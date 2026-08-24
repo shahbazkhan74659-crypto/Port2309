@@ -19,7 +19,9 @@ This describes the **actual current implementation** — a single static prototy
 - Python Django
 - Django templates
 - Tailwind CSS
-- React, mounted as islands into specific DOM nodes (not a full SPA)
+- React + JavaScript, mounted as islands into specific DOM nodes (not a full SPA)
+- A relational database — PostgreSQL or MySQL, engine choice deferred until closer to a hosting decision (see `DECISIONS.md`)
+- Stack is explicitly open to adding further tools as needed; not considered closed
 
 ## Application Structure
 
@@ -74,7 +76,9 @@ Not applicable. No API exists in the prototype, and none has been implemented fo
 
 ## Data / Persistence
 
-Not applicable. The prototype has no database or persistence layer; all data is hardcoded in the script. The contact form does not send data anywhere — submitting it simulates success client-side only (the prototype explicitly tells the user "this is a prototype, so nothing was actually sent").
+**Implemented:** Not applicable. The prototype has no database or persistence layer; all data is hardcoded in the script. The contact form does not send data anywhere — submitting it simulates success client-side only (the prototype explicitly tells the user "this is a prototype, so nothing was actually sent").
+
+**Planned:** A relational database via Django's ORM. Engine: To be defined — PostgreSQL or MySQL, deliberately deferred until closer to a hosting decision (see `DECISIONS.md`). No schema/models exist yet.
 
 ## Authentication & Authorization
 

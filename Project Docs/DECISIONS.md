@@ -2,14 +2,14 @@
 
 These decisions were made during a prior planning discussion, before any production code was written. They are recorded here as established direction for `ARCHITECTURE.md` and `PHASES.md`. Where original reasoning was not captured at the time, this is marked explicitly rather than guessed.
 
-## Decision: Production stack — Django + Django templates + Tailwind CSS + React islands
+## Decision: Production stack — Django + Django templates + Tailwind CSS + React/JS + relational database
 
 - Status: Accepted
-- Date: 2026-08-19
-- Context: The project needed a technology stack for the production portfolio site, chosen before any implementation began.
-- Decision: Python Django with Django templates for server-rendered pages, styled with Tailwind CSS, with React mounted into specific DOM nodes ("islands") via plain JS/bundled script for interactive pieces — not a full single-page React application.
-- Reasoning: To be defined. (Not captured in the planning record; only the chosen stack is known.)
-- Consequences: Production implementation has not yet started, so no consequences have been observed. Note that the existing visual prototype (`prototype/index.html`) does not use this stack — it is a separate, framework-free artifact. See "Standalone static prototype" decision below.
+- Date: 2026-08-19 (initial stack decision); reconfirmed and extended 2026-08-24 (database layer added)
+- Context: The project needed a technology stack for the production portfolio site, chosen before any implementation began. The 2026-08-19 decision covered the application/rendering layer but did not name a persistence layer; the owner confirmed the full stack including the database on 2026-08-24.
+- Decision: Python Django with Django templates for server-rendered pages, styled with Tailwind CSS, with React + JavaScript for interactive pieces (per the 2026-08-19 discussion, mounted as islands into specific DOM nodes rather than a full single-page application), backed by a relational database — either PostgreSQL or MySQL. The owner explicitly deferred choosing between Postgres and MySQL until closer to a hosting decision (see below); the stack is also explicitly open to adding further tools as needed rather than being considered closed.
+- Reasoning: To be defined for the app/rendering layer (not captured in the original planning record). For the DB engine specifically: deferred on purpose because Django's ORM makes switching low-cost early on, so the choice is better tied to the eventual hosting provider.
+- Consequences: Production implementation has not yet started, so no consequences have been observed. `ARCHITECTURE.md`'s planned data/persistence section marks the DB engine as "To be defined — Postgres or MySQL." Note that the existing visual prototype (`prototype/index.html`) does not use this stack — it is a separate, framework-free artifact. See "Standalone static prototype" decision below.
 
 ## Decision: Three Django apps — `core`, `contents`, `hiring`
 
