@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Portfolio — GitHub{% endblock %}
-{% block description %}Placeholder GitHub profile preview.{% endblock %}
+{% block title %}GitHub — Shahbaz Khan{% endblock %}
+{% block description %}Shahbaz Khan's GitHub profile.{% endblock %}
 
 {% block content %}
 
@@ -11,29 +11,49 @@
     <div>
       <p class="eyebrow">GITHUB</p>
       <h1 class="page-title">CODE &amp;<br>COMMITS.</h1>
-      <p class="page-sub">A read-only preview of the GitHub profile — placeholder until it's connected to real data.</p>
+      <p class="page-sub">A read-only, live preview of the GitHub profile.</p>
     </div>
-    <img class="page-head-logo" src="{% static 'images/github-logo.png' %}" alt="GitHub logo">
+    <a class="page-head-logo-link" href="{{ html_url }}" aria-label="View {{ name }}'s profile on GitHub">
+      <img class="page-head-logo" src="{% static 'images/github-logo.png' %}" alt="GitHub logo">
+    </a>
   </div>
 </section>
 
 <section class="section">
-  <div class="wrap">
+  <div class="wrap github-layout">
     <div class="profile-card">
-      <div class="profile-avatar"></div>
-      <h2 class="profile-name">Your Name</h2>
-      <p class="profile-handle">@yourusername</p>
-      <p class="profile-bio">Placeholder bio pulled from the GitHub profile goes here.</p>
+      {% if avatar_url %}
+        <img class="profile-avatar" src="{{ avatar_url }}" alt="{{ name }}">
+      {% else %}
+        <div class="profile-avatar"></div>
+      {% endif %}
+      <h2 class="profile-name">{{ name }}</h2>
+      <p class="profile-handle">@{{ handle }}</p>
+      <p class="profile-bio">{{ bio }}</p>
       <div class="profile-stats">
-        <div class="profile-stat"><strong>&mdash;</strong><span>Repositories</span></div>
-        <div class="profile-stat"><strong>&mdash;</strong><span>Followers</span></div>
-        <div class="profile-stat"><strong>&mdash;</strong><span>Following</span></div>
+        <div class="profile-stat"><strong>{{ public_repos }}</strong><span>Repositories</span></div>
+        <div class="profile-stat"><strong>{{ followers }}</strong><span>Followers</span></div>
+        <div class="profile-stat"><strong>{{ following }}</strong><span>Following</span></div>
       </div>
       <div class="profile-actions">
-        <a class="submit-btn" href="#">View on GitHub &rarr;</a>
+        <a class="submit-btn" href="{{ html_url }}">View on GitHub &rarr;</a>
       </div>
     </div>
-    <p class="form-note" style="margin-top:20px">This is a placeholder preview — live GitHub data isn't connected yet.</p>
+
+    <div class="repo-list">
+      {% for repo in repos %}
+        <a class="repo-item" href="{{ repo.html_url }}">
+          <div class="repo-item-head">
+            <span class="repo-name">{{ repo.name }}</span>
+            {% if repo.language %}<span class="repo-lang">{{ repo.language }}</span>{% endif %}
+          </div>
+          {% if repo.description %}<p class="repo-desc">{{ repo.description }}</p>{% endif %}
+          <span class="repo-stars">&#9733; {{ repo.stars }}</span>
+        </a>
+      {% empty %}
+        <p class="form-note" style="padding:18px">Repositories aren't available right now &mdash; try refreshing, or view them directly on GitHub.</p>
+      {% endfor %}
+    </div>
   </div>
 </section>
 

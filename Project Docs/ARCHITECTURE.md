@@ -1,10 +1,10 @@
 # Architecture
 
-This describes the **actual current implementation** — the static prototype plus a Django project with Home, About, Contact, a static Projects page, a placeholder GitHub page, and the `core`/`projects` apps (Phases 1–4) — followed by the **planned** production architecture beyond that. See `DECISIONS.md` for the reasoning behind the planned stack.
+This describes the **actual current implementation** — the static prototype plus a Django project with Home, About, Contact, a static Projects page, a live-data GitHub page, and the `core`/`projects` apps, now carrying the owner's real content (Phases 1–5) — followed by the **planned** production architecture beyond that. See `DECISIONS.md` for the reasoning behind the planned stack.
 
 ## System Overview
 
-**Implemented:** The repository contains `prototype/index.html` (the standalone static mockup, unchanged — kept only as a styling/layout reference per `DECISIONS.md`) plus a from-scratch Django project: `manage.py` and a `config/` settings package (created via `django-admin startproject config .`) running inside a project-local `.venv` with Django 5.2.14 pinned in `requirements.txt` (Phase 1, 2026-08-24). Phases 2–3 (2026-08-24) added Home, About, Contact, and a static Projects list page, plus a placeholder GitHub page added just after Phase 3 — all styled by a Tailwind CSS build (npm + Tailwind CLI v4) reproducing the prototype's design tokens. As of Phase 4 (2026-08-24), routing/views moved out of `config/` into a real `core` app (`core/views.py`, `core/urls.py` — the latter is now `ROOT_URLCONF` directly), and a `projects` app is scaffolded and registered but intentionally empty (no models/views/urls yet). `config/` now holds only `settings.py`/`wsgi.py`/`asgi.py`. No database models or React tooling exist yet.
+**Implemented:** The repository contains `prototype/index.html` (the standalone static mockup, unchanged — kept only as a styling/layout reference per `DECISIONS.md`) plus a from-scratch Django project: `manage.py` and a `config/` settings package (created via `django-admin startproject config .`) running inside a project-local `.venv` with Django 5.2.14 pinned in `requirements.txt` (Phase 1, 2026-08-24). Phases 2–3 (2026-08-24) added Home, About, Contact, and a static Projects list page, plus a GitHub page added just after Phase 3 — all styled by a Tailwind CSS build (npm + Tailwind CLI v4) reproducing the prototype's design tokens. As of Phase 4 (2026-08-24), routing/views moved out of `config/` into a real `core` app (`core/views.py`, `core/urls.py` — the latter is now `ROOT_URLCONF` directly), and a `projects` app is scaffolded and registered but intentionally empty (no models/views/urls yet). `config/` now holds only `settings.py`/`wsgi.py`/`asgi.py`. As of Phase 5 (2026-08-24), Home/About/Contact/base.html carry the owner's real content instead of generic placeholders, and `/github/` fetches real, live profile data from GitHub's public API server-side — the one deliberate exception is Home's featured-project card and the entire Projects page, which the owner chose to leave on Phase 3's mockup/placeholder content until the `projects` app gains real models. No database models or React tooling exist yet.
 
 **Planned:** A Django server rendering HTML templates, styled with Tailwind CSS, with React mounted into specific DOM nodes ("islands") for interactive pieces. Database models (including a real, model-backed Projects listing/detail, to live in the now-scaffolded `projects` app) and React tooling are not implemented yet.
 
@@ -19,6 +19,7 @@ This describes the **actual current implementation** — the static prototype pl
 - Python 3.11.9, Django 5.2.14
 - Project-local virtual environment (`.venv/`, gitignored), dependencies pinned in `requirements.txt`
 - Pillow 12.3.0 (added 2026-08-24) — image asset processing (e.g. background removal for the hero portrait), not used by the running Django app itself
+- `requests` 2.34.2 (added Phase 5, 2026-08-24), with its transitive deps `certifi`/`charset-normalizer`/`idna`/`urllib3` — used by `core/views.py`'s `github` view to call GitHub's public REST API server-side
 
 **Implemented (Tailwind, Phase 2, 2026-08-24):**
 - Node v24.18.0 / npm 11.16.0, `tailwindcss` + `@tailwindcss/cli` v4.3.3 as devDependencies (`package.json`)
@@ -69,11 +70,13 @@ This describes the **actual current implementation** — the static prototype pl
 
 **Implemented (Django, Phase 2):** The Home page's content (name, tagline, roles, featured project, about snapshot, CTA copy) is hardcoded directly in `templates/pages/home.html` as generic placeholder text — not passed via view context, not model-backed. See `DECISIONS.md` for why (prototype content is fictional and must not be reused as real data; real content doesn't exist yet).
 
-**Implemented (Django, Phase 3):** Same pattern for About, Contact, and Projects — all content (bio/skills placeholders, contact rows, the three placeholder project entries) is hardcoded directly in each template, not passed via view context. Notably, the Projects page's three entries are hardcoded markup, **not** a loop over a data structure or model — there is no `Project` model yet (that's Phase 4); each entry is a literal repeated block in `templates/pages/projects.html`.
+**Implemented (Django, Phase 3):** Same pattern for About, Contact, and Projects — all content is hardcoded directly in each template, not passed via view context. The Projects page's three entries are hardcoded markup, **not** a loop over a data structure or model — there is no `Project` model yet; each entry is a literal repeated block in `templates/pages/projects.html`. **Still true as of Phase 5** — this page and Home's featured-project card were deliberately excluded from the Phase 5 content swap (see `DECISIONS.md`) and remain exactly this way.
 
-**Implemented (post-Phase 3 addition, 2026-08-24):** The GitHub page's profile card (name, handle, bio, stats) is also hardcoded placeholder content — no external HTTP call is made yet. The "View on GitHub" button and the page's own stats are static placeholders, not fetched from `api.github.com`.
+**Implemented (Django, Phase 5, 2026-08-24):** `base.html`, `home.html` (except the featured-project card), `about.html`, and `contact.html` now hold the owner's real hardcoded content (still not passed via view context — same "hardcoded in the template" pattern as before, just real text instead of generic placeholders). The GitHub page is the one exception to "hardcoded" — `core/views.py`'s `github` view now fetches live data server-side from `https://api.github.com/users/<username>` and passes it into the template context (`avatar_url`, `name`, `bio`, `public_repos`, `followers`, `following`, `html_url`), falling back to static real values on any request failure. See `DECISIONS.md` for both decisions.
 
-**Planned:** Not yet defined beyond that — will depend on Django models/views (per `projects` app and wherever other content types land) once implemented.
+**Implemented (post-Phase 5 addition, 2026-08-24):** The same `github` view also fetches the owner's repo list (`GET /users/<username>/repos?sort=updated`) and passes a `repos` list into the context; `templates/pages/github.html` renders it as a scrollable panel (`.repo-list`) beside the profile card, each entry linking out to its real GitHub URL. Falls back to an empty list (rendered as a small "not available right now" note) on request failure. See `DECISIONS.md`.
+
+**Planned:** Real content/model-backed data for Home's featured project and the Projects page — will depend on the `projects` app gaining models/views once that phase happens.
 
 ## State Management
 
@@ -119,13 +122,15 @@ Not applicable. No auth exists in the prototype or in any implemented production
 
 **Implemented:** Google Fonts, loaded via `<link rel="preconnect">` and a stylesheet `<link>` in the document head. This is the only external dependency in the repository.
 
-**Planned:** GitHub's public REST API (`api.github.com/users/<username>`), to replace the `/github/` page's current placeholder content with real, server-fetched profile data — not yet implemented (see `DECISIONS.md`, `TASKS.md`). No integration planned for LinkedIn or Email (no viable public API — see `DECISIONS.md`).
+**Implemented (Phase 5, 2026-08-24):** GitHub's public REST API (`api.github.com/users/<username>`), called server-side from `core/views.py`'s `github` view via the `requests` library — real avatar/name/bio/repo/follower/following data rendered on `/github/`. Unauthenticated, so capped at 60 requests/hour per IP; no caching implemented (fine for current traffic — see `DECISIONS.md`).
+
+**Planned:** No integration planned for LinkedIn or Email (no viable public API — see `DECISIONS.md`).
 
 ## Build & Runtime
 
 **Implemented (prototype):** None. The file can be opened directly in a browser or served as a static file; there is no build step, package manager, or dev server.
 
-**Implemented (Django, Phase 1):** `.venv/` (project-local virtual environment) + `requirements.txt` (currently: Django, asgiref, sqlparse, tzdata). Run via `manage.py runserver`.
+**Implemented (Django, Phase 1):** `.venv/` (project-local virtual environment) + `requirements.txt` (currently: Django, asgiref, sqlparse, tzdata, pillow, requests + requests' transitive deps — see Technology Stack). Run via `manage.py runserver`.
 
 **Implemented (Tailwind, Phase 2):** `npm install` (Node/npm toolchain, `package.json` + `node_modules/`, gitignored) then `npm run build:css` (one-shot, minified) or `npm run watch:css` (rebuild on change) to generate `static/css/main.css` from `static_src/css/input.css`. This build step must run (or `main.css` must already exist) before `runserver` will show a styled page — Django does not invoke it automatically.
 

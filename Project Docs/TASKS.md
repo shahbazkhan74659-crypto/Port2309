@@ -2,13 +2,15 @@
 
 ## Active
 
-To be defined. No task is currently confirmed as actively in progress. [Phase 1]–[Phase 4] are now complete (see Completed below); a [Phase 5] task breakdown has not yet been given by the project owner.
+To be defined. No task is currently confirmed as actively in progress. [Phase 1]–[Phase 5] are now complete (see Completed below); a [Phase 6] task breakdown has not yet been given by the project owner.
 
 ## Next
 
-To be defined. The full roadmap (Phase 0–12, see `PHASES.md`) is now named. [Phase 1]–[Phase 4] are complete; detailed task breakdowns for [Phase 5] onward have not yet been given by the project owner. Build from scratch on the confirmed stack — use `prototype/index.html` only as a styling/layout reference, not as code to port (see `DECISIONS.md`). Note: a visual in-browser pass on the [Phase 3] pages (About/Contact/Projects) is still owed for a couple of pages — the GitHub page itself was visually confirmed in-browser (2026-08-24) after the logo was added.
+To be defined. The full roadmap (Phase 0–12, see `PHASES.md`) is now named. [Phase 1]–[Phase 5] are complete; detailed task breakdowns for [Phase 6] onward have not yet been given by the project owner. Build from scratch on the confirmed stack — use `prototype/index.html` only as a styling/layout reference, not as code to port (see `DECISIONS.md`).
 
-Open, not yet scheduled to a phase: wire the GitHub page (`/github/`) up to a real server-side call to GitHub's public REST API (`api.github.com/users/<username>`), replacing its current placeholder content — see `DECISIONS.md`.
+Deferred, explicitly (owner's choice): swap the site brand mark (nav/footer "S.") for the owner's custom badge image ("SK Badge.png") — the owner asked to be consulted again before this is added, so ask before doing it. See `DECISIONS.md`'s Phase 5 content-swap decision.
+
+Deferred, explicitly (owner's choice, Phase 5): Home's featured-project card and the entire Projects page stay on Phase 3's mockup/placeholder content until the `projects` app gains real models — not an oversight.
 
 Resolved 2026-08-24: Designs, Blog, Resume, Timeline, and Hire Me all live in the `core` app; `projects` is scoped strictly to the owner's projects/works/code. **Designs still has no phase assigned yet** — when it's scheduled, it belongs in `core` per this decision. See `DECISIONS.md`.
 
@@ -37,3 +39,6 @@ None.
 - [x] Add a placeholder GitHub profile page (`/github/`, `templates/pages/github.html`, new `.profile-card` CSS) — no live API fetch yet; trimmed LinkedIn/Email from the site footer (LinkedIn/Email stay plain outbound links elsewhere, no custom UI) — 2026-08-24, ad-hoc addition, not a numbered phase (see `DECISIONS.md`)
 - [x] Clean up an AI-generated GitHub logo (background removed to transparent, watermark stripped, edges cleaned) and place it on the GitHub page's header (`static/images/github-logo.png`) — 2026-08-24, verified in-browser
 - [x] [Phase 4] Scaffold `core`/`projects` apps via `manage.py startapp`; moved all views/routing out of `config/` into `core` (`core/views.py`, `core/urls.py` — now `ROOT_URLCONF`); `config/` reduced to `settings.py`/`wsgi.py`/`asgi.py` only; `projects` registered but left empty — 2026-08-24 (see `ARCHITECTURE.md`, `DECISIONS.md`, `PHASES.md`)
+- [x] [Phase 5] Replaced placeholder content with the owner's real content site-wide (identity, Home hero/about-snapshot/statement/CTA, About page, Contact links) — 2026-08-24; explicitly excluded Home's featured-project card and the Projects page (owner's choice, stay on Phase 3 mockup content) and the site brand mark badge swap (deferred, owner wants to be asked first) — see `PHASES.md`, `DECISIONS.md`
+- [x] [Phase 5] Wired `/github/` up to GitHub's public REST API for live avatar/name/bio/repo/follower/following data, with a static-real-values fallback on request failure; added `requests` to `requirements.txt` — 2026-08-24, verified in-browser (see `DECISIONS.md`, `ARCHITECTURE.md`) — this closes out the previously-open "wire the GitHub page up" item
+- [x] Added a scrollable real-repository list to the GitHub page (`.repo-list`, beside the profile card), fetched live from GitHub's repos API, each entry linking out to the real repo — 2026-08-24, ad-hoc addition, verified in-browser (see `DECISIONS.md`, `ARCHITECTURE.md`)

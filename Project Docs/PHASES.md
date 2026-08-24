@@ -84,16 +84,20 @@ Scaffold both apps via `manage.py startapp`, register them in `INSTALLED_APPS`, 
 
 **Status: Complete.** Verified 2026-08-24 — `manage.py check` clean; all six routes return their expected status codes (five pages 200, `/admin/` 302 to login); nav `{% url %}` resolution and `aria-current="page"` active-state marking confirmed still correct after the swap. See `ARCHITECTURE.md`, `DECISIONS.md`.
 
-## Phase 5 — Turning the Static Pages into Dynamic Pages
+## Phase 5 — Replace Placeholder Content With Real Content
 
 ### Objective
-Take the static pages/base structure built in Phases 2–3 and make them dynamic — wiring up navigation, placeholder content/states, and animation.
+Owner-defined scope (2026-08-24), superseding this phase's original speculative description (real navigation/animation — that direction was never confirmed and did not happen): replace the generic placeholder identity/bio/contact copy from Phases 2–3 with the owner's real content, and give the GitHub page (`/github/`) live data instead of a placeholder card.
 
 ### Scope
-To be defined in further detail by the project owner. Implied by the phase name: real (non-hash, server-routed) navigation between pages, placeholder content/loading states, and animation/interactivity — likely where the planned React/JS islands (see `DECISIONS.md`) come in, though that hasn't been confirmed for this phase specifically.
+Real content replaced site-wide: identity (name, brand mark, role, location) in `base.html`/`home.html`; Home's hero/about-snapshot/statement/CTA copy; the full About page (background, "what I care about", philosophy, skills, closing paragraph); Contact page's email/GitHub/LinkedIn rows. `/github/` now calls GitHub's public REST API server-side (`core/views.py`, new `requests` dependency) for real avatar/name/bio/repo/follower/following data, with a static fallback if the call fails. Explicitly **excluded** by owner direction: the hero portrait photo (already real, untouched) and Home's featured-project card plus the entire Projects page (`templates/pages/projects.html`) — both stay on mockup/placeholder content, to be replaced once the real `projects` app/model exists (Phase 4 apps are scaffolded but still empty — see `ARCHITECTURE.md`).
 
 ### Completion Criteria
-To be defined.
+Every in-scope page renders real content with no leftover generic placeholder strings (`[FIRST]`, `you@example.com`, `yourusername`, "Placeholder ..."); `/github/` shows live-fetched profile data; Projects page and Home's featured project remain untouched placeholder content by design.
+
+**Status: Complete.** Verified 2026-08-24 — `manage.py check` clean; all pages visually confirmed in-browser with real content (name, role, location, bio, skills, philosophy, contact links); `/github/` confirmed showing live avatar/bio/stats fetched from `api.github.com`; only remaining "placeholder" string on the site is intentionally on Home's featured-project card. See `ARCHITECTURE.md`, `DECISIONS.md`.
+
+**Note:** The site brand mark (nav/footer "S.") currently uses an auto-derived first-initial default. The owner has a custom badge image ("SK Badge.png") to swap in as a final follow-up step — deliberately deferred, not part of this phase's completion.
 
 **Status: Not started.**
 

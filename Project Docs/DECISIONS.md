@@ -104,7 +104,34 @@ These decisions were made during a prior planning discussion, before any product
 - Context: The prototype's text (name "Renzo Malik," bio, projects, socials) is fictional and, per `CLAUDE.md`, must not be reused as real content. The owner's real bio/project/contact content does not exist yet, and no content models exist until later phases.
 - Decision: Pages built before real content or content models exist (starting with the Phase 2 Home page) use clearly generic, non-identity placeholder copy (e.g. "YOUR NAME," "ROLE / ROLE / ROLE," "Placeholder paragraph about you") hardcoded directly in the template — not the prototype's persona, and not passed via view context yet.
 - Reasoning: Owner's explicit direction — real content decision deferred rather than fabricated.
-- Consequences: Every page built under this decision will need its placeholder copy revisited once real content or content-backed models exist. Do not treat any placeholder string as real biographical/project data.
+- Consequences: Every page built under this decision will need its placeholder copy revisited once real content or content-backed models exist. Do not treat any placeholder string as real biographical/project data. **Partially revisited in Phase 5** — see "Real content replaces placeholders" below; the Projects page and Home's featured-project card are the deliberate remaining exception until model-backed content exists (Phase 4's `projects` app is scaffolded but still empty).
+
+## Decision: Real content replaces placeholders (Phase 5); Projects/featured-project stay placeholder by choice
+
+- Status: Accepted
+- Date: 2026-08-24 (Phase 5)
+- Context: The owner's real content (name, bio, skills, contact links, GitHub username) became available and was supplied for Phase 5. The owner explicitly scoped this phase narrower than `PHASES.md`'s original speculative Phase 5 description (real navigation/animation) — see the updated `PHASES.md` Phase 5 entry.
+- Decision: Real content now replaces the generic placeholders in `base.html`, `home.html` (except the featured-project card), `about.html`, and `contact.html`. The site brand mark ("S.") is auto-derived from the real first name for now — the owner has a custom badge image to swap in as a separate, explicitly deferred follow-up (they asked to be consulted again before it's added). Home's featured-project card and the entire Projects page (`templates/pages/projects.html`) were explicitly excluded from this content swap by the owner and remain on mockup/placeholder content — not an oversight.
+- Reasoning: Owner's explicit direction, given directly in response to a planning-time request for content ("credentials"). Keeping Projects/featured-project on placeholder content avoids describing specific real projects twice (once now as static text, again later as real `Project` model instances in a future phase) — better to wait for the model.
+- Consequences: The About-snapshot headline (`ADJECTIVE.` × 3 placeholder) received real single-word content ("CURIOSITY." / "CREATION." / "EXPERIMENTATION.") rather than the owner's original full-sentence answer, which would have overflowed the large display-heading font sizing — the full sentences were kept as a new smaller supporting line (`.about-headline-sub`, new CSS class) underneath instead, per the owner's explicit choice between the two options offered. Any future work on Home's featured project or the Projects page should treat their current placeholder content as still fully "Phase 3 mockup," not real data to preserve.
+
+## Decision: GitHub page fetches live data from the public API (Phase 5)
+
+- Status: Accepted
+- Date: 2026-08-24 (Phase 5)
+- Context: The `/github/` page (added post-Phase 3) had shown static placeholder profile data with live-fetching left as an explicitly open, unscheduled `TASKS.md` item. The owner chose to implement it now as part of Phase 5, when asked directly.
+- Decision: `core/views.py`'s `github` view calls `https://api.github.com/users/shahbazkhan74659-crypto` server-side (5s timeout, wrapped in `try/except requests.RequestException`), passing avatar/name/bio/repo/follower/following counts and the real profile URL into the template context. On any failure, it falls back to hardcoded real static values (not the old generic placeholder) so the page never 500s. `requests` (and its transitive deps: `certifi`, `charset-normalizer`, `idna`, `urllib3`) was added to `requirements.txt`, pinned via `pip freeze`.
+- Reasoning: Owner's explicit choice between "live fetch now" and "static real values only" when asked during planning — live fetch keeps the stats always current with minimal extra implementation cost (one HTTP call).
+- Consequences: GitHub's unauthenticated API caps out at 60 requests/hour per IP — fine for a low-traffic personal portfolio, but there is no caching yet. A future enhancement could add Django's cache framework if traffic ever approaches that limit; not needed now. The username is a hardcoded constant in `core/views.py` (`GITHUB_USERNAME`) since no settings/config model exists to store it dynamically.
+
+## Decision: GitHub page also lists real repositories in a scrollable panel
+
+- Status: Accepted
+- Date: 2026-08-24 (post-Phase 5 addition, not part of any numbered phase)
+- Context: The owner asked to also list their real GitHub repositories on `/github/`, read-only, each linking straight out to the repo on GitHub — same pattern as the profile-card fetch, using a hand-drawn mockup to show placement (beside the profile card, its own scrollable section).
+- Decision: `core/views.py`'s `github` view makes a second call to `https://api.github.com/users/<username>/repos?sort=updated&per_page=100` (same timeout/error-handling pattern as the profile fetch — falls back to an empty list, not a crash), passing name/description/language/star-count/URL per repo. `templates/pages/github.html` renders them in a new `.repo-list` panel next to `.profile-card` (`.github-layout` flex wrapper), each repo a full-row link (`.repo-item`) to its real GitHub URL; the panel scrolls internally (`max-height: 480px; overflow-y: auto`) rather than growing the page.
+- Reasoning: Owner's explicit direction; sorted by most-recently-updated with no cap/filtering (all repos shown, forks included) since the owner didn't ask for either.
+- Consequences: Same 60 req/hour unauthenticated rate-limit and no-caching situation as the profile fetch now applies twice per page load (two API calls) — still fine for current traffic, same future-caching note applies. If a repo's `description` is null, only the name/language/star row renders (no empty paragraph).
 
 ## Decision: Hero portrait redesigned as a large overlapping image, diverging from the prototype
 
