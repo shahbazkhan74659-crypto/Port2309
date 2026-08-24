@@ -47,5 +47,14 @@ These decisions were made during a prior planning discussion, before any product
 - Date: Unknown exact date; file present in the repository as of 2026-08-23.
 - Context: `prototype/index.html` exists as a single, self-contained, framework-free HTML/CSS/JS file implementing a client-side hash-routed mockup (Home, Projects list/detail, About, Contact) with placeholder persona ("Renzo Malik") and placeholder project content — built independently of the planned Django + Tailwind + React stack.
 - Observed implementation: See `ARCHITECTURE.md` for full technical detail.
-- Original reasoning: To be defined. (No record explains why a standalone vanilla-JS prototype was chosen over prototyping directly within the planned Django + Tailwind stack, or what this prototype is meant to become — e.g. a design reference to port into templates, versus a throwaway mockup.)
-- Consequences: The prototype's relationship to the production build is currently unconfirmed — see `TASKS.md` and `PHASES.md`. This should be clarified with the project owner before Phase 3 (production scaffolding) begins.
+- Original reasoning: To be defined. (No record explains why a standalone vanilla-JS prototype was chosen over prototyping directly within the planned Django + Tailwind stack.)
+- Consequences: None outstanding — see the "Prototype is a styling/design reference only" decision below, which resolves how it relates to the production build.
+
+## Decision: Prototype is a styling/design reference only — production build starts from scratch
+
+- Status: Accepted
+- Date: 2026-08-24
+- Context: The relationship between `prototype/index.html` and the planned Django + Tailwind + React production build was previously unconfirmed (see decision above).
+- Decision: The prototype is not to be ported, reused, or built upon as code. Production implementation will be built from scratch on the confirmed stack (Django + Django templates + Tailwind CSS + React/JS + relational database). The prototype's HTML/CSS is retained only as a visual/styling and layout-structure reference to consult while building the real templates and components.
+- Reasoning: Owner's explicit direction.
+- Consequences: Do not treat `prototype/index.html` as a source to copy code from during production scaffolding (Phase 3) — reimplement the design intent in Django templates/Tailwind/React rather than lifting its vanilla-JS routing/rendering approach. Its placeholder persona ("Renzo Malik") and placeholder project content are not real content and must not carry over either. See `PHASES.md` and `TASKS.md`.
