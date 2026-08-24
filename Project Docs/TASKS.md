@@ -6,7 +6,9 @@ To be defined. No task is currently confirmed as actively in progress. [Phase 1]
 
 ## Next
 
-To be defined. The full roadmap (Phase 0–12, see `PHASES.md`) is now named. [Phase 1]–[Phase 3] are complete; detailed task breakdowns for [Phase 4] onward have not yet been given by the project owner. Build from scratch on the confirmed stack — use `prototype/index.html` only as a styling/layout reference, not as code to port (see `DECISIONS.md`). Note: a visual in-browser pass on the [Phase 3] pages (About/Contact/Projects) is still owed — browser automation was unavailable when they were built (2026-08-24).
+To be defined. The full roadmap (Phase 0–12, see `PHASES.md`) is now named. [Phase 1]–[Phase 3] are complete; detailed task breakdowns for [Phase 4] onward have not yet been given by the project owner. Build from scratch on the confirmed stack — use `prototype/index.html` only as a styling/layout reference, not as code to port (see `DECISIONS.md`). Note: a visual in-browser pass on the [Phase 3] pages (About/Contact/Projects) and the GitHub placeholder page is still owed — browser automation was unavailable when they were built (2026-08-24).
+
+Open, not yet scheduled to a phase: wire the GitHub page (`/github/`) up to a real server-side call to GitHub's public REST API (`api.github.com/users/<username>`), replacing its current placeholder content — see `DECISIONS.md`.
 
 Resolved 2026-08-24: Designs, Blog, Resume, Timeline, and Hire Me all live in the `core` app; `projects` is scoped strictly to the owner's projects/works/code. **Designs still has no phase assigned yet** — when it's scheduled, it belongs in `core` per this decision. See `DECISIONS.md`.
 
@@ -32,3 +34,4 @@ None.
 - [x] [Phase 2] Build global base template (`templates/base.html`) and Home page (`templates/pages/home.html`), wire up Tailwind CSS via npm + Tailwind CLI, matching `prototype/index.html`'s theme/structure with generic placeholder content — 2026-08-24 (see `ARCHITECTURE.md`, `DECISIONS.md`)
 - [x] Add real hero portrait image to Home page (`static/images/hero-portrait.png`); added Pillow as a dependency for image processing (background removal) — 2026-08-24 (see `ARCHITECTURE.md`)
 - [x] [Phase 3] Build About, Contact, and a static Projects list page (`templates/pages/{about,contact,projects}.html`), routed via `config/views.py`/`config/urls.py`; ported the matching CSS from `prototype/index.html` into `static_src/css/input.css`; wired nav/footer + Home's internal links to the real routes with active-page (`aria-current="page"`) marking — 2026-08-24 (see `ARCHITECTURE.md`, `PHASES.md`)
+- [x] Add a placeholder GitHub profile page (`/github/`, `templates/pages/github.html`, new `.profile-card` CSS) — no live API fetch yet; trimmed LinkedIn/Email from the site footer (LinkedIn/Email stay plain outbound links elsewhere, no custom UI) — 2026-08-24, ad-hoc addition, not a numbered phase (see `DECISIONS.md`)

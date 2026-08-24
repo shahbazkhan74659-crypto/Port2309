@@ -339,6 +339,27 @@ a.mockup-link:hover .mockup, a.mockup-link:focus-visible .mockup{ transform: tra
 .btn-line{ display:inline-flex; align-items:center; gap:8px; font-family: var(--font-mono); font-size: 0.76rem; letter-spacing:0.08em; text-transform:uppercase; color: var(--ink); border-bottom: 1px solid var(--border-strong); padding-bottom: 4px; transition: color 0.2s ease, border-color 0.2s ease; }
 .btn-line:hover{ color: var(--accent); border-color: var(--accent); }
 
+/* ---------- GITHUB PAGE HEAD ---------- */
+.page-head-row{ display: flex; align-items: center; justify-content: space-between; gap: clamp(24px, 4vw, 48px); flex-wrap: wrap; }
+.page-head-logo{ width: clamp(180px, 22vw, 320px); height: auto; flex-shrink: 0; }
+
+/* ---------- GITHUB PROFILE CARD ---------- */
+.profile-card{
+  border: 1px solid var(--border-strong); background: var(--bg-raised); border-radius: 14px;
+  padding: clamp(28px, 5vw, 48px); max-width: 560px; margin-top: clamp(24px, 4vw, 40px);
+}
+.profile-avatar{
+  width: 96px; height: 96px; border-radius: 50%;
+  background: var(--bg-raised-2); border: 1px solid var(--border);
+}
+.profile-name{ font-family: var(--font-display); font-weight: 800; font-size: 1.6rem; margin-top: 20px; }
+.profile-handle{ font-family: var(--font-mono); color: var(--ink-faint); font-size: 0.85rem; margin-top: 4px; }
+.profile-bio{ color: var(--ink-dim); margin-top: 16px; max-width: 48ch; line-height: 1.7; }
+.profile-stats{ display: flex; gap: 28px; margin-top: 24px; }
+.profile-stat strong{ display: block; font-family: var(--font-mono); color: var(--ink); font-size: 1.1rem; }
+.profile-stat span{ font-family: var(--font-mono); color: var(--ink-faint); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.profile-actions{ margin-top: 28px; }
+
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 900px){
   .about-grid, .two-col, .contact-grid{ grid-template-columns: 1fr; }

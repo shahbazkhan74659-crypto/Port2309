@@ -15,3 +15,7 @@ def contact(request):
 
 def projects(request):
     return render(request, "pages/projects.html")
+
+
+def github(request):
+    return render(request, "pages/github.html")

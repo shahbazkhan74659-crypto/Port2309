@@ -43,6 +43,8 @@ This describes the **actual current implementation** — the static prototype pl
 
 **Implemented (Phase 3, 2026-08-24):** Same app-less pattern extended to three more pages — `config/views.py` gained `about`, `contact`, and `projects` view functions, each rendering their `templates/pages/*.html` counterpart, registered in `config/urls.py` as `path('about/', ...)` / `path('contact/', ...)` / `path('projects/', ...)`.
 
+**Implemented (post-Phase 3 addition, 2026-08-24):** A `github` view/route (`/github/` → `templates/pages/github.html`) added the same way — a placeholder, read-only GitHub profile card (no live API call yet). See `DECISIONS.md` for why GitHub got a custom page while LinkedIn/Email did not.
+
 **Planned:** As of 2026-08-24 the owner settled on exactly two Django apps (superseding an earlier three-app plan — see `DECISIONS.md`), to be scaffolded in Phase 4:
 - `core` — views, URLs, and the main routing of the site; identity, etc.
 - `projects` — the owner's projects, works, and code
@@ -70,6 +72,8 @@ Routing currently living in `config/` is expected to move into these apps once t
 **Implemented (Django, Phase 2):** The Home page's content (name, tagline, roles, featured project, about snapshot, CTA copy) is hardcoded directly in `templates/pages/home.html` as generic placeholder text — not passed via view context, not model-backed. See `DECISIONS.md` for why (prototype content is fictional and must not be reused as real data; real content doesn't exist yet).
 
 **Implemented (Django, Phase 3):** Same pattern for About, Contact, and Projects — all content (bio/skills placeholders, contact rows, the three placeholder project entries) is hardcoded directly in each template, not passed via view context. Notably, the Projects page's three entries are hardcoded markup, **not** a loop over a data structure or model — there is no `Project` model yet (that's Phase 4); each entry is a literal repeated block in `templates/pages/projects.html`.
+
+**Implemented (post-Phase 3 addition, 2026-08-24):** The GitHub page's profile card (name, handle, bio, stats) is also hardcoded placeholder content — no external HTTP call is made yet. The "View on GitHub" button and the page's own stats are static placeholders, not fetched from `api.github.com`.
 
 **Planned:** Not yet defined beyond that — will depend on Django models/views (per `projects` app and wherever other content types land) once implemented.
 
@@ -115,7 +119,7 @@ Not applicable. No auth exists in the prototype or in any implemented production
 
 **Implemented:** Google Fonts, loaded via `<link rel="preconnect">` and a stylesheet `<link>` in the document head. This is the only external dependency in the repository.
 
-**Planned:** None currently established.
+**Planned:** GitHub's public REST API (`api.github.com/users/<username>`), to replace the `/github/` page's current placeholder content with real, server-fetched profile data — not yet implemented (see `DECISIONS.md`, `TASKS.md`). No integration planned for LinkedIn or Email (no viable public API — see `DECISIONS.md`).
 
 ## Build & Runtime
 

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Portfolio — GitHub{% endblock %}
+{% block description %}Placeholder GitHub profile preview.{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap page-head-row">
+    <div>
+      <p class="eyebrow">GITHUB</p>
+      <h1 class="page-title">CODE &amp;<br>COMMITS.</h1>
+      <p class="page-sub">A read-only preview of the GitHub profile — placeholder until it's connected to real data.</p>
+    </div>
+    <img class="page-head-logo" src="{% static 'images/github-logo.png' %}" alt="GitHub logo">
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="profile-card">
+      <div class="profile-avatar"></div>
+      <h2 class="profile-name">Your Name</h2>
+      <p class="profile-handle">@yourusername</p>
+      <p class="profile-bio">Placeholder bio pulled from the GitHub profile goes here.</p>
+      <div class="profile-stats">
+        <div class="profile-stat"><strong>&mdash;</strong><span>Repositories</span></div>
+        <div class="profile-stat"><strong>&mdash;</strong><span>Followers</span></div>
+        <div class="profile-stat"><strong>&mdash;</strong><span>Following</span></div>
+      </div>
+      <div class="profile-actions">
+        <a class="submit-btn" href="#">View on GitHub &rarr;</a>
+      </div>
+    </div>
+    <p class="form-note" style="margin-top:20px">This is a placeholder preview — live GitHub data isn't connected yet.</p>
+  </div>
+</section>
+
+{% endblock %}
