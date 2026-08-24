@@ -99,8 +99,6 @@ Every in-scope page renders real content with no leftover generic placeholder st
 
 **Note:** The site brand mark deferral is now resolved (2026-08-24, post-Phase 5) — the nav/footer "S." auto-derived default was swapped for the owner's real "SK" badge image (background-removed, cleaned). See `DECISIONS.md`.
 
-**Status: Not started.**
-
 ## Phase 6 — Connecting Pages to the Apps, and Modals
 
 ### Objective
@@ -112,7 +110,7 @@ To be defined in further detail by the project owner. Implied by the phase name:
 ### Completion Criteria
 To be defined.
 
-**Status: Not started.**
+**Status: On hold.** Owner's call, 2026-08-24 — no confirmed need for modal UI exists yet, so this phase is paused rather than started. The "connect pages to real data" half of its scope (a real `Project` model, replacing the Phase 3 mockup content) is still expected to happen eventually, just not necessarily bundled with modals or done next — see `TASKS.md`. Work continues with Phase 7.
 
 ## Phase 7 — Blog and Resume
 
