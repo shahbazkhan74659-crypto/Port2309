@@ -104,9 +104,14 @@ h1,h2,h3,p{ margin: 0; }
   content: ""; position: absolute; left: 0; right: 0; bottom: -6px;
   height: 1px; background: var(--accent);
 }
-.nav-mark{
-  font-family: var(--font-display); font-weight: 800; color: var(--accent);
-  font-size: 0.95rem;
+.nav-mark{ display: flex; align-items: center; }
+.nav-mark-badge{
+  height: 28px; width: auto; display: block;
+  filter: drop-shadow(0 0 5px rgba(165,143,245,0.55)) drop-shadow(0 0 12px rgba(165,143,245,0.3));
+  transition: filter 0.25s ease;
+}
+.nav-mark:hover .nav-mark-badge{
+  filter: drop-shadow(0 0 7px rgba(165,143,245,0.75)) drop-shadow(0 0 16px rgba(165,143,245,0.45));
 }
 
 /* ---------- SECTION RHYTHM ---------- */
@@ -262,7 +267,11 @@ a.mockup-link:hover .mockup, a.mockup-link:focus-visible .mockup{ transform: tra
 /* ---------- FOOTER ---------- */
 .foot{ border-top: 1px solid var(--border); padding: 26px var(--edge); }
 .foot-inner{ max-width: var(--max); margin:0 auto; display:flex; justify-content: space-between; align-items:center; flex-wrap: wrap; gap: 14px; }
-.foot-mark{ font-family: var(--font-display); font-weight: 800; color: var(--accent); }
+.foot-mark{ display: flex; align-items: center; }
+.foot-mark-badge{
+  height: 22px; width: auto; display: block;
+  filter: drop-shadow(0 0 4px rgba(165,143,245,0.5)) drop-shadow(0 0 10px rgba(165,143,245,0.25));
+}
 .foot-links{ display:flex; gap: clamp(14px, 3vw, 26px); flex-wrap: wrap; }
 .foot-links a{ font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-dim); transition: color 0.2s ease; }
 .foot-links a:hover{ color: var(--ink); }

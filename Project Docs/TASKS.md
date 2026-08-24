@@ -8,7 +8,7 @@ To be defined. No task is currently confirmed as actively in progress. [Phase 1]
 
 To be defined. The full roadmap (Phase 0–12, see `PHASES.md`) is now named. [Phase 1]–[Phase 5] are complete; detailed task breakdowns for [Phase 6] onward have not yet been given by the project owner. Build from scratch on the confirmed stack — use `prototype/index.html` only as a styling/layout reference, not as code to port (see `DECISIONS.md`).
 
-Deferred, explicitly (owner's choice): swap the site brand mark (nav/footer "S.") for the owner's custom badge image ("SK Badge.png") — the owner asked to be consulted again before this is added, so ask before doing it. See `DECISIONS.md`'s Phase 5 content-swap decision.
+Resolved 2026-08-24: the site brand mark badge swap is done — see Completed below.
 
 Deferred, explicitly (owner's choice, Phase 5): Home's featured-project card and the entire Projects page stay on Phase 3's mockup/placeholder content until the `projects` app gains real models — not an oversight.
 
@@ -42,3 +42,6 @@ None.
 - [x] [Phase 5] Replaced placeholder content with the owner's real content site-wide (identity, Home hero/about-snapshot/statement/CTA, About page, Contact links) — 2026-08-24; explicitly excluded Home's featured-project card and the Projects page (owner's choice, stay on Phase 3 mockup content) and the site brand mark badge swap (deferred, owner wants to be asked first) — see `PHASES.md`, `DECISIONS.md`
 - [x] [Phase 5] Wired `/github/` up to GitHub's public REST API for live avatar/name/bio/repo/follower/following data, with a static-real-values fallback on request failure; added `requests` to `requirements.txt` — 2026-08-24, verified in-browser (see `DECISIONS.md`, `ARCHITECTURE.md`) — this closes out the previously-open "wire the GitHub page up" item
 - [x] Added a scrollable real-repository list to the GitHub page (`.repo-list`, beside the profile card), fetched live from GitHub's repos API, each entry linking out to the real repo — 2026-08-24, ad-hoc addition, verified in-browser (see `DECISIONS.md`, `ARCHITECTURE.md`)
+- [x] Fixed the GitHub page's profile-card/repo-list layout to be equal width and height (switched `.github-layout` from flex to a stretch grid) — 2026-08-24, verified in-browser (see `DECISIONS.md`)
+- [x] Made the GitHub logo in the page header a clickable button linking to the real GitHub profile, with a hover/scale affordance — 2026-08-24, verified in-browser
+- [x] Cleaned the owner's real "SK" badge image (background removed via edge-based flood fill, watermark/noise dropped) and swapped it in as the site's nav/footer brand mark, replacing the auto-derived "S." text — 2026-08-24, verified in-browser (see `DECISIONS.md`, `ARCHITECTURE.md`) — this closes out the deferred badge-swap item

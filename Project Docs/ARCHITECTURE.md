@@ -62,6 +62,8 @@ This describes the **actual current implementation** — the static prototype pl
 
 **Implemented (Django, Phase 3):** `templates/pages/about.html`, `templates/pages/contact.html`, and `templates/pages/projects.html` also extend `base.html`, following the same pattern as Home. `base.html`'s nav/footer now render active-page state via `{% if request.resolver_match.url_name == '...' %}aria-current="page"{% endif %}` per link (the `.nav-link[aria-current="page"]` CSS existed since the Phase 2 port but was unused until now).
 
+**Implemented (post-Phase 5 addition, 2026-08-24):** The nav/footer brand mark in `base.html` (`.nav-mark`/`.foot-mark`) now renders the owner's real "SK" badge image (`static/images/sk-badge.png`) instead of an auto-derived "S." text mark. See `DECISIONS.md` for the background-removal technique used to clean the source asset.
+
 **Planned:** Beyond the base shell, not yet defined — will depend on further Django template structure and which pieces become React islands.
 
 ## Data Flow

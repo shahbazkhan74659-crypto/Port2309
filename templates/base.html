@@ -21,7 +21,9 @@
         <a class="nav-link" href="{% url 'projects' %}"{% if request.resolver_match.url_name == 'projects' %} aria-current="page"{% endif %}>Projects</a>
         <a class="nav-link" href="{% url 'about' %}"{% if request.resolver_match.url_name == 'about' %} aria-current="page"{% endif %}>About</a>
         <a class="nav-link" href="{% url 'contact' %}"{% if request.resolver_match.url_name == 'contact' %} aria-current="page"{% endif %}>Contact</a>
-        <a class="nav-mark" href="{% url 'home' %}" aria-label="Home">S.</a>
+        <a class="nav-mark" href="{% url 'home' %}" aria-label="Home">
+          <img class="nav-mark-badge" src="{% static 'images/sk-badge.png' %}" alt="SK">
+        </a>
       </nav>
     </div>
   </header>
@@ -32,7 +34,9 @@
 
   <footer class="foot">
     <div class="foot-inner">
-      <span class="foot-mark">S.</span>
+      <span class="foot-mark">
+        <img class="foot-mark-badge" src="{% static 'images/sk-badge.png' %}" alt="SK">
+      </span>
       <nav class="foot-links" aria-label="Footer">
         <a href="{% url 'projects' %}">Projects</a><a href="{% url 'about' %}">About</a><a href="{% url 'contact' %}">Contact</a>
         <a href="{% url 'github' %}">GitHub</a>

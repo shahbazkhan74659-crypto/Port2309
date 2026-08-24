@@ -97,7 +97,7 @@ Every in-scope page renders real content with no leftover generic placeholder st
 
 **Status: Complete.** Verified 2026-08-24 — `manage.py check` clean; all pages visually confirmed in-browser with real content (name, role, location, bio, skills, philosophy, contact links); `/github/` confirmed showing live avatar/bio/stats fetched from `api.github.com`; only remaining "placeholder" string on the site is intentionally on Home's featured-project card. See `ARCHITECTURE.md`, `DECISIONS.md`.
 
-**Note:** The site brand mark (nav/footer "S.") currently uses an auto-derived first-initial default. The owner has a custom badge image ("SK Badge.png") to swap in as a final follow-up step — deliberately deferred, not part of this phase's completion.
+**Note:** The site brand mark deferral is now resolved (2026-08-24, post-Phase 5) — the nav/footer "S." auto-derived default was swapped for the owner's real "SK" badge image (background-removed, cleaned). See `DECISIONS.md`.
 
 **Status: Not started.**
 
