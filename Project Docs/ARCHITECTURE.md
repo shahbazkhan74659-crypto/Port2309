@@ -4,9 +4,9 @@ This describes the **actual current implementation** — a single static prototy
 
 ## System Overview
 
-**Implemented:** The repository contains exactly one file, `prototype/index.html` — a self-contained, client-side-rendered mockup with no server, no build step, and no dependencies beyond a Google Fonts stylesheet link. There is no git repository, no package manifest, and no production application code.
+**Implemented:** The repository contains `prototype/index.html` (the standalone static mockup, unchanged — kept only as a styling/layout reference per `DECISIONS.md`) plus, as of 2026-08-24 (Phase 1), a from-scratch Django project scaffold at the repo root: `manage.py` and a `config/` settings package (created via `django-admin startproject config .`), running inside a project-local `.venv` with Django 5.2.14 pinned in `requirements.txt`. No apps, templates, static files, or database models exist yet — this is bare scaffolding only, verified by `manage.py check` and a working `runserver` showing Django's default success page.
 
-**Planned:** A Django server rendering HTML templates, styled with Tailwind CSS, with React mounted into specific DOM nodes ("islands") for interactive pieces. Not implemented yet.
+**Planned:** A Django server rendering HTML templates, styled with Tailwind CSS, with React mounted into specific DOM nodes ("islands") for interactive pieces. The `core`/`projects` apps, templates, static files, and Tailwind/React tooling are not implemented yet.
 
 ## Technology Stack
 
@@ -14,6 +14,11 @@ This describes the **actual current implementation** — a single static prototy
 - Plain HTML, inline CSS (`<style>` block), inline JavaScript (`<script>` block, IIFE, `"use strict"`)
 - No framework, no bundler, no package manager, no build tooling
 - External dependency: Google Fonts (Archivo, Inter, IBM Plex Mono), loaded via `<link>` tags
+
+**Implemented (Django scaffold, Phase 1, 2026-08-24):**
+- Python 3.11.9, Django 5.2.14
+- Project-local virtual environment (`.venv/`, gitignored), dependencies pinned in `requirements.txt`
+- No Tailwind, React, or database engine wired up yet — those remain planned
 
 **Planned (production, not implemented):**
 - Python Django
@@ -25,15 +30,17 @@ This describes the **actual current implementation** — a single static prototy
 
 ## Application Structure
 
-**Implemented:** `prototype/index.html` is the entire application — head metadata, all CSS, an empty `<div id="app"></div>` mount point, and all JavaScript (data, rendering, and routing logic) in one file.
+**Implemented:** `prototype/index.html` is a separate, standalone artifact — head metadata, all CSS, an empty `<div id="app"></div>` mount point, and all JavaScript (data, rendering, and routing logic) in one file.
 
-**Planned:** Not yet scaffolded. As of 2026-08-24 the owner settled on exactly two Django apps (superseding an earlier three-app plan — see `DECISIONS.md`):
+**Implemented (Django, Phase 1):** `manage.py` and a `config/` package (`settings.py`, `urls.py`, `wsgi.py`, `asgi.py`) at the repo root — Django's unmodified default scaffold. No apps have been created yet.
+
+**Planned:** As of 2026-08-24 the owner settled on exactly two Django apps (superseding an earlier three-app plan — see `DECISIONS.md`), to be scaffolded in Phase 4:
 - `core` — views, URLs, and the main routing of the site; identity, etc.
 - `projects` — the owner's projects, works, and code
 
 Where the rest of the originally-planned feature set (Designs, Blog, Resume, Timeline, Hire Me) lands is unresolved — to be defined per feature as those phases come up. See `DECISIONS.md`.
 
-Plus one global `templates/` folder and one global `static/` folder at the project root (not per-app).
+Plus one global `templates/` folder and one global `static/` folder at the project root (not per-app) — not yet created (Phase 2).
 
 ## Component Structure
 
@@ -93,9 +100,11 @@ Not applicable. No auth exists in the prototype or in any implemented production
 
 ## Build & Runtime
 
-**Implemented:** None. The file can be opened directly in a browser or served as a static file; there is no build step, package manager, or dev server.
+**Implemented (prototype):** None. The file can be opened directly in a browser or served as a static file; there is no build step, package manager, or dev server.
 
-**Planned:** Not yet defined — will depend on the Django + Tailwind + React toolchain once set up.
+**Implemented (Django, Phase 1):** `.venv/` (project-local virtual environment) + `requirements.txt` (currently: Django, asgiref, sqlparse, tzdata). Run via `manage.py runserver`. No Tailwind or JS build tooling yet.
+
+**Planned:** Not yet defined — will depend on the Tailwind + React toolchain once set up.
 
 ## Architectural Boundaries
 

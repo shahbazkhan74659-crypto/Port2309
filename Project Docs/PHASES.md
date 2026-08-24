@@ -39,9 +39,9 @@ Initialize the Django project from scratch (per Phase 0 stack decisions and the 
 To be defined in further detail by the project owner. Implied by the phase name: creating the Django project and confirming `runserver` serves Django's default success page.
 
 ### Completion Criteria
-To be defined.
+Running the Django dev server (`runserver`) shows Django's default success page (the "rocket" page) with no errors.
 
-**Status: Not started.**
+**Status: Complete.** Verified 2026-08-24 — `manage.py check` reported no issues, and `runserver` served the rocket page (HTTP 200) at `http://127.0.0.1:8000/`. See `ARCHITECTURE.md` for the resulting project structure.
 
 ## Phase 2 — Static Global Base Structure and a Home Page
 
