@@ -86,7 +86,16 @@ These decisions were made during a prior planning discussion, before any product
 - Context: Phase 2's Home page needed a working URL + view, but the `core`/`projects` apps aren't scaffolded until Phase 4 (see the "Two Django apps" decision above). Django doesn't require an app for basic template-rendering routes.
 - Decision: `config/views.py` holds a plain `home` view; `config/urls.py` routes `path('', views.home, name='home')` directly, with no app involved. Phase 3's additional static pages are expected to follow the same pattern until Phase 4.
 - Reasoning: Avoids scaffolding `core`/`projects` prematurely (out of Phase 2/3 scope) while still letting Home be a real, server-routed page rather than a static file.
-- Consequences: This routing is expected to move into `core`'s `urls.py`/`views.py` once that app exists in Phase 4 — treat `config/views.py`'s page-rendering views as temporary, not a long-term pattern.
+- Consequences: This routing is expected to move into `core`'s `urls.py`/`views.py` once that app exists in Phase 4 — treat `config/views.py`'s page-rendering views as temporary, not a long-term pattern. **Done as of Phase 4, 2026-08-24** — see the `core.urls` decision below.
+
+## Decision: `core.urls` as `ROOT_URLCONF`; `config/` holds only settings/WSGI/ASGI
+
+- Status: Accepted
+- Date: 2026-08-24 (Phase 4)
+- Context: Phase 4 scaffolded `core` and `projects` and moved all routing out of `config/`, per the owner's explicit instruction that `config/` should end up containing only `settings.py`, `wsgi.py`, and `asgi.py` — no `urls.py`, no `views.py`. Django's `ROOT_URLCONF` setting must point at some module with a `urlpatterns` list, so removing `config/urls.py` entirely meant that module had to become something else.
+- Decision: `ROOT_URLCONF = 'core.urls'` in `config/settings.py`. `core/urls.py` holds the full `urlpatterns` list, including `path('admin/', admin.site.urls)` — `core/views.py` holds all page views (`home`, `about`, `contact`, `projects`, `github`), moved verbatim from `config/`. It is included unnamespaced (there is no `include()` layer at all — `core.urls` *is* the root), so every existing `{% url 'home' %}`/`'about'`/`'contact'`/`'projects'`/`'github'` template reference kept working with zero template changes.
+- Reasoning: This matches `core`'s own documented job description (`ARCHITECTURE.md`/the "Two Django apps" decision above: *"views, URLs, and the main routing of the site"*) — `core` acting as the actual root router isn't a workaround, it's what the app boundary was defined to do.
+- Consequences: Any future app-specific urls (e.g. a `projects/urls.py`, once that app grows beyond empty) would be `include()`d from `core/urls.py`, not from a project-level `config/urls.py` — there isn't one. `core` permanently doubles as the site's top-level router. If a future phase ever needs project-level URL concerns (e.g. i18n URL prefixing, a maintenance-mode toggle) that don't belong in `core`, that would need revisiting this decision rather than silently reintroducing `config/urls.py`.
 
 ## Decision: Generic placeholder content for pre-content-model pages
 

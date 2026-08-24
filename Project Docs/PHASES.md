@@ -77,12 +77,12 @@ Nav and footer links in `base.html`, and the internal Home page links that targe
 Scaffold the two Django apps that carry the site's dynamic functionality: `core` (views, URLs, and the site's main routing; identity, etc.) and `projects` (handling the owner's projects, works, and code).
 
 ### Scope
-To be defined in further detail by the project owner. This phase also formally supersedes the earlier three-app plan (`core`/`contents`/`hiring`) — see `DECISIONS.md`. Designs, Blog, Resume, Timeline, and Hire Me are resolved to live in `core` (see `DECISIONS.md`), though building them out is not part of this phase's stated scope.
+Scaffold both apps via `manage.py startapp`, register them in `INSTALLED_APPS`, and move all routing out of `config/` into `core` — `core/views.py` and `core/urls.py` take over everything that had been living in `config/views.py`/`config/urls.py` since Phase 2 (per `DECISIONS.md`'s "Phase 2/3 static pages routed directly via config/" decision, which explicitly anticipated this move). `core/urls.py` becomes the project's `ROOT_URLCONF` directly (see `DECISIONS.md`'s "`core.urls` as `ROOT_URLCONF`" decision) — `config/` is reduced to `settings.py`/`wsgi.py`/`asgi.py` only, no `urls.py`, no `views.py`. `projects` is scaffolded and registered but left fully empty (default `startapp` stub, no views/urls/models) — this phase also formally supersedes the earlier three-app plan (`core`/`contents`/`hiring`) — see `DECISIONS.md`. Designs, Blog, Resume, Timeline, and Hire Me are resolved to live in `core` (see `DECISIONS.md`), though building them out is not part of this phase's stated scope.
 
 ### Completion Criteria
-To be defined.
+`manage.py check` reports no issues; every existing route (`/`, `/about/`, `/contact/`, `/projects/`, `/github/`, `/admin/`) still resolves identically through `core.urls`, with zero template changes required (url names are unnamespaced). `config/` contains only `__init__.py`, `settings.py`, `wsgi.py`, `asgi.py`.
 
-**Status: Not started.**
+**Status: Complete.** Verified 2026-08-24 — `manage.py check` clean; all six routes return their expected status codes (five pages 200, `/admin/` 302 to login); nav `{% url %}` resolution and `aria-current="page"` active-state marking confirmed still correct after the swap. See `ARCHITECTURE.md`, `DECISIONS.md`.
 
 ## Phase 5 — Turning the Static Pages into Dynamic Pages
 

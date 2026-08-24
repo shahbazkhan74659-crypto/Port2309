@@ -1,12 +1,12 @@
 # Architecture
 
-This describes the **actual current implementation** — the static prototype plus a Django project with Home, About, Contact, and a static Projects page (Phases 1–3) — followed by the **planned** production architecture beyond that. See `DECISIONS.md` for the reasoning behind the planned stack.
+This describes the **actual current implementation** — the static prototype plus a Django project with Home, About, Contact, a static Projects page, a placeholder GitHub page, and the `core`/`projects` apps (Phases 1–4) — followed by the **planned** production architecture beyond that. See `DECISIONS.md` for the reasoning behind the planned stack.
 
 ## System Overview
 
-**Implemented:** The repository contains `prototype/index.html` (the standalone static mockup, unchanged — kept only as a styling/layout reference per `DECISIONS.md`) plus a from-scratch Django project: `manage.py` and a `config/` settings package (created via `django-admin startproject config .`) running inside a project-local `.venv` with Django 5.2.14 pinned in `requirements.txt` (Phase 1, 2026-08-24). As of Phase 2 (2026-08-24), it also serves a real Home page: `templates/base.html` (global nav/footer chrome) + `templates/pages/home.html`, styled by a Tailwind CSS build (npm + Tailwind CLI v4) that reproduces the prototype's exact design tokens and section markup, routed directly through `config/views.py`/`config/urls.py` (no Django app yet). As of Phase 3 (2026-08-24), About, Contact, and a static Projects list page are also implemented the same way, and all nav/footer/internal links between the four pages are real routes (no more `href="#"` placeholders for these). No apps, database models, or React tooling exist yet.
+**Implemented:** The repository contains `prototype/index.html` (the standalone static mockup, unchanged — kept only as a styling/layout reference per `DECISIONS.md`) plus a from-scratch Django project: `manage.py` and a `config/` settings package (created via `django-admin startproject config .`) running inside a project-local `.venv` with Django 5.2.14 pinned in `requirements.txt` (Phase 1, 2026-08-24). Phases 2–3 (2026-08-24) added Home, About, Contact, and a static Projects list page, plus a placeholder GitHub page added just after Phase 3 — all styled by a Tailwind CSS build (npm + Tailwind CLI v4) reproducing the prototype's design tokens. As of Phase 4 (2026-08-24), routing/views moved out of `config/` into a real `core` app (`core/views.py`, `core/urls.py` — the latter is now `ROOT_URLCONF` directly), and a `projects` app is scaffolded and registered but intentionally empty (no models/views/urls yet). `config/` now holds only `settings.py`/`wsgi.py`/`asgi.py`. No database models or React tooling exist yet.
 
-**Planned:** A Django server rendering HTML templates, styled with Tailwind CSS, with React mounted into specific DOM nodes ("islands") for interactive pieces. The `core`/`projects` apps, database models (including a real, model-backed Projects listing/detail), and React tooling are not implemented yet.
+**Planned:** A Django server rendering HTML templates, styled with Tailwind CSS, with React mounted into specific DOM nodes ("islands") for interactive pieces. Database models (including a real, model-backed Projects listing/detail, to live in the now-scaffolded `projects` app) and React tooling are not implemented yet.
 
 ## Technology Stack
 
@@ -45,11 +45,9 @@ This describes the **actual current implementation** — the static prototype pl
 
 **Implemented (post-Phase 3 addition, 2026-08-24):** A `github` view/route (`/github/` → `templates/pages/github.html`) added the same way — a placeholder, read-only GitHub profile card (no live API call yet). See `DECISIONS.md` for why GitHub got a custom page while LinkedIn/Email did not.
 
-**Planned:** As of 2026-08-24 the owner settled on exactly two Django apps (superseding an earlier three-app plan — see `DECISIONS.md`), to be scaffolded in Phase 4:
-- `core` — views, URLs, and the main routing of the site; identity, etc.
-- `projects` — the owner's projects, works, and code
+**Implemented (Phase 4, 2026-08-24):** `core` and `projects` apps scaffolded via `manage.py startapp` and registered in `INSTALLED_APPS`. All five view functions (`home`, `about`, `contact`, `projects`, `github`) and the full `urlpatterns` list (including `admin/`) moved verbatim from `config/` into `core/views.py`/`core/urls.py`; `config/views.py` and `config/urls.py` were deleted. `ROOT_URLCONF` now points at `'core.urls'` directly — there is no `config/urls.py` and no `include()` layer, so `core.urls` *is* the site's root router (see `DECISIONS.md` for why this is `core`'s correct role, not a workaround). `projects` exists only as a registered, empty `startapp` scaffold — no models, views, or urls.py yet. The rest of the originally-planned feature set — Designs, Blog, Resume, Timeline, Hire Me — is resolved (2026-08-24) to live in `core`; `projects` is scoped strictly to the owner's projects/works/code. See `DECISIONS.md`.
 
-Routing currently living in `config/` is expected to move into these apps once they exist. The rest of the originally-planned feature set — Designs, Blog, Resume, Timeline, Hire Me — is resolved (2026-08-24) to live in `core`; `projects` is scoped strictly to the owner's projects/works/code. See `DECISIONS.md`.
+**Planned:** `projects` gaining real models/views/urls (a `Project` model, list/detail views) in a future phase, at which point its `urls.py` would be `include()`d from `core/urls.py`.
 
 ## Component Structure
 
@@ -97,9 +95,11 @@ Routing is driven by the browser's `hashchange` event; there is no server-side r
 
 **Implemented (Django, Phase 2):** Real server-side routing via `config/urls.py`: `path('', views.home, name='home')` → `/`.
 
-**Implemented (Django, Phase 3):** `path('about/', ..., name='about')`, `path('contact/', ..., name='contact')`, `path('projects/', ..., name='projects')` added alongside `home`. Nav, footer, and Home's internal links (featured-project explore/mockup link → Projects, "more about me" → About, "get in touch" → Contact) all resolve via `{% url %}` now instead of `href="#"`. Remaining `href="#"` placeholders are limited to things with no real destination yet: GitHub/LinkedIn footer and CTA links (no real social URLs), and the Projects page's per-entry "Explore project"/"View on GitHub" actions (no detail routes or repo URLs yet — those depend on the `projects` app/model, Phase 4).
+**Implemented (Django, Phase 3):** `path('about/', ..., name='about')`, `path('contact/', ..., name='contact')`, `path('projects/', ..., name='projects')` added alongside `home`. Nav, footer, and Home's internal links (featured-project explore/mockup link → Projects, "more about me" → About, "get in touch" → Contact) all resolve via `{% url %}` now instead of `href="#"`. Remaining `href="#"` placeholders are limited to things with no real destination yet: GitHub/LinkedIn footer and CTA links (no real social URLs), and the Projects page's per-entry "Explore project"/"View on GitHub" actions (no detail routes or repo URLs yet — those depend on a real `Project` model).
 
-**Planned:** Django URL routing moving into per-app `urls.py` (`core`, `projects`) once those apps exist (Phase 4) — not yet implemented.
+**Implemented (Django, Phase 4):** All routing now lives in `core/urls.py`, which is `ROOT_URLCONF` itself (unnamespaced) — so every `{% url %}` name from earlier phases (`home`, `about`, `contact`, `projects`, `github`) kept resolving to the exact same paths with no template changes. `config/` no longer has a `urls.py` at all.
+
+**Planned:** A `projects/urls.py`, once that app has real views to route to, `include()`d from `core/urls.py` (which will remain the actual `ROOT_URLCONF` — see `DECISIONS.md`).
 
 ## API Architecture
 
@@ -133,7 +133,7 @@ Not applicable. No auth exists in the prototype or in any implemented production
 
 ## Architectural Boundaries
 
-Production architectural boundaries (Django app responsibilities, template/static layout) are decided in principle (see `DECISIONS.md`) but not yet implemented in code. The prototype has no architectural boundaries beyond being a single file.
+**Implemented (Phase 4, 2026-08-24):** The `core`/`projects` app split (see `DECISIONS.md`) is now real in code, not just decided in principle — `core` owns all current views/URLs/routing, `projects` exists as an empty, registered app awaiting its own models/views. Template/static layout stays global per the Phase 0 decision (unaffected by app boundaries). The prototype has no architectural boundaries beyond being a single file.
 
 ## Important Invariants
 
