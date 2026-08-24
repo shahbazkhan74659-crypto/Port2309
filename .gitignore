@@ -17,3 +17,8 @@ media/
 # Editor
 .vscode/
 .idea/
+
+# Node / Tailwind build
+node_modules/
+static/css/main.css
+static/css/main.css.map

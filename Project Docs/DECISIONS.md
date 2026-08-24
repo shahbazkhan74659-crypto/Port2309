@@ -61,6 +61,42 @@ These decisions were made during a prior planning discussion, before any product
 - Original reasoning: To be defined. (No record explains why a standalone vanilla-JS prototype was chosen over prototyping directly within the planned Django + Tailwind stack.)
 - Consequences: None outstanding — see the "Prototype is a styling/design reference only" decision below, which resolves how it relates to the production build.
 
+## Decision: Tailwind wired via npm + Tailwind CLI v4 (CSS-first `@theme` config)
+
+- Status: Accepted
+- Date: 2026-08-24 (Phase 2)
+- Context: Phase 2 required a working Tailwind CSS build, per the confirmed stack. Node v24.18.0/npm 11.16.0 were confirmed available on the dev machine. Tailwind v4 supports CSS-first configuration (`@theme` in the stylesheet itself) instead of a separate `tailwind.config.js`.
+- Decision: `package.json` at repo root with `tailwindcss` + `@tailwindcss/cli` as devDependencies. Source stylesheet at `static_src/css/input.css` declares the prototype's exact design tokens (colors, fonts) in an `@theme` block, plus the prototype's hand-written component CSS (nav, hero, sections, footer, etc.) ported near-verbatim rather than rewritten as Tailwind utility classes. Built to `static/css/main.css` via `npm run build:css` (one-shot) / `npm run watch:css` (dev). Build output is gitignored, like `node_modules/`.
+- Reasoning: The prototype's design is bespoke art direction (fluid `clamp()` typography, custom color tokens, specific component layouts) rather than a Tailwind-utility-shaped design — porting the CSS as-is guarantees visual fidelity to the prototype (the owner's explicit priority for Phase 2) while still getting Tailwind's build pipeline in place for future utility-based/React-island work.
+- Consequences: `main.css` is a build artifact, not checked into git — `npm install && npm run build:css` (or an already-built `static/css/main.css`) is required before `runserver` shows a styled page. As more Tailwind utilities get used going forward, this file will start mixing hand-written component CSS with generated utilities.
+
+## Decision: Phase 2/3 static pages routed directly via `config/`, not an app
+
+- Status: Accepted
+- Date: 2026-08-24 (Phase 2)
+- Context: Phase 2's Home page needed a working URL + view, but the `core`/`projects` apps aren't scaffolded until Phase 4 (see the "Two Django apps" decision above). Django doesn't require an app for basic template-rendering routes.
+- Decision: `config/views.py` holds a plain `home` view; `config/urls.py` routes `path('', views.home, name='home')` directly, with no app involved. Phase 3's additional static pages are expected to follow the same pattern until Phase 4.
+- Reasoning: Avoids scaffolding `core`/`projects` prematurely (out of Phase 2/3 scope) while still letting Home be a real, server-routed page rather than a static file.
+- Consequences: This routing is expected to move into `core`'s `urls.py`/`views.py` once that app exists in Phase 4 — treat `config/views.py`'s page-rendering views as temporary, not a long-term pattern.
+
+## Decision: Generic placeholder content for pre-content-model pages
+
+- Status: Accepted
+- Date: 2026-08-24 (Phase 2)
+- Context: The prototype's text (name "Renzo Malik," bio, projects, socials) is fictional and, per `CLAUDE.md`, must not be reused as real content. The owner's real bio/project/contact content does not exist yet, and no content models exist until later phases.
+- Decision: Pages built before real content or content models exist (starting with the Phase 2 Home page) use clearly generic, non-identity placeholder copy (e.g. "YOUR NAME," "ROLE / ROLE / ROLE," "Placeholder paragraph about you") hardcoded directly in the template — not the prototype's persona, and not passed via view context yet.
+- Reasoning: Owner's explicit direction — real content decision deferred rather than fabricated.
+- Consequences: Every page built under this decision will need its placeholder copy revisited once real content or content-backed models exist. Do not treat any placeholder string as real biographical/project data.
+
+## Decision: Hero portrait redesigned as a large overlapping image, diverging from the prototype
+
+- Status: Accepted
+- Date: 2026-08-24 (Phase 2, post-completion refinement)
+- Context: The Phase 2 Home page initially ported the prototype's hero portrait treatment as-is: a small (`clamp(150–300px)` wide) image floated right, with text wrapping around it via `shape-outside`. After adding the real portrait photo, the owner asked for a materially different treatment: an image spanning roughly half the screen, sized to its actual aspect ratio (head-to-stomach fully visible, no cropping), positioned top-right just below the sticky nav (slightly overlapping under it), with the hero text (`I BUILD.` / `I WRITE.` / name / `I EXPLORE.`) layered on top of the image via `z-index` rather than flowing around it.
+- Decision: `.hero-portrait-slot` uses `position: absolute` sized by `height` + `aspect-ratio: 1149 / 1369` (the photo's real ratio) instead of the prototype's fixed float box; hero text gets `position: relative; z-index: 2` plus a soft `text-shadow` to stay legible over the photo.
+- Reasoning: Owner's explicit direction, given after seeing the ported-as-is version rendered — the float/wrap treatment worked for the prototype's small decorative portrait but not for a large, real photo meant to anchor the hero.
+- Consequences: This is an intentional, confirmed deviation from "match the prototype's structure" for this one element — do not "fix" it back toward the prototype's float-based layout. Other Home sections (featured project, statement, about snapshot, CTA, nav/footer) still follow the prototype's structure as recorded in the Phase 2 completion note in `PHASES.md`.
+
 ## Decision: Prototype is a styling/design reference only — production build starts from scratch
 
 - Status: Accepted

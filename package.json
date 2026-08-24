@@ -1,0 +1,26 @@
+{
+  "name": "portfolio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:css": "tailwindcss -i ./static_src/css/input.css -o ./static/css/main.css --minify",
+    "watch:css": "tailwindcss -i ./static_src/css/input.css -o ./static/css/main.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shahbazkhan74659-crypto/Port2309.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/shahbazkhan74659-crypto/Port2309/issues"
+  },
+  "homepage": "https://github.com/shahbazkhan74659-crypto/Port2309#readme",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}

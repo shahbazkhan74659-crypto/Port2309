@@ -1,0 +1,46 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Portfolio{% endblock %}</title>
+  <meta name="description" content="{% block description %}Personal portfolio — projects, writing, and contact.{% endblock %}">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="nav-name" href="{% url 'home' %}">YOUR NAME</a>
+      <nav class="nav-links" aria-label="Primary">
+        <a class="nav-link" href="#">Projects</a>
+        <a class="nav-link" href="#">About</a>
+        <a class="nav-link" href="#">Contact</a>
+        <a class="nav-mark" href="{% url 'home' %}" aria-label="Home">P.</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="foot">
+    <div class="foot-inner">
+      <span class="foot-mark">P.</span>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="#">Projects</a><a href="#">About</a><a href="#">Contact</a>
+        <a href="#">GitHub</a><a href="#">LinkedIn</a><a href="#">Email</a>
+      </nav>
+      <span class="foot-copy">&copy; {% now "Y" %} YOUR NAME</span>
+    </div>
+  </footer>
+
+  {% block extra_body %}{% endblock %}
+</body>
+</html>

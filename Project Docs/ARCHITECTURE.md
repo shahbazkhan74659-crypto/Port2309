@@ -1,12 +1,12 @@
 # Architecture
 
-This describes the **actual current implementation** — a single static prototype — followed by the **planned** production architecture, which is not yet implemented. See `DECISIONS.md` for the reasoning behind the planned stack.
+This describes the **actual current implementation** — the static prototype plus a Django project with a working Home page (Phases 1–2) — followed by the **planned** production architecture beyond that. See `DECISIONS.md` for the reasoning behind the planned stack.
 
 ## System Overview
 
-**Implemented:** The repository contains `prototype/index.html` (the standalone static mockup, unchanged — kept only as a styling/layout reference per `DECISIONS.md`) plus, as of 2026-08-24 (Phase 1), a from-scratch Django project scaffold at the repo root: `manage.py` and a `config/` settings package (created via `django-admin startproject config .`), running inside a project-local `.venv` with Django 5.2.14 pinned in `requirements.txt`. No apps, templates, static files, or database models exist yet — this is bare scaffolding only, verified by `manage.py check` and a working `runserver` showing Django's default success page.
+**Implemented:** The repository contains `prototype/index.html` (the standalone static mockup, unchanged — kept only as a styling/layout reference per `DECISIONS.md`) plus a from-scratch Django project: `manage.py` and a `config/` settings package (created via `django-admin startproject config .`) running inside a project-local `.venv` with Django 5.2.14 pinned in `requirements.txt` (Phase 1, 2026-08-24). As of Phase 2 (2026-08-24), it also serves a real Home page: `templates/base.html` (global nav/footer chrome) + `templates/pages/home.html`, styled by a Tailwind CSS build (npm + Tailwind CLI v4) that reproduces the prototype's exact design tokens and section markup, routed directly through `config/views.py`/`config/urls.py` (no Django app yet). No apps, database models, or React tooling exist yet.
 
-**Planned:** A Django server rendering HTML templates, styled with Tailwind CSS, with React mounted into specific DOM nodes ("islands") for interactive pieces. The `core`/`projects` apps, templates, static files, and Tailwind/React tooling are not implemented yet.
+**Planned:** A Django server rendering HTML templates, styled with Tailwind CSS, with React mounted into specific DOM nodes ("islands") for interactive pieces. The `core`/`projects` apps, remaining pages (Projects, About, Contact, etc.), database models, and React tooling are not implemented yet.
 
 ## Technology Stack
 
@@ -18,7 +18,12 @@ This describes the **actual current implementation** — a single static prototy
 **Implemented (Django scaffold, Phase 1, 2026-08-24):**
 - Python 3.11.9, Django 5.2.14
 - Project-local virtual environment (`.venv/`, gitignored), dependencies pinned in `requirements.txt`
-- No Tailwind, React, or database engine wired up yet — those remain planned
+- Pillow 12.3.0 (added 2026-08-24) — image asset processing (e.g. background removal for the hero portrait), not used by the running Django app itself
+
+**Implemented (Tailwind, Phase 2, 2026-08-24):**
+- Node v24.18.0 / npm 11.16.0, `tailwindcss` + `@tailwindcss/cli` v4.3.3 as devDependencies (`package.json`)
+- Source stylesheet `static_src/css/input.css` (CSS-first `@theme` tokens + ported prototype component CSS), built to `static/css/main.css` (gitignored) via `npm run build:css` / `npm run watch:css`
+- No React or database engine wired up yet — those remain planned
 
 **Planned (production, not implemented):**
 - Python Django
@@ -32,15 +37,15 @@ This describes the **actual current implementation** — a single static prototy
 
 **Implemented:** `prototype/index.html` is a separate, standalone artifact — head metadata, all CSS, an empty `<div id="app"></div>` mount point, and all JavaScript (data, rendering, and routing logic) in one file.
 
-**Implemented (Django, Phase 1):** `manage.py` and a `config/` package (`settings.py`, `urls.py`, `wsgi.py`, `asgi.py`) at the repo root — Django's unmodified default scaffold. No apps have been created yet.
+**Implemented (Django, Phase 1):** `manage.py` and a `config/` package (`settings.py`, `urls.py`, `wsgi.py`, `asgi.py`, `views.py`) at the repo root.
+
+**Implemented (Phase 2, 2026-08-24):** `config/views.py` holds a `home` view rendering `templates/pages/home.html`, wired directly in `config/urls.py` as `path('', views.home, name='home')` — an interim, app-less arrangement (see `DECISIONS.md`). One global `templates/` folder (`base.html` + `pages/home.html`) and one global `static/` folder (`css/main.css`, Tailwind-built), per the Phase 0 decision, are both now active via `TEMPLATES[0]['DIRS']`/`STATICFILES_DIRS` in `config/settings.py`.
 
 **Planned:** As of 2026-08-24 the owner settled on exactly two Django apps (superseding an earlier three-app plan — see `DECISIONS.md`), to be scaffolded in Phase 4:
 - `core` — views, URLs, and the main routing of the site; identity, etc.
 - `projects` — the owner's projects, works, and code
 
-Where the rest of the originally-planned feature set (Designs, Blog, Resume, Timeline, Hire Me) lands is unresolved — to be defined per feature as those phases come up. See `DECISIONS.md`.
-
-Plus one global `templates/` folder and one global `static/` folder at the project root (not per-app) — not yet created (Phase 2).
+Routing currently living in `config/` is expected to move into these apps once they exist. Where the rest of the originally-planned feature set (Designs, Blog, Resume, Timeline, Hire Me) lands is unresolved — to be defined per feature as those phases come up. See `DECISIONS.md`.
 
 ## Component Structure
 
@@ -50,13 +55,17 @@ Plus one global `templates/` folder and one global `static/` folder at the proje
 - `mockupFor` / `mockupBar` — decorative "browser chrome" project mockups (no real screenshots)
 - `renderContactForm` / `renderSuccessPanel` / `wireContactForm` — client-side-only contact form and validation
 
-**Planned:** Not yet defined — will depend on Django template structure and which pieces become React islands.
+**Implemented (Django, Phase 2):** `templates/base.html` defines the shared shell (nav header, `<main id="main">` content block, footer) via `{% block content %}`; `templates/pages/home.html` extends it. No template partials/includes yet — nav and footer are inlined directly in `base.html`, since it is itself the single shared shell.
+
+**Planned:** Beyond the base shell, not yet defined — will depend on further Django template structure and which pieces become React islands.
 
 ## Data Flow
 
 **Implemented:** All content is hardcoded in JavaScript objects/arrays at the top of the script — `PROFILE`, `SOCIALS`, `PROJECTS`, `NAV_ITEMS`. On load and on every `hashchange`, `render()` reads `window.location.hash`, picks a page renderer, and replaces `#app`'s `innerHTML` with `renderNav() + <main> + renderFooter()`. There is no data fetching, no API, and no persistence.
 
-**Planned:** Not yet defined — will depend on Django models/views (per `contents` app) once implemented.
+**Implemented (Django, Phase 2):** The Home page's content (name, tagline, roles, featured project, about snapshot, CTA copy) is hardcoded directly in `templates/pages/home.html` as generic placeholder text — not passed via view context, not model-backed. See `DECISIONS.md` for why (prototype content is fictional and must not be reused as real data; real content doesn't exist yet).
+
+**Planned:** Not yet defined beyond that — will depend on Django models/views (per `projects` app and wherever other content types land) once implemented.
 
 ## State Management
 
@@ -76,7 +85,9 @@ Plus one global `templates/` folder and one global `static/` folder at the proje
 
 Routing is driven by the browser's `hashchange` event; there is no server-side routing.
 
-**Planned:** Django URL routing (per app: `core`, `contents`, `hiring`) — not yet implemented.
+**Implemented (Django, Phase 2):** Real server-side routing via `config/urls.py`: `path('', views.home, name='home')` → `/`. All other nav/footer/in-page links are placeholder `href="#"` until their pages exist (Phase 3+).
+
+**Planned:** Django URL routing moving into per-app `urls.py` (`core`, `projects`) once those apps exist (Phase 4) — not yet implemented.
 
 ## API Architecture
 
@@ -102,9 +113,11 @@ Not applicable. No auth exists in the prototype or in any implemented production
 
 **Implemented (prototype):** None. The file can be opened directly in a browser or served as a static file; there is no build step, package manager, or dev server.
 
-**Implemented (Django, Phase 1):** `.venv/` (project-local virtual environment) + `requirements.txt` (currently: Django, asgiref, sqlparse, tzdata). Run via `manage.py runserver`. No Tailwind or JS build tooling yet.
+**Implemented (Django, Phase 1):** `.venv/` (project-local virtual environment) + `requirements.txt` (currently: Django, asgiref, sqlparse, tzdata). Run via `manage.py runserver`.
 
-**Planned:** Not yet defined — will depend on the Tailwind + React toolchain once set up.
+**Implemented (Tailwind, Phase 2):** `npm install` (Node/npm toolchain, `package.json` + `node_modules/`, gitignored) then `npm run build:css` (one-shot, minified) or `npm run watch:css` (rebuild on change) to generate `static/css/main.css` from `static_src/css/input.css`. This build step must run (or `main.css` must already exist) before `runserver` will show a styled page — Django does not invoke it automatically.
+
+**Planned:** React/JS build tooling — not yet set up.
 
 ## Architectural Boundaries
 

@@ -49,12 +49,12 @@ Running the Django dev server (`runserver`) shows Django's default success page 
 Establish the site's global, reusable structure — the base Django template(s), global `templates/`/`static/` layout (per the Phase 0 decision), and Tailwind CSS setup that every page will build on — and implement the Home page against it.
 
 ### Scope
-To be defined in further detail by the project owner. Implied by the phase name: a global base template (nav/footer/shared chrome) and a static (non-dynamic/no-models-yet) Home page built from scratch using `prototype/index.html` only as a styling/layout reference (see `DECISIONS.md`).
+A global `templates/base.html` (nav/footer chrome) and `templates/pages/home.html`, styled via Tailwind CSS (npm + Tailwind CLI v4, CSS-first `@theme` config), reproducing `prototype/index.html`'s exact design tokens and markup structure for the nav, hero, featured project, statement, about-snapshot, and CTA sections. Routed directly via `config/views.py` + `config/urls.py` (no Django app yet — `core`/`projects` are Phase 4). Content uses generic placeholders (not the prototype's fictional persona), per owner direction — see `DECISIONS.md`.
 
 ### Completion Criteria
-To be defined.
+`manage.py runserver` serves the Home page at `/` with no errors, styled via the Tailwind-built stylesheet, visually matching `prototype/index.html`'s theme and structure (placeholder content aside).
 
-**Status: Not started.**
+**Status: Complete.** Verified 2026-08-24 — `manage.py check` reported no issues; `/` returns HTTP 200 with the expected structural classes (`nav`, `hero-line`, `feat-title`, `cta-title`, `foot`); `/static/css/main.css` builds via `npm run build:css` and serves HTTP 200. See `ARCHITECTURE.md`.
 
 ## Phase 3 — Other Static Pages
 
