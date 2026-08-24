@@ -27,10 +27,11 @@ This describes the **actual current implementation** — a single static prototy
 
 **Implemented:** `prototype/index.html` is the entire application — head metadata, all CSS, an empty `<div id="app"></div>` mount point, and all JavaScript (data, rendering, and routing logic) in one file.
 
-**Planned:** Not yet scaffolded. Prior planning established three Django apps (see `DECISIONS.md`):
-- `core` — home/nav views + urls, and search bar logic
-- `contents` — Projects, Designs, Blog, Resume, and a vertical Timeline, all as separate models within this one app
-- `hiring` — the "Hire Me" feature logic
+**Planned:** Not yet scaffolded. As of 2026-08-24 the owner settled on exactly two Django apps (superseding an earlier three-app plan — see `DECISIONS.md`):
+- `core` — views, URLs, and the main routing of the site; identity, etc.
+- `projects` — the owner's projects, works, and code
+
+Where the rest of the originally-planned feature set (Designs, Blog, Resume, Timeline, Hire Me) lands is unresolved — to be defined per feature as those phases come up. See `DECISIONS.md`.
 
 Plus one global `templates/` folder and one global `static/` folder at the project root (not per-app).
 

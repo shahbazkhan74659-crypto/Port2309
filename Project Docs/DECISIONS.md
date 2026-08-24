@@ -13,7 +13,7 @@ These decisions were made during a prior planning discussion, before any product
 
 ## Decision: Three Django apps — `core`, `contents`, `hiring`
 
-- Status: Accepted
+- Status: **Superseded** (2026-08-24) — see "Two Django apps — `core`, `projects`" below.
 - Date: 2026-08-19
 - Context: The site's feature set (Projects, Designs, Blog, Resume, Timeline, Hire Me, home/nav, search) needed to be organized into Django apps.
 - Decision: Exactly three apps:
@@ -21,7 +21,18 @@ These decisions were made during a prior planning discussion, before any product
   - `contents` — Projects, Designs, Blog, Resume, and a vertical Timeline (college → now), as separate models within one app
   - `hiring` — the "Hire Me" feature logic
 - Reasoning: To be defined beyond the boundary itself. (One nuance is recorded — see "Designs kept removable" below — but the broader rationale for exactly this three-way split was not captured.)
-- Consequences: Not yet implemented. `PHASES.md` / `TASKS.md` should be updated once Django scaffolding begins to confirm the boundaries hold in practice.
+- Consequences: Never implemented, so nothing needs unwinding in code. Superseded by the owner's explicit simplification to two apps.
+
+## Decision: Two Django apps — `core`, `projects`
+
+- Status: Accepted
+- Date: 2026-08-24
+- Context: While naming Phase 4 of the roadmap, the owner explicitly discarded the earlier three-app plan (`core`/`contents`/`hiring`) in favor of a simpler two-app structure.
+- Decision: Exactly two apps:
+  - `core` — views, URLs, and the main routing of the site; identity (e.g. About/home identity content), etc.
+  - `projects` — the owner's projects, works, and code — replaces the "Projects" portion of the old `contents` app.
+- Reasoning: Owner's explicit direction: "forget those three apps we decided back then... only two apps... that's enough."
+- Consequences: **Open question** — where Designs, Blog, Resume, Timeline, and the "Hire Me" feature (previously slated for `contents`/`hiring`) now live is unresolved: whether they fold into `core` or `projects`, become their own app(s) later, or are dropped from scope has not been stated. Do not assume; ask the owner when one of those features comes up in a phase. See `TASKS.md`. The "Designs kept removable via feature flag" decision below also needs revisiting once this is resolved, since it was written against the now-superseded `contents` app.
 
 ## Decision: Global `templates/` and `static/` directories, not per-app
 
@@ -34,12 +45,12 @@ These decisions were made during a prior planning discussion, before any product
 
 ## Decision: Designs feature kept removable via feature flag
 
-- Status: Accepted
+- Status: Accepted in principle, but **app placement pending** (2026-08-24) — see the `core`/`projects` decision above.
 - Date: 2026-08-19
 - Context: The Designs feature may be dropped from the site in the future, unlike Projects, Blog, Resume, and Timeline.
 - Decision: Implement Designs as its own model with a feature flag gating its URLs, nav entry, and search visibility, kept isolated so it can be removed without disturbing Projects, Blog, Resume, or Timeline.
 - Reasoning: Anticipated possibility that Designs will be cut; isolating it avoids entangling its removal with unrelated features.
-- Consequences: When `contents` app is implemented, Designs-related code should stay isolated from the other content models per this decision.
+- Consequences: The isolation principle (own model + feature flag) still stands, but it originally assumed a `contents` app that no longer exists in the plan. Which app Designs now belongs to is unresolved — see the open question in the `core`/`projects` decision above.
 
 ## Decision: Build a standalone static visual prototype before production implementation
 
