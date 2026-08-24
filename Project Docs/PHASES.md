@@ -110,7 +110,7 @@ To be defined in further detail by the project owner. Implied by the phase name:
 ### Completion Criteria
 To be defined.
 
-**Status: On hold.** Owner's call, 2026-08-24 — no confirmed need for modal UI exists yet, so this phase is paused rather than started. The "connect pages to real data" half of its scope (a real `Project` model, replacing the Phase 3 mockup content) is still expected to happen eventually, just not necessarily bundled with modals or done next — see `TASKS.md`. Work continues with Phase 7.
+**Status: Superseded — merged into Phase 8.** Owner's call, 2026-08-24. This phase was briefly put on hold (no confirmed need for modal UI existed yet), then its scope was folded into a redefined Phase 8 rather than resumed separately — see `DECISIONS.md`'s "Timeline cut from the roadmap; Phase 6 merged into a redefined Phase 8" decision. The objective/scope above is kept as a historical record of what this phase originally covered; the actual work now happens under Phase 8. Work continues with Phase 7 next.
 
 ## Phase 7 — Blog and Resume
 
@@ -125,13 +125,13 @@ To be defined.
 
 **Status: Not started.**
 
-## Phase 8 — Vertical Growth Timeline, Contact, and Hire Me
+## Phase 8 — Projects App: Modal & Mechanism, and Hire Me
 
 ### Objective
-Build the vertical Timeline feature (college → now, per `PROJECT.md`), a working Contact feature (replacing the prototype's simulated-only contact form), and the "Hire Me" feature.
+Redefined 2026-08-24 (owner's direction, see `DECISIONS.md`), superseding this phase's original scope (Vertical Growth Timeline, Contact, and Hire Me — Timeline is cut from the roadmap entirely, Contact is considered already covered by the real Contact page/info shipped in Phases 3/5). Build the real `projects` app — a `Project` model replacing the Phase 3/5 mockup content on the Projects page and Home's featured-project card — with a modal-based mechanism for viewing project details, and build the "Hire Me" feature. This absorbs the held/superseded Phase 6's "connect pages to real data + modal UI" scope.
 
 ### Scope
-To be defined in further detail by the project owner. Timeline, Contact, and Hire Me all live in the `core` app (see `DECISIONS.md`). Designs remains the one originally-planned feature with no phase yet — when scheduled, it also belongs in `core`.
+To be defined in further detail by the project owner. Implied by the redefined objective: a `Project` model (fields mirroring what the Phase 3 mockup already established — name, description, tech stack, category, year, role, links), list/detail views in the `projects` app, and a modal mechanism for opening project details without a full page navigation (the concrete answer to Phase 6's originally-speculative modal UI, and likely where React/JS islands, per `DECISIONS.md`, actually get used for the first time). "Hire Me" lives in `core` (see `DECISIONS.md`). Designs remains the one originally-planned feature with no phase yet — when scheduled, it also belongs in `core`.
 
 ### Completion Criteria
 To be defined.

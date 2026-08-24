@@ -22,8 +22,9 @@ Build one site where anyone can find everything about the owner: Projects, Desig
 
 ## Non-Goals
 
-- Designs may be dropped from the site in the future — the feature is intended to be easy to remove without disturbing Projects, Blog, Resume, or Timeline. See `DECISIONS.md`.
+- Designs may be dropped from the site in the future — the feature is intended to be easy to remove without disturbing Projects, Blog, or Resume. See `DECISIONS.md`.
 - Not a full single-page application; React is intended for islands of interactivity only, not for driving overall page routing/rendering.
+- A vertical Timeline feature is not being built — cut from the roadmap (owner's call, 2026-08-24). See `DECISIONS.md`.
 
 ## Target Users
 
@@ -41,10 +42,9 @@ Per prior planning discussion (see `DECISIONS.md`), the site is intended to cove
 - Contact
 - Skills
 - GitHub links
-- A vertical Timeline of the owner's journey (college → now)
 - "Hire Me" feature
 
-The existing static prototype (`prototype/index.html`) currently demonstrates a subset of this: Home, Projects (list + detail), About, and Contact, using placeholder persona/content. It does not represent Designs, Resume, Skills, Timeline, or Hire Me. See `ARCHITECTURE.md`.
+The existing static prototype (`prototype/index.html`) currently demonstrates a subset of this: Home, Projects (list + detail), About, and Contact, using placeholder persona/content. It does not represent Designs, Resume, Skills, or Hire Me. See `ARCHITECTURE.md`.
 
 ## Current Status
 

@@ -2,17 +2,17 @@
 
 ## Active
 
-To be defined. No task is currently confirmed as actively in progress. [Phase 1]–[Phase 5] are complete; [Phase 6] is on hold (see below); a [Phase 7] task breakdown has not yet been given by the project owner.
+To be defined. No task is currently confirmed as actively in progress. [Phase 1]–[Phase 5] are complete; [Phase 6] is superseded/merged into a redefined [Phase 8] (see below); a [Phase 7] task breakdown has not yet been given by the project owner.
 
 ## Next
 
 [Phase 7] "Blog and Resume" is next, per the owner's explicit direction (2026-08-24) — detailed task breakdown not yet given. Build from scratch on the confirmed stack — use `prototype/index.html` only as a styling/layout reference, not as code to port (see `DECISIONS.md`).
 
-**[Phase 6] is on hold** (owner's call, 2026-08-24) — no confirmed need for modal UI exists, so the phase is paused rather than skipped or redefined. Its "connect pages to real data" half (a real `Project` model, replacing the still-hardcoded Phase 3 Projects page / Home featured-project content) remains a real, pending need — just not scheduled next. See `PHASES.md`.
+**[Phase 6] is superseded — merged into a redefined [Phase 8]** (owner's call, 2026-08-24). [Phase 8] is now "Projects App: Modal & Mechanism, and Hire Me" — a real `Project` model (replacing the still-hardcoded Phase 3 Projects page / Home featured-project content) plus a modal mechanism for project details, plus "Hire Me". Timeline is cut from the roadmap entirely (not deferred); Contact gets no further scheduled work (considered already covered). See `PHASES.md`, `DECISIONS.md`.
 
 Resolved 2026-08-24: the site brand mark badge swap is done — see Completed below.
 
-Deferred, explicitly (owner's choice, Phase 5): Home's featured-project card and the entire Projects page stay on Phase 3's mockup/placeholder content until the `projects` app gains real models — not an oversight; also now the deferred core of [Phase 6] once it resumes.
+Deferred, explicitly (owner's choice, Phase 5): Home's featured-project card and the entire Projects page stay on Phase 3's mockup/placeholder content until the `projects` app gains real models — not an oversight; this is now [Phase 8]'s scope.
 
 Resolved 2026-08-24: Designs, Blog, Resume, Timeline, and Hire Me all live in the `core` app; `projects` is scoped strictly to the owner's projects/works/code. **Designs still has no phase assigned yet** — when it's scheduled, it belongs in `core` per this decision. See `DECISIONS.md`.
 
