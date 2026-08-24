@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Portfolio — About{% endblock %}
+{% block description %}Placeholder about page — background, interests, and skills.{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">ABOUT ME</p>
+    <h1 class="page-title">WHO'S<br>BEHIND THIS.</h1>
+    <p class="about-lede" style="margin-top:28px">Placeholder paragraph introducing who you are and what you do.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap two-col">
+    <div>
+      <h2 class="stack-title">Background</h2>
+      <p class="prose">Placeholder paragraph about your background — where you're from, what led you here, and your path so far.</p>
+    </div>
+    <div>
+      <h2 class="stack-title">What I care about</h2>
+      <p class="prose">Placeholder paragraph about the kind of problems or technical work you're drawn to.</p>
+      <p class="prose">Placeholder paragraph about your interests outside of the technical side of things.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <p class="eyebrow" style="margin-bottom:20px">PHILOSOPHY</p>
+    <blockquote class="quote-block">Placeholder quote about how you approach your work.</blockquote>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <p class="eyebrow" style="margin-bottom:24px">SKILLS &amp; TOOLS</p>
+    <div class="skill-groups">
+      <div>
+        <p class="skill-group-label">Languages</p>
+        <div class="skill-tags">
+          <span class="skill-tag">Skill</span><span class="skill-tag">Skill</span><span class="skill-tag">Skill</span>
+        </div>
+      </div>
+      <div>
+        <p class="skill-group-label">Frameworks &amp; Tools</p>
+        <div class="skill-tags">
+          <span class="skill-tag">Skill</span><span class="skill-tag">Skill</span><span class="skill-tag">Skill</span>
+        </div>
+      </div>
+      <div>
+        <p class="skill-group-label">Currently learning</p>
+        <div class="skill-tags">
+          <span class="skill-tag">Skill</span><span class="skill-tag">Skill</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <p class="eyebrow" style="margin-bottom:20px">WHERE THIS IS GOING</p>
+    <p class="prose" style="max-width:56ch; font-size:1.1rem;">Placeholder paragraph about what you're currently working toward.</p>
+    <a class="explore-link more-link" href="{% url 'contact' %}">GET IN TOUCH <span class="arrow">&rarr;</span></a>
+  </div>
+</section>
+
+{% endblock %}

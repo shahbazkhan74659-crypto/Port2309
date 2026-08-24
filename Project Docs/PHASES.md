@@ -62,12 +62,14 @@ A global `templates/base.html` (nav/footer chrome) and `templates/pages/home.htm
 Build out the remaining static (non-dynamic/no-models-yet) pages on top of the Phase 2 global base structure.
 
 ### Scope
-To be defined in further detail by the project owner. Implied by the phase name and the prototype reference (see `PROJECT.md`, `DECISIONS.md`): pages such as About and Contact beyond the Phase 2 Home page, built from scratch using `prototype/index.html` only as a styling/layout reference — not yet the dynamic, model-backed pages that depend on the `projects` app (and any other app(s) still to be resolved, see `DECISIONS.md`).
+About, Contact, and a static Projects list page, built from scratch on top of the Phase 2 global base structure — using `prototype/index.html` only as a styling/layout reference, per `DECISIONS.md`. Routed directly via `config/views.py` + `config/urls.py`, same as Home (still no `core`/`projects` apps — those are Phase 4). All three pages use hardcoded, generic placeholder content (`DECISIONS.md`'s "Generic placeholder content for pre-content-model pages" decision) rather than the prototype's persona/project data. The Projects page is a **static, hardcoded list only** — no per-project detail pages or slugs (those depend on the real `projects` app/model, Phase 4) and its data is not model-backed; it will be superseded by the real listing once Phase 4 lands. The Contact page ships as static markup only — no client-side validation or simulated-submit JS (deferred to Phase 5/8).
+
+Nav and footer links in `base.html`, and the internal Home page links that target these pages, were updated from `href="#"` placeholders to real routes, including `aria-current="page"` active-state marking on the nav (CSS for this existed since the Phase 2 port but was unused until now).
 
 ### Completion Criteria
-To be defined.
+`manage.py runserver` serves `/about/`, `/contact/`, and `/projects/` at HTTP 200 inside the shared `base.html` shell, styled via the Tailwind-built stylesheet, visually matching `prototype/index.html`'s theme (placeholder content aside). Nav/footer links to these pages work and show the active-page state; Home's "more about me", "get in touch", and featured-project links resolve to the real pages instead of `#`.
 
-**Status: Not started.**
+**Status: Complete.** Verified 2026-08-24 — `manage.py check` reported no issues; `/`, `/about/`, `/contact/`, and `/projects/` all return HTTP 200; `aria-current="page"` confirmed present on the correct nav link per page; new CSS classes (`.proj-entry`, `.contact-grid`, `.skill-tag`, etc.) confirmed present in the built `static/css/main.css`. Visual confirmation in-browser was not performed this session (browser automation was unavailable) — the project owner should give it a visual pass. See `ARCHITECTURE.md`.
 
 ## Phase 4 — Apps: `core`, `projects`
 
@@ -75,7 +77,7 @@ To be defined.
 Scaffold the two Django apps that carry the site's dynamic functionality: `core` (views, URLs, and the site's main routing; identity, etc.) and `projects` (handling the owner's projects, works, and code).
 
 ### Scope
-To be defined in further detail by the project owner. This phase also formally supersedes the earlier three-app plan (`core`/`contents`/`hiring`) — see `DECISIONS.md`. Where Designs, Blog, Resume, Timeline, and Hire Me fit is unresolved and not part of this phase's stated scope.
+To be defined in further detail by the project owner. This phase also formally supersedes the earlier three-app plan (`core`/`contents`/`hiring`) — see `DECISIONS.md`. Designs, Blog, Resume, Timeline, and Hire Me are resolved to live in `core` (see `DECISIONS.md`), though building them out is not part of this phase's stated scope.
 
 ### Completion Criteria
 To be defined.
@@ -114,7 +116,7 @@ To be defined.
 Build the Blog and Resume features.
 
 ### Scope
-To be defined in further detail by the project owner. This phase begins resolving part of the open question in `DECISIONS.md` (where Designs/Blog/Resume/Timeline/Hire Me fit under the two-app `core`/`projects` plan) — which app(s) Blog and Resume live in has not yet been stated.
+To be defined in further detail by the project owner. Blog and Resume both live in the `core` app (see `DECISIONS.md`).
 
 ### Completion Criteria
 To be defined.
@@ -127,7 +129,7 @@ To be defined.
 Build the vertical Timeline feature (college → now, per `PROJECT.md`), a working Contact feature (replacing the prototype's simulated-only contact form), and the "Hire Me" feature.
 
 ### Scope
-To be defined in further detail by the project owner. This phase resolves most of the remaining open question in `DECISIONS.md` (where Designs/Blog/Resume/Timeline/Hire Me fit under the two-app `core`/`projects` plan) — Timeline and Hire Me are now scheduled, though which app(s) they live in has not yet been stated. Designs remains the one originally-planned feature with no phase yet.
+To be defined in further detail by the project owner. Timeline, Contact, and Hire Me all live in the `core` app (see `DECISIONS.md`). Designs remains the one originally-planned feature with no phase yet — when scheduled, it also belongs in `core`.
 
 ### Completion Criteria
 To be defined.

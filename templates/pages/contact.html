@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Portfolio — Contact{% endblock %}
+{% block description %}Placeholder contact page — get in touch.{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">CONTACT</p>
+    <h1 class="page-title">LET'S TALK.</h1>
+    <p class="page-sub">Whether it's a project, a question, or just something worth discussing — placeholder intro text about getting in touch.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap contact-grid">
+    <div>
+      <ul class="contact-list">
+        <li class="contact-row">
+          <a href="mailto:you@example.com" style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+            <span class="contact-row-label">Email</span><span class="contact-row-value">you@example.com</span>
+          </a>
+        </li>
+        <li class="contact-row">
+          <a href="#" style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+            <span class="contact-row-label">GitHub</span><span class="contact-row-value">github.com/yourusername</span>
+          </a>
+        </li>
+        <li class="contact-row">
+          <a href="#" style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+            <span class="contact-row-label">LinkedIn</span><span class="contact-row-value">linkedin.com/in/yourusername</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <form>
+        <div class="field">
+          <label for="cf-name">Name</label>
+          <input id="cf-name" name="name" type="text" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="cf-email">Email</label>
+          <input id="cf-email" name="email" type="email" autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="cf-message">Message</label>
+          <textarea id="cf-message" name="message"></textarea>
+        </div>
+        <button class="submit-btn" type="submit">Send message &rarr;</button>
+        <p class="form-note">This form isn't connected yet — email me directly using the address above.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

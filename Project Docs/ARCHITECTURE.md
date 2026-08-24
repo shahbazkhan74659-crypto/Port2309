@@ -1,12 +1,12 @@
 # Architecture
 
-This describes the **actual current implementation** — the static prototype plus a Django project with a working Home page (Phases 1–2) — followed by the **planned** production architecture beyond that. See `DECISIONS.md` for the reasoning behind the planned stack.
+This describes the **actual current implementation** — the static prototype plus a Django project with Home, About, Contact, and a static Projects page (Phases 1–3) — followed by the **planned** production architecture beyond that. See `DECISIONS.md` for the reasoning behind the planned stack.
 
 ## System Overview
 
-**Implemented:** The repository contains `prototype/index.html` (the standalone static mockup, unchanged — kept only as a styling/layout reference per `DECISIONS.md`) plus a from-scratch Django project: `manage.py` and a `config/` settings package (created via `django-admin startproject config .`) running inside a project-local `.venv` with Django 5.2.14 pinned in `requirements.txt` (Phase 1, 2026-08-24). As of Phase 2 (2026-08-24), it also serves a real Home page: `templates/base.html` (global nav/footer chrome) + `templates/pages/home.html`, styled by a Tailwind CSS build (npm + Tailwind CLI v4) that reproduces the prototype's exact design tokens and section markup, routed directly through `config/views.py`/`config/urls.py` (no Django app yet). No apps, database models, or React tooling exist yet.
+**Implemented:** The repository contains `prototype/index.html` (the standalone static mockup, unchanged — kept only as a styling/layout reference per `DECISIONS.md`) plus a from-scratch Django project: `manage.py` and a `config/` settings package (created via `django-admin startproject config .`) running inside a project-local `.venv` with Django 5.2.14 pinned in `requirements.txt` (Phase 1, 2026-08-24). As of Phase 2 (2026-08-24), it also serves a real Home page: `templates/base.html` (global nav/footer chrome) + `templates/pages/home.html`, styled by a Tailwind CSS build (npm + Tailwind CLI v4) that reproduces the prototype's exact design tokens and section markup, routed directly through `config/views.py`/`config/urls.py` (no Django app yet). As of Phase 3 (2026-08-24), About, Contact, and a static Projects list page are also implemented the same way, and all nav/footer/internal links between the four pages are real routes (no more `href="#"` placeholders for these). No apps, database models, or React tooling exist yet.
 
-**Planned:** A Django server rendering HTML templates, styled with Tailwind CSS, with React mounted into specific DOM nodes ("islands") for interactive pieces. The `core`/`projects` apps, remaining pages (Projects, About, Contact, etc.), database models, and React tooling are not implemented yet.
+**Planned:** A Django server rendering HTML templates, styled with Tailwind CSS, with React mounted into specific DOM nodes ("islands") for interactive pieces. The `core`/`projects` apps, database models (including a real, model-backed Projects listing/detail), and React tooling are not implemented yet.
 
 ## Technology Stack
 
@@ -41,11 +41,13 @@ This describes the **actual current implementation** — the static prototype pl
 
 **Implemented (Phase 2, 2026-08-24):** `config/views.py` holds a `home` view rendering `templates/pages/home.html`, wired directly in `config/urls.py` as `path('', views.home, name='home')` — an interim, app-less arrangement (see `DECISIONS.md`). One global `templates/` folder (`base.html` + `pages/home.html`) and one global `static/` folder (`css/main.css`, Tailwind-built), per the Phase 0 decision, are both now active via `TEMPLATES[0]['DIRS']`/`STATICFILES_DIRS` in `config/settings.py`.
 
+**Implemented (Phase 3, 2026-08-24):** Same app-less pattern extended to three more pages — `config/views.py` gained `about`, `contact`, and `projects` view functions, each rendering their `templates/pages/*.html` counterpart, registered in `config/urls.py` as `path('about/', ...)` / `path('contact/', ...)` / `path('projects/', ...)`.
+
 **Planned:** As of 2026-08-24 the owner settled on exactly two Django apps (superseding an earlier three-app plan — see `DECISIONS.md`), to be scaffolded in Phase 4:
 - `core` — views, URLs, and the main routing of the site; identity, etc.
 - `projects` — the owner's projects, works, and code
 
-Routing currently living in `config/` is expected to move into these apps once they exist. Where the rest of the originally-planned feature set (Designs, Blog, Resume, Timeline, Hire Me) lands is unresolved — to be defined per feature as those phases come up. See `DECISIONS.md`.
+Routing currently living in `config/` is expected to move into these apps once they exist. The rest of the originally-planned feature set — Designs, Blog, Resume, Timeline, Hire Me — is resolved (2026-08-24) to live in `core`; `projects` is scoped strictly to the owner's projects/works/code. See `DECISIONS.md`.
 
 ## Component Structure
 
@@ -57,6 +59,8 @@ Routing currently living in `config/` is expected to move into these apps once t
 
 **Implemented (Django, Phase 2):** `templates/base.html` defines the shared shell (nav header, `<main id="main">` content block, footer) via `{% block content %}`; `templates/pages/home.html` extends it. No template partials/includes yet — nav and footer are inlined directly in `base.html`, since it is itself the single shared shell.
 
+**Implemented (Django, Phase 3):** `templates/pages/about.html`, `templates/pages/contact.html`, and `templates/pages/projects.html` also extend `base.html`, following the same pattern as Home. `base.html`'s nav/footer now render active-page state via `{% if request.resolver_match.url_name == '...' %}aria-current="page"{% endif %}` per link (the `.nav-link[aria-current="page"]` CSS existed since the Phase 2 port but was unused until now).
+
 **Planned:** Beyond the base shell, not yet defined — will depend on further Django template structure and which pieces become React islands.
 
 ## Data Flow
@@ -64,6 +68,8 @@ Routing currently living in `config/` is expected to move into these apps once t
 **Implemented:** All content is hardcoded in JavaScript objects/arrays at the top of the script — `PROFILE`, `SOCIALS`, `PROJECTS`, `NAV_ITEMS`. On load and on every `hashchange`, `render()` reads `window.location.hash`, picks a page renderer, and replaces `#app`'s `innerHTML` with `renderNav() + <main> + renderFooter()`. There is no data fetching, no API, and no persistence.
 
 **Implemented (Django, Phase 2):** The Home page's content (name, tagline, roles, featured project, about snapshot, CTA copy) is hardcoded directly in `templates/pages/home.html` as generic placeholder text — not passed via view context, not model-backed. See `DECISIONS.md` for why (prototype content is fictional and must not be reused as real data; real content doesn't exist yet).
+
+**Implemented (Django, Phase 3):** Same pattern for About, Contact, and Projects — all content (bio/skills placeholders, contact rows, the three placeholder project entries) is hardcoded directly in each template, not passed via view context. Notably, the Projects page's three entries are hardcoded markup, **not** a loop over a data structure or model — there is no `Project` model yet (that's Phase 4); each entry is a literal repeated block in `templates/pages/projects.html`.
 
 **Planned:** Not yet defined beyond that — will depend on Django models/views (per `projects` app and wherever other content types land) once implemented.
 
@@ -85,7 +91,9 @@ Routing currently living in `config/` is expected to move into these apps once t
 
 Routing is driven by the browser's `hashchange` event; there is no server-side routing.
 
-**Implemented (Django, Phase 2):** Real server-side routing via `config/urls.py`: `path('', views.home, name='home')` → `/`. All other nav/footer/in-page links are placeholder `href="#"` until their pages exist (Phase 3+).
+**Implemented (Django, Phase 2):** Real server-side routing via `config/urls.py`: `path('', views.home, name='home')` → `/`.
+
+**Implemented (Django, Phase 3):** `path('about/', ..., name='about')`, `path('contact/', ..., name='contact')`, `path('projects/', ..., name='projects')` added alongside `home`. Nav, footer, and Home's internal links (featured-project explore/mockup link → Projects, "more about me" → About, "get in touch" → Contact) all resolve via `{% url %}` now instead of `href="#"`. Remaining `href="#"` placeholders are limited to things with no real destination yet: GitHub/LinkedIn footer and CTA links (no real social URLs), and the Projects page's per-entry "Explore project"/"View on GitHub" actions (no detail routes or repo URLs yet — those depend on the `projects` app/model, Phase 4).
 
 **Planned:** Django URL routing moving into per-app `urls.py` (`core`, `projects`) once those apps exist (Phase 4) — not yet implemented.
 

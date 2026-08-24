@@ -32,7 +32,7 @@ These decisions were made during a prior planning discussion, before any product
   - `core` — views, URLs, and the main routing of the site; identity (e.g. About/home identity content), etc.
   - `projects` — the owner's projects, works, and code — replaces the "Projects" portion of the old `contents` app.
 - Reasoning: Owner's explicit direction: "forget those three apps we decided back then... only two apps... that's enough."
-- Consequences: **Open question** — where Designs, Blog, Resume, Timeline, and the "Hire Me" feature (previously slated for `contents`/`hiring`) now live is unresolved: whether they fold into `core` or `projects`, become their own app(s) later, or are dropped from scope has not been stated. Do not assume; ask the owner when one of those features comes up in a phase. See `TASKS.md`. The "Designs kept removable via feature flag" decision below also needs revisiting once this is resolved, since it was written against the now-superseded `contents` app.
+- Consequences: Where Designs, Blog, Resume, Timeline, and the "Hire Me" feature (previously slated for `contents`/`hiring`) now live was initially an open question — **resolved 2026-08-24, see "Feature placement: Designs/Blog/Resume/Timeline/Hire Me → `core`" below.** The "Designs kept removable via feature flag" decision below also needed revisiting once this was resolved, since it was written against the now-superseded `contents` app — see that decision's updated Consequences.
 
 ## Decision: Global `templates/` and `static/` directories, not per-app
 
@@ -50,7 +50,16 @@ These decisions were made during a prior planning discussion, before any product
 - Context: The Designs feature may be dropped from the site in the future, unlike Projects, Blog, Resume, and Timeline.
 - Decision: Implement Designs as its own model with a feature flag gating its URLs, nav entry, and search visibility, kept isolated so it can be removed without disturbing Projects, Blog, Resume, or Timeline.
 - Reasoning: Anticipated possibility that Designs will be cut; isolating it avoids entangling its removal with unrelated features.
-- Consequences: The isolation principle (own model + feature flag) still stands, but it originally assumed a `contents` app that no longer exists in the plan. Which app Designs now belongs to is unresolved — see the open question in the `core`/`projects` decision above.
+- Consequences: The isolation principle (own model + feature flag) still stands, but it originally assumed a `contents` app that no longer exists in the plan. As of 2026-08-24, Designs is placed in `core` (see "Feature placement: Designs/Blog/Resume/Timeline/Hire Me → `core`" below) — the feature-flag isolation still applies within `core`.
+
+## Decision: Feature placement — Designs, Blog, Resume, Timeline, Hire Me → `core`
+
+- Status: Accepted
+- Date: 2026-08-24
+- Context: The "Two Django apps — `core`, `projects`" decision above left it unresolved where Designs, Blog, Resume, Timeline, and Hire Me would live, deferring the choice per-feature. The owner has now settled it for all five at once rather than one at a time.
+- Decision: Designs, Blog, Resume, Timeline, and Hire Me all live in the `core` app. `projects` is scoped strictly to the owner's projects/works/code — nothing else.
+- Reasoning: Owner's explicit direction.
+- Consequences: Phases 7 (Blog and Resume) and 8 (Timeline, Contact, Hire Me) now have a settled app target — see `PHASES.md`. Designs still has no phase assigned yet, but when it is scheduled it belongs in `core`. `TASKS.md`'s open-question entry on this is resolved.
 
 ## Decision: Build a standalone static visual prototype before production implementation
 
