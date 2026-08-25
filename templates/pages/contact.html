@@ -18,39 +18,43 @@
     <div>
       <ul class="contact-list">
         <li class="contact-row">
-          <a href="mailto:shahbazkhan74659@gmail.com" style="display:flex; justify-content:space-between; width:100%; align-items:center;">
-            <span class="contact-row-label">Email</span><span class="contact-row-value">shahbazkhan74659@gmail.com</span>
+          <a href="mailto:{{ contact_email.email }}" style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+            <span class="contact-row-label">Email</span><span class="contact-row-value">{{ contact_email.email }}</span>
           </a>
         </li>
         <li class="contact-row">
           <a href="{% url 'github' %}" style="display:flex; justify-content:space-between; width:100%; align-items:center;">
-            <span class="contact-row-label">GitHub</span><span class="contact-row-value">github.com/shahbazkhan74659-crypto</span>
+            <span class="contact-row-label">GitHub</span><span class="contact-row-value">{{ contact_email.github_display }}</span>
           </a>
         </li>
         <li class="contact-row">
           <a href="https://www.linkedin.com/in/shahbaz-khan-471aa2418/" style="display:flex; justify-content:space-between; width:100%; align-items:center;">
-            <span class="contact-row-label">LinkedIn</span><span class="contact-row-value">linkedin.com/in/shahbaz-khan-471aa2418</span>
+            <span class="contact-row-label">LinkedIn</span><span class="contact-row-value">{{ contact_email.linkedin_display }}</span>
           </a>
         </li>
       </ul>
     </div>
     <div>
-      <form>
+      {% if sent %}
+        <p class="proj-desc">Thanks — your message has been sent. I'll get back to you soon.</p>
+      {% else %}
+      <form method="post">
+        {% csrf_token %}
         <div class="field">
-          <label for="cf-name">Name</label>
-          <input id="cf-name" name="name" type="text" autocomplete="name">
+          <label for="{{ form.name.id_for_label }}">Name</label>
+          {{ form.name }}
         </div>
         <div class="field">
-          <label for="cf-email">Email</label>
-          <input id="cf-email" name="email" type="email" autocomplete="email">
+          <label for="{{ form.email.id_for_label }}">Email</label>
+          {{ form.email }}
         </div>
         <div class="field">
-          <label for="cf-message">Message</label>
-          <textarea id="cf-message" name="message"></textarea>
+          <label for="{{ form.message.id_for_label }}">Message</label>
+          {{ form.message }}
         </div>
         <button class="submit-btn" type="submit">Send message &rarr;</button>
-        <p class="form-note">This form isn't connected yet — email me directly using the address above.</p>
       </form>
+      {% endif %}
     </div>
   </div>
 </section>

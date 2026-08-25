@@ -131,12 +131,12 @@ Owner-defined scope (2026-08-25): a static placeholder `/blog/` page (`templates
 Redefined 2026-08-24 (owner's direction, see `DECISIONS.md`), superseding this phase's original scope (Vertical Growth Timeline, Contact, and Hire Me — Timeline is cut from the roadmap entirely, Contact is considered already covered by the real Contact page/info shipped in Phases 3/5). Build the real `projects` app — a `Project` model replacing the Phase 3/5 mockup content on the Projects page and Home's featured-project card — with a modal-based mechanism for viewing project details, and build the "Hire Me" feature. This absorbs the held/superseded Phase 6's "connect pages to real data + modal UI" scope.
 
 ### Scope
-To be defined in further detail by the project owner. Implied by the redefined objective: a `Project` model (fields mirroring what the Phase 3 mockup already established — name, description, tech stack, category, year, role, links), list/detail views in the `projects` app, and a modal mechanism for opening project details without a full page navigation (the concrete answer to Phase 6's originally-speculative modal UI, and likely where React/JS islands, per `DECISIONS.md`, actually get used for the first time). "Hire Me" lives in `core` (see `DECISIONS.md`). Designs remains the one originally-planned feature with no phase yet — when scheduled, it also belongs in `core`.
+Owner-defined scope, settled 2026-08-25 (see `DECISIONS.md`): a real `Project` model (`title`, `slug`, `short_description`, `tags`, `category`, `role`, `year`, `status`, `github_url`, `live_url`, `order`, `featured`) in the `projects` app, with `project_list`/`project_detail` views and `projects/urls.py` `include()`d from `core/urls.py` at `/projects/`. The Projects list page and Home's featured-project card are now driven by real `Project` rows instead of Phase 3/5's hardcoded mockup markup. A vanilla-JS/CSS modal (no React) on the Projects list page opens a project's details without a full page navigation, backed by a real `/projects/<slug>/` detail page as the no-JS/shareable-link fallback. Three placeholder `Project` rows (mirroring the old hardcoded mockup text) were seeded via a data migration so the feature is testable now — real content stays deferred to Phase 11, per the existing "don't fabricate real content" convention. "Hire Me" was built in `core` (per `DECISIONS.md`) as a dedicated `/hire/` page with a real, backend-processed form: a `HireRequest` model + `HireRequestForm`, saved on submit (POST/redirect/GET), reviewable via Django admin — no email integration, since none exists elsewhere in the project. Nav/footer both gained a "Hire Me" link. Designs remains the one originally-planned feature with no phase yet — when scheduled, it also belongs in `core`.
 
 ### Completion Criteria
-To be defined.
+`manage.py check` and `migrate` run clean; `/projects/` lists the seeded `Project` rows and its "EXPLORE PROJECT"/mockup links open a working modal (closable via Escape, backdrop click, or the close button) without navigating away; `/projects/<slug>/` loads each project's standalone detail page directly; `/` renders the `featured` `Project`'s real data in place of the old hardcoded featured-project card; `/hire/` renders a form that, on valid submission, saves a `HireRequest` and shows a success state, with submissions visible in `/admin/`; nav/footer show a working "Hire Me" link with correct active-page state.
 
-**Status: Not started.**
+**Status: Complete.** Verified 2026-08-25 — `manage.py check` clean; migrations applied (`projects.0001_initial`, `projects.0002_seed_placeholder_projects`, `core.0001_initial`); `/`, `/projects/`, `/projects/project-one/`, `/hire/` all return HTTP 200 and `/admin/` 302 (login redirect, as expected); Home's featured-project card confirmed showing the seeded "Project One" row; a real Hire Me submission was posted via `curl` (CSRF-protected), confirmed saved in the database, then removed (test data, not a real lead). Browser-based interactive verification (clicking the modal open/close) was not performed this session — the Chrome extension was unavailable — confirmed instead via direct HTTP checks of the rendered HTML/JS. See `ARCHITECTURE.md`, `DECISIONS.md`.
 
 ## Phase 9 — Finishing and Polishing the Frontend and Backend
 
@@ -151,7 +151,7 @@ To be defined.
 
 **Status: Not started.**
 
-## Phase 10 — Database: MySQL/PostgreSQL
+## Phase 10 — Database: MySQL/PostgreSQL/sqlite
 
 ### Objective
 Choose and set up the production relational database engine — PostgreSQL or MySQL — resolving the deferral recorded in `DECISIONS.md` (deliberately left open until closer to a hosting decision).

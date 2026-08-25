@@ -1,5 +1,7 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 
 from . import views
 
@@ -8,8 +10,12 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
-    path('projects/', views.projects, name='projects'),
+    path('hire/', views.hire_me, name='hire_me'),
+    path('projects/', include('projects.urls')),
     path('blog/', views.blog, name='blog'),
     path('resume/', views.resume, name='resume'),
     path('github/', views.github, name='github'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

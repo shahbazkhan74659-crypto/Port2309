@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load static %}
 
 {% block title %}Shahbaz Khan — Portfolio{% endblock %}
 {% block description %}Shahbaz Khan — developer, freelancer, and writer. Projects, writing, and contact, all in one place.{% endblock %}
@@ -8,26 +7,26 @@
 
 <section class="hero">
   <div class="wrap">
-    <p class="eyebrow hero-greeting">HELLO, I'M SHAHBAZ.</p>
+    <p class="eyebrow hero-greeting">{{ hero.greeting }}</p>
     <div class="hero-type">
       <div class="hero-portrait-slot">
         <div class="hero-portrait-glow"></div>
-        <img class="hero-portrait" src="{% static 'images/hero-portrait.png' %}" alt="Portrait photo">
+        <img class="hero-portrait" src="{{ hero.portrait.url }}" alt="Portrait photo">
       </div>
       <a class="btn-neon hero-resume-btn" href="{% url 'resume' %}">SEE MY RESUME <span class="arrow">&rarr;</span></a>
-      <h1 class="hero-line">I BUILD.</h1>
-      <p class="hero-line">I WRITE.</p>
+      <h1 class="hero-line">{{ hero.line_one }}</h1>
+      <p class="hero-line">{{ hero.line_two }}</p>
       <div class="hero-name-row">
-        <p class="hero-line">SHAHBAZ</p><p class="hero-line dim">KHAN</p>
+        <p class="hero-line">{{ hero.name_first }}</p><p class="hero-line dim">{{ hero.name_last }}</p>
       </div>
-      <p class="hero-line">I EXPLORE.</p>
+      <p class="hero-line">{{ hero.line_three }}</p>
     </div>
     <div class="hero-meta">
-      <div class="hero-meta-block roles">DEVELOPER / FREELANCER / WRITER</div>
+      <div class="hero-meta-block roles">{{ hero.roles }}</div>
       <div class="hero-meta-block">
-        CURRENTLY EXPLORING AI &amp; AUTONOMOUS SYSTEMS<br>BUILDING A PERSONAL AI AGENT TO HANDLE MY WORK<br>WRITING A FANTASY STORY BEYOND THIS WORLD
+        {{ hero.meta_line_one }}<br>{{ hero.meta_line_two }}<br>{{ hero.meta_line_three }}
       </div>
-      <div class="hero-meta-block"><strong>2026 &rarr;</strong><br>SILVASSA, DADRA &amp; NAGAR HAVELI</div>
+      <div class="hero-meta-block"><strong>{{ hero.year }} &rarr;</strong><br>{{ hero.location }}</div>
     </div>
   </div>
 </section>
@@ -38,6 +37,35 @@
       <p class="eyebrow"><span class="accent-dot">01</span> &mdash; PROJECT</p>
     </div>
     <div class="feat-body">
+      {% if featured %}
+      <div>
+        <h2 id="feat-heading" class="feat-title">{{ featured.title }}</h2>
+        <p class="feat-desc">{{ featured.short_description }}</p>
+        <div class="feat-footline">
+          <span class="count">01 / 01</span>
+          <a class="explore-link" href="{% url 'project_detail' featured.slug %}">EXPLORE <span class="arrow">&rarr;</span></a>
+        </div>
+      </div>
+      <a class="mockup-link" href="{% url 'project_detail' featured.slug %}" aria-label="Open project details">
+        <div class="mockup">
+          <div class="mockup-bar">
+            <div class="mockup-dots"><span></span><span></span><span></span></div>
+            <div class="mockup-url">{% if featured.live_url %}{{ featured.live_url }}{% else %}{{ featured.slug }}.app{% endif %}</div>
+          </div>
+          <div class="mockup-body">
+            <div class="mk-row">{% for tag in featured.tag_list %}<div class="mk-chip">{{ tag }}</div>{% endfor %}</div>
+            <div class="mk-line" style="width:70%"></div>
+            <div class="mk-line" style="width:92%"></div>
+            <div class="mk-line" style="width:55%"></div>
+            <div class="mk-row" style="margin-top:6px">
+              <div class="mk-block" style="flex:1;height:54px"></div>
+              <div class="mk-block" style="flex:1;height:54px"></div>
+              <div class="mk-block" style="flex:1;height:54px"></div>
+            </div>
+          </div>
+        </div>
+      </a>
+      {% else %}
       <div>
         <h2 id="feat-heading" class="feat-title">Project Name</h2>
         <p class="feat-desc">One-line placeholder description of the featured project goes here.</p>
@@ -65,30 +93,31 @@
           </div>
         </div>
       </a>
+      {% endif %}
     </div>
   </div>
 </section>
 
 <section class="section statement">
-  <div class="wrap"><p>Good ideas deserve more than thought&mdash;they deserve to be built.</p></div>
+  <div class="wrap"><p>{{ quote.statement }}</p></div>
 </section>
 
 <section class="section" aria-labelledby="snapshot-heading">
   <div class="wrap">
-    <p class="eyebrow">A LITTLE ABOUT ME</p>
+    <p class="eyebrow">{{ about_snapshot.eyebrow }}</p>
     <div class="about-grid">
       <div>
-        <h2 id="snapshot-heading" class="about-headline">CURIOSITY.<br>CREATION.<br>EXPERIMENTATION.</h2>
-        <p class="about-headline-sub">Curiosity starts the question. Creation takes it somewhere new. Experimentation turns it into something real.</p>
+        <h2 id="snapshot-heading" class="about-headline">{{ about_snapshot.headline_one }}<br>{{ about_snapshot.headline_two }}<br>{{ about_snapshot.headline_three }}</h2>
+        <p class="about-headline-sub">{{ about_snapshot.headline_sub }}</p>
       </div>
       <div>
-        <p class="about-para">I'm a developer, writer, and explorer&mdash;drawn to the space where technology, ideas, and imagination meet. I build things to understand how they work, write to make sense of what I discover, and explore simply because there's always something new worth finding. My work is less about following a fixed path and more about turning curiosity into things that didn't exist before.</p>
+        <p class="about-para">{{ about_snapshot.paragraph }}</p>
         <div class="currently">
-          <p class="currently-label">Currently</p>
-          <p><strong>Building:</strong> An autonomous personal AI assistant</p>
-          <p><strong>Learning:</strong> AI and autonomous systems</p>
-          <p><strong>Writing:</strong> A fantasy story, "The God Valley"</p>
-          <p><strong>Exploring:</strong> Agentic AI tooling and autonomous workflows</p>
+          <p class="currently-label">{{ about_snapshot.currently_label }}</p>
+          <p><strong>Building:</strong> {{ about_snapshot.currently_building }}</p>
+          <p><strong>Learning:</strong> {{ about_snapshot.currently_learning }}</p>
+          <p><strong>Writing:</strong> {{ about_snapshot.currently_writing }}</p>
+          <p><strong>Exploring:</strong> {{ about_snapshot.currently_exploring }}</p>
         </div>
         <a class="explore-link more-link" href="{% url 'about' %}">MORE ABOUT ME <span class="arrow">&rarr;</span></a>
       </div>
@@ -101,7 +130,7 @@
     <h2 id="talk-heading" class="cta-title">LET'S<br>TALK.</h2>
     <div class="cta-row">
       <div class="cta-links">
-        <div>Email &mdash; <a href="mailto:shahbazkhan74659@gmail.com">shahbazkhan74659@gmail.com</a></div>
+        <div>Email &mdash; <a href="mailto:{{ contact_email.email }}">{{ contact_email.email }}</a></div>
         <div class="cta-social">
           <a href="{% url 'github' %}">GitHub</a><a href="https://www.linkedin.com/in/shahbaz-khan-471aa2418/">LinkedIn</a>
         </div>

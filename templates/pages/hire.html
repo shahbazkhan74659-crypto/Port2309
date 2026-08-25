@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Hire Me — Shahbaz Khan{% endblock %}
+{% block description %}Hire Shahbaz Khan for your next project.{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">HIRE ME</p>
+    <h1 class="page-title">LET'S BUILD<br>SOMETHING.</h1>
+    <p class="page-sub">I'm currently available for freelance work — full-stack builds, from a first prototype through to a shipped product. Tell me about your project below and I'll get back to you.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap contact-grid">
+    <div>
+      <ul class="contact-list">
+        <li class="contact-row">
+          <span class="contact-row-label">{{ contact_email.available_for_label }}</span><span class="contact-row-value">{{ contact_email.available_for }}</span>
+        </li>
+        <li class="contact-row">
+          <span class="contact-row-label">{{ contact_email.stack_label }}</span><span class="contact-row-value">{{ contact_email.stack }}</span>
+        </li>
+        <li class="contact-row">
+          <a href="mailto:{{ contact_email.email }}" style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+            <span class="contact-row-label">Or email directly</span><span class="contact-row-value">{{ contact_email.email }}</span>
+          </a>
+        </li>
+        <li class="contact-row">
+          <a href="{% url 'github' %}" style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+            <span class="contact-row-label">GitHub</span><span class="contact-row-value">{{ contact_email.github_display }}</span>
+          </a>
+        </li>
+        <li class="contact-row">
+          <a href="https://www.linkedin.com/in/shahbaz-khan-471aa2418/" style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+            <span class="contact-row-label">LinkedIn</span><span class="contact-row-value">{{ contact_email.linkedin_display }}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div>
+      {% if sent %}
+        <p class="proj-desc">Thanks — your request has been sent. I'll get back to you soon.</p>
+      {% else %}
+      <form method="post">
+        {% csrf_token %}
+        <div class="field">
+          <label for="{{ form.name.id_for_label }}">Name</label>
+          {{ form.name }}
+        </div>
+        <div class="field">
+          <label for="{{ form.email.id_for_label }}">Email</label>
+          {{ form.email }}
+        </div>
+        <div class="field">
+          <label for="{{ form.project_type.id_for_label }}">Project type</label>
+          {{ form.project_type }}
+        </div>
+        <div class="field">
+          <label for="{{ form.details.id_for_label }}">Details</label>
+          {{ form.details }}
+        </div>
+        <div class="field">
+          <label for="{{ form.budget.id_for_label }}">Budget (optional)</label>
+          {{ form.budget }}
+        </div>
+        <div class="field">
+          <label for="{{ form.timeline.id_for_label }}">Timeline (optional)</label>
+          {{ form.timeline }}
+        </div>
+        <button class="submit-btn" type="submit">Send request &rarr;</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

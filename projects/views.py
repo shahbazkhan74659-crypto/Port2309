@@ -1,3 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 
-# Create your views here.
+from .models import Project
+
+
+def project_list(request):
+    return render(request, "pages/projects.html", {"projects": Project.objects.all()})
+
+
+def project_detail(request, slug):
+    project = get_object_or_404(Project, slug=slug)
+    return render(request, "pages/project_detail.html", {"project": project})

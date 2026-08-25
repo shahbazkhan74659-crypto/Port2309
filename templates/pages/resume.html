@@ -11,7 +11,11 @@
     <p class="eyebrow">RESUME</p>
     <h1 class="page-title">RESUME.</h1>
     <p class="page-sub">Placeholder experience and education below — real content goes here once it's ready.</p>
+    {% if resume_url %}
+    <a class="btn-ghost" style="margin-top:22px" href="{{ resume_url }}" target="_blank" rel="noopener">DOWNLOAD PDF <span class="arrow">&rarr;</span></a>
+    {% else %}
     <a class="btn-ghost" style="margin-top:22px" href="{% static 'files/resume.pdf' %}" target="_blank" rel="noopener">DOWNLOAD PDF <span class="arrow">&rarr;</span></a>
+    {% endif %}
   </div>
 </section>
 

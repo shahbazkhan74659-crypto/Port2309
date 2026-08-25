@@ -7,52 +7,52 @@
 
 <section class="page-head">
   <div class="wrap">
-    <p class="eyebrow">ABOUT ME</p>
-    <h1 class="page-title">WHO'S<br>BEHIND THIS.</h1>
-    <p class="about-lede" style="margin-top:28px">Developer, writer, and explorer&mdash;building ideas, exploring possibilities, and creating things that feel worth making.</p>
+    <p class="eyebrow">{{ about.eyebrow }}</p>
+    <h1 class="page-title">{{ about.title_line_one }}<br>{{ about.title_line_two }}</h1>
+    <p class="about-lede" style="margin-top:28px">{{ about.lede }}</p>
   </div>
 </section>
 
 <section class="section">
   <div class="wrap two-col">
     <div>
-      <h2 class="stack-title">Background</h2>
-      <p class="prose">I'm based in Silvassa, Dadra &amp; Nagar Haveli, where I completed a Diploma in Information Technology after 10th grade. I build full-stack, production-ready websites and applications, and I'm currently putting those skills into practice through freelancing.</p>
+      <h2 class="stack-title">{{ about.background_heading }}</h2>
+      <p class="prose">{{ about.background_paragraph }}</p>
     </div>
     <div>
-      <h2 class="stack-title">What I care about</h2>
-      <p class="prose">I care about solving real-world business problems with technology&mdash;building practical systems that improve workflows, reduce complexity, and create measurable value.</p>
+      <h2 class="stack-title">{{ about.care_heading }}</h2>
+      <p class="prose">{{ about.care_paragraph }}</p>
     </div>
   </div>
 </section>
 
 <section class="section">
   <div class="wrap">
-    <p class="eyebrow" style="margin-bottom:20px">PHILOSOPHY</p>
-    <blockquote class="quote-block">Code is not merely written to make things work, but to give ideas a structure through which they can exist.</blockquote>
+    <p class="eyebrow" style="margin-bottom:20px">{{ about.philosophy_eyebrow }}</p>
+    <blockquote class="quote-block">{{ about.philosophy_quote }}</blockquote>
   </div>
 </section>
 
 <section class="section">
   <div class="wrap">
-    <p class="eyebrow" style="margin-bottom:24px">SKILLS &amp; TOOLS</p>
+    <p class="eyebrow" style="margin-bottom:24px">{{ about.skills_eyebrow }}</p>
     <div class="skill-groups">
       <div>
-        <p class="skill-group-label">Languages</p>
+        <p class="skill-group-label">{{ about.languages_label }}</p>
         <div class="skill-tags">
-          <span class="skill-tag">Python</span><span class="skill-tag">Java</span><span class="skill-tag">JavaScript</span><span class="skill-tag">HTML/CSS</span>
+          {% for tag in about.languages_list %}<span class="skill-tag">{{ tag }}</span>{% endfor %}
         </div>
       </div>
       <div>
-        <p class="skill-group-label">Frameworks &amp; Tools</p>
+        <p class="skill-group-label">{{ about.frameworks_label }}</p>
         <div class="skill-tags">
-          <span class="skill-tag">Django</span><span class="skill-tag">Spring Boot</span><span class="skill-tag">React</span><span class="skill-tag">Tailwind CSS</span><span class="skill-tag">AJAX</span><span class="skill-tag">Relational DB</span>
+          {% for tag in about.frameworks_list %}<span class="skill-tag">{{ tag }}</span>{% endfor %}
         </div>
       </div>
       <div>
-        <p class="skill-group-label">Currently learning</p>
+        <p class="skill-group-label">{{ about.learning_label }}</p>
         <div class="skill-tags">
-          <span class="skill-tag">AI Agents</span><span class="skill-tag">Autonomous Systems</span>
+          {% for tag in about.learning_list %}<span class="skill-tag">{{ tag }}</span>{% endfor %}
         </div>
       </div>
     </div>
@@ -61,8 +61,8 @@
 
 <section class="section">
   <div class="wrap">
-    <p class="eyebrow" style="margin-bottom:20px">WHERE THIS IS GOING</p>
-    <p class="prose" style="max-width:56ch; font-size:1.1rem;">I'm currently building a personal AI agent designed to interact with my digital world through voice. It can control my laptop, launch applications, perform tasks, communicate naturally through voice, and eventually extend that control to my phone and other connected devices.</p>
+    <p class="eyebrow" style="margin-bottom:20px">{{ about.going_eyebrow }}</p>
+    <p class="prose" style="max-width:56ch; font-size:1.1rem;">{{ about.going_paragraph }}</p>
     <a class="explore-link more-link" href="{% url 'contact' %}">GET IN TOUCH <span class="arrow">&rarr;</span></a>
   </div>
 </section>

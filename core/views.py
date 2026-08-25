@@ -1,23 +1,51 @@
 import requests
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+
+from projects.models import Project
+
+from .forms import ContactRequestForm, HireRequestForm
+from .models import About, AboutSnapshot, HeroContent, Quote, Resume
 
 GITHUB_USERNAME = "shahbazkhan74659-crypto"
 
 
 def home(request):
-    return render(request, "pages/home.html")
+    featured = Project.objects.filter(featured=True).first()
+    hero = HeroContent.objects.first()
+    quote = Quote.objects.first()
+    about_snapshot = AboutSnapshot.objects.first()
+    return render(
+        request,
+        "pages/home.html",
+        {"featured": featured, "hero": hero, "quote": quote, "about_snapshot": about_snapshot},
+    )
 
 
 def about(request):
-    return render(request, "pages/about.html")
+    about = About.objects.first()
+    return render(request, "pages/about.html", {"about": about})
 
 
 def contact(request):
-    return render(request, "pages/contact.html")
+    if request.method == "POST":
+        form = ContactRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(f"{request.path}?sent=1")
+    else:
+        form = ContactRequestForm()
+    return render(request, "pages/contact.html", {"form": form, "sent": request.GET.get("sent") == "1"})
 
 
-def projects(request):
-    return render(request, "pages/projects.html")
+def hire_me(request):
+    if request.method == "POST":
+        form = HireRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(f"{request.path}?sent=1")
+    else:
+        form = HireRequestForm()
+    return render(request, "pages/hire.html", {"form": form, "sent": request.GET.get("sent") == "1"})
 
 
 def blog(request):
@@ -25,7 +53,9 @@ def blog(request):
 
 
 def resume(request):
-    return render(request, "pages/resume.html")
+    latest = Resume.objects.first()
+    resume_url = latest.file.url if latest else None
+    return render(request, "pages/resume.html", {"resume_url": resume_url})
 
 
 def github(request):

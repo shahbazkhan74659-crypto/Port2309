@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}{{ project.title }} — Shahbaz Khan{% endblock %}
+{% block description %}{{ project.short_description }}{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">PROJECT</p>
+    <h1 class="page-title">{{ project.title|upper }}.</h1>
+    <p class="page-sub">{{ project.short_description }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="proj-top">
+      <span class="proj-status">{{ project.status }}</span>
+    </div>
+    <div class="proj-tags">
+      {% for tag in project.tag_list %}<span class="proj-tag">{{ tag }}</span>{% endfor %}
+    </div>
+    <div class="proj-meta-row">
+      <div><strong>Category</strong>{{ project.category }}</div>
+      <div><strong>Year</strong>{{ project.year }}</div>
+      <div><strong>Role</strong>{{ project.role }}</div>
+    </div>
+    <div class="proj-actions">
+      <a class="btn-line" href="{% url 'projects' %}">&larr; ALL PROJECTS</a>
+      {% if project.github_url %}<a class="btn-line" href="{{ project.github_url }}">VIEW ON GITHUB &rarr;</a>{% endif %}
+      {% if project.live_url %}<a class="btn-line" href="{{ project.live_url }}">VIEW LIVE &rarr;</a>{% endif %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}
