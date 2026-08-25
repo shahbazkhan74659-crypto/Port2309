@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Something Went Wrong — Shahbaz Khan{% endblock %}
+{% block description %}Something went wrong on this page.{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">500</p>
+    <h1 class="page-title">SOMETHING WENT WRONG.</h1>
+    <p class="page-sub">An unexpected error occurred on this end. Please try again shortly, or <a href="{% url 'home' %}">head back to the homepage &rarr;</a></p>
+  </div>
+</section>
+
+{% endblock %}

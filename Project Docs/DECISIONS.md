@@ -344,6 +344,36 @@ These decisions were made during a prior planning discussion, before any product
 - Reasoning: Owner's explicit direction, extending the labeling convention established one decision earlier for Phase - X to a second unnumbered insertion, keeping build order explicit (Phase 10 → Phase - X → Phase Y → Phase 11) without touching the numeric sequence.
 - Consequences: The roadmap now has two consecutive non-numeric phases (X, then Y) between Phase 10 and Phase 11. `PHASES.md`'s intro note and closing line were updated to record this as a fourth phase-insertion event and to make the X-then-Y ordering explicit. If a further unnumbered phase is inserted later, per the note in the Phase - X decision above, it will need its own distinguishing label — "X" and "Y" are now both taken.
 
+## Decision: Phase 9 scope confirmed via a codebase-grounded survey; SEO/meta explicitly excluded
+
+- Status: Accepted
+- Date: 2026-08-25 (Phase 9)
+- Context: Phase 9's scope had read "To be defined by the project owner" since it was first written. Rather than propose scope from generic best-practice knowledge, the codebase was surveyed for concrete polish candidates across 9 categories (error pages, forms, accessibility, responsive design, SEO/meta, performance, code quality, security basics, testing), each finding tied to an actual file/line. The owner was then asked to select which candidates belong in Phase 9, presented as two grouped multi-select questions (frontend/backend).
+- Decision: Phase 9's scope is exactly 8 items the owner selected: accessibility fixes, responsive/mobile gaps, visible form validation errors, smooth scrolling behaviour (frontend); custom error pages, production-safety settings, GitHub API caching, view code de-duplication (backend). SEO/meta (favicon, Open Graph tags, robots.txt) was surveyed but **not** selected — explicitly out of scope, not an oversight. Testing-related findings were not offered as Phase 9 candidates at all, since Phase 12 already owns that scope.
+- Reasoning: Grounding the candidate list in the actual code (rather than a generic "polish checklist") meant the owner was choosing between real, concrete trade-offs specific to this project, not abstract categories — consistent with this project's established pattern of the owner making explicit choices rather than Claude assuming scope on their behalf.
+- Consequences: `PHASES.md`'s Phase 9 entry now has real Scope/Completion Criteria text instead of "to be defined." If SEO/meta work is wanted later, it has no phase yet — same situation as Designs.
+
+## Decision: Phase 9 implementation choices — `python-dotenv`, default `LocMemCache`, error pages extending `base.html`
+
+- Status: Accepted
+- Date: 2026-08-25 (Phase 9)
+- Context: Three of Phase 9's backend items needed a specific technical approach, not just a scope decision: (1) externalizing `SECRET_KEY`/`DEBUG`/`ALLOWED_HOSTS` needed an env-var loading mechanism — none existed in the project; (2) caching the GitHub API calls needed a cache backend — none was configured; (3) the three new error templates needed to decide whether to extend `base.html` (the site's only shared shell) or stand alone.
+- Decision:
+  1. **`python-dotenv`** over `django-environ` or raw `os.environ.get()`: only 3 settings needed externalizing, so `django-environ`'s casting/`DATABASE_URL` machinery was unnecessary weight, and plain `os.environ.get()` alone doesn't load a `.env` file — something still has to populate `os.environ` from it. `config/settings.py` calls `load_dotenv(BASE_DIR / '.env')` once at the top, then reads each setting with a dev-safe default identical to the old hardcoded value, so behavior is unchanged for anyone without a `.env` file. A tracked `.env.example` documents the three keys.
+  2. **Django's default `LocMemCache`**, not a new dependency: `config/settings.py` has no `CACHES` setting, and Django 5.2 uses `LocMemCache` automatically in that case — `django.core.cache.cache` worked with zero new configuration. Two cache keys (profile, repos), 15-minute TTL, only successful responses cached.
+  3. **All three error templates (`404.html`/`500.html`/`403.html`) extend `base.html`**, verified against Django 5.2's actual `django/views/defaults.py`: the `404`/`403` views pass `request` into the template (so `base.html`'s nav/footer, `{% url %}`, and context processors all work normally), but the `500` view (`server_error`) does **not** pass `request` at all. This is safe for `base.html` specifically because its only `request`-dependent expression is the nav's `aria-current` active-link check, which Django resolves as falsy rather than erroring when `request` is undefined — so the 500 page still renders a working nav/footer, just without the (irrelevant, on an error page) active-link highlight.
+- Reasoning: Each choice picked the option needing the least new surface area (no new dependency where Django already provides one; the lightest env-var library for the actual number of settings involved) while still verifying correctness against real behavior (Django source, not assumption) for the one genuinely nuanced piece — the 500 page's missing request context.
+- Consequences: `requirements.txt` gained exactly one new dependency (`python-dotenv==1.1.0`). `LocMemCache`'s per-process nature (not shared across multiple prod workers) is noted in `ARCHITECTURE.md`'s Important Invariants as a future consideration, not an issue now. If a future page's error template needs `request`-dependent content beyond what `base.html` currently uses, the 500 case specifically would need re-checking — it cannot assume `request` is available.
+
+## Decision: Contact/Hire Me views merged into a shared `_handle_lead_form` helper
+
+- Status: Accepted
+- Date: 2026-08-25 (Phase 9)
+- Context: `core.views.contact` and `core.views.hire_me` had near-identical POST/redirect/GET logic since Phase 8 (validate `ModelForm`, save on valid POST, redirect to `f"{request.path}?sent=1"`, render with `sent` context on GET) — flagged during the Phase 9 codebase survey as duplicated code, and selected by the owner as an in-scope item ("View code de-duplication").
+- Decision: Added `core._handle_lead_form(request, form_class, template_name)` implementing the shared logic once (plus the new Phase 9 error-attribute tagging — `aria-invalid`/`aria-describedby` on invalid fields, for the "visible form validation errors" item). `contact`/`hire_me` are now one-line wrappers calling it with their respective form class and template. Behavior preserved exactly: same redirect target, same GET `?sent=1` detection, same template context shape.
+- Reasoning: Owner's explicit selection during Phase 9 scoping; a straightforward extract-shared-helper refactor with no behavior change, verified via direct POST requests (invalid submission showed errors, valid submission still redirected to `?sent=1` and saved).
+- Consequences: Any future lead-capture form with this same shape should reuse or extend `_handle_lead_form` rather than duplicating the pattern again — recorded as a precedent in `ARCHITECTURE.md`'s Important Invariants.
+
 ## Decision: Prototype is a styling/design reference only — production build starts from scratch
 
 - Status: Accepted

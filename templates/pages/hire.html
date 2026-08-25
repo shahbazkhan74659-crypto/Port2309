@@ -24,17 +24,17 @@
           <span class="contact-row-label">{{ contact_email.stack_label }}</span><span class="contact-row-value">{{ contact_email.stack }}</span>
         </li>
         <li class="contact-row">
-          <a href="mailto:{{ contact_email.email }}" style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+          <a href="mailto:{{ contact_email.email }}" class="contact-row-link">
             <span class="contact-row-label">Or email directly</span><span class="contact-row-value">{{ contact_email.email }}</span>
           </a>
         </li>
         <li class="contact-row">
-          <a href="{% url 'github' %}" style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+          <a href="{% url 'github' %}" class="contact-row-link">
             <span class="contact-row-label">GitHub</span><span class="contact-row-value">{{ contact_email.github_display }}</span>
           </a>
         </li>
         <li class="contact-row">
-          <a href="https://www.linkedin.com/in/shahbaz-khan-471aa2418/" style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+          <a href="https://www.linkedin.com/in/shahbaz-khan-471aa2418/" class="contact-row-link">
             <span class="contact-row-label">LinkedIn</span><span class="contact-row-value">{{ contact_email.linkedin_display }}</span>
           </a>
         </li>
@@ -46,29 +46,50 @@
       {% else %}
       <form method="post">
         {% csrf_token %}
+        {% if form.non_field_errors %}
+          <div class="form-errors" role="alert">{{ form.non_field_errors }}</div>
+        {% endif %}
         <div class="field">
           <label for="{{ form.name.id_for_label }}">Name</label>
           {{ form.name }}
+          {% if form.name.errors %}
+            <p id="{{ form.name.id_for_label }}-error" class="field-error" role="alert">{{ form.name.errors.0 }}</p>
+          {% endif %}
         </div>
         <div class="field">
           <label for="{{ form.email.id_for_label }}">Email</label>
           {{ form.email }}
+          {% if form.email.errors %}
+            <p id="{{ form.email.id_for_label }}-error" class="field-error" role="alert">{{ form.email.errors.0 }}</p>
+          {% endif %}
         </div>
         <div class="field">
           <label for="{{ form.project_type.id_for_label }}">Project type</label>
           {{ form.project_type }}
+          {% if form.project_type.errors %}
+            <p id="{{ form.project_type.id_for_label }}-error" class="field-error" role="alert">{{ form.project_type.errors.0 }}</p>
+          {% endif %}
         </div>
         <div class="field">
           <label for="{{ form.details.id_for_label }}">Details</label>
           {{ form.details }}
+          {% if form.details.errors %}
+            <p id="{{ form.details.id_for_label }}-error" class="field-error" role="alert">{{ form.details.errors.0 }}</p>
+          {% endif %}
         </div>
         <div class="field">
           <label for="{{ form.budget.id_for_label }}">Budget (optional)</label>
           {{ form.budget }}
+          {% if form.budget.errors %}
+            <p id="{{ form.budget.id_for_label }}-error" class="field-error" role="alert">{{ form.budget.errors.0 }}</p>
+          {% endif %}
         </div>
         <div class="field">
           <label for="{{ form.timeline.id_for_label }}">Timeline (optional)</label>
           {{ form.timeline }}
+          {% if form.timeline.errors %}
+            <p id="{{ form.timeline.id_for_label }}-error" class="field-error" role="alert">{{ form.timeline.errors.0 }}</p>
+          {% endif %}
         </div>
         <button class="submit-btn" type="submit">Send request &rarr;</button>
       </form>

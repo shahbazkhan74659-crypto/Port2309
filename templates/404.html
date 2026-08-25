@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found — Shahbaz Khan{% endblock %}
+{% block description %}The page you're looking for doesn't exist.{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">404</p>
+    <h1 class="page-title">PAGE NOT FOUND.</h1>
+    <p class="page-sub">The page you're looking for doesn't exist or has moved. <a href="{% url 'home' %}">Back to home &rarr;</a></p>
+  </div>
+</section>
+
+{% endblock %}

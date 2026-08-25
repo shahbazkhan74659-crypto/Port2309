@@ -34,7 +34,7 @@
 }
 
 *, *::before, *::after{ box-sizing: border-box; }
-html{ background: var(--bg); }
+html{ background: var(--bg); scroll-behavior: smooth; }
 html, body{ margin:0; padding:0; overflow-x: hidden; }
 
 body{
@@ -374,6 +374,7 @@ a.mockup-link:hover .mockup, a.mockup-link:focus-visible .mockup{ transform: tra
 .contact-row-label{ font-family: var(--font-mono); font-size: 0.7rem; color: var(--ink-faint); letter-spacing: 0.12em; text-transform: uppercase; }
 .contact-row-value{ font-family: var(--font-mono); font-size: 0.95rem; color: var(--ink); transition: color 0.2s ease; }
 .contact-row a:hover .contact-row-value{ color: var(--accent); }
+.contact-row-link{ display:flex; justify-content:space-between; width:100%; align-items:center; }
 
 .field{ margin-bottom: 22px; }
 .field label{ display:block; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-dim); margin-bottom: 10px; }
@@ -384,6 +385,8 @@ a.mockup-link:hover .mockup, a.mockup-link:focus-visible .mockup{ transform: tra
 }
 .field textarea{ resize: vertical; min-height: 120px; }
 .field input:focus, .field textarea:focus{ outline: none; border-color: var(--accent); background: var(--bg-raised-2); }
+.field-error{ color: #e5675e; font-size: 0.8rem; margin-top: 6px; }
+.form-errors{ color: #e5675e; font-size: 0.85rem; margin-bottom: 16px; }
 .submit-btn{
   display:inline-flex; align-items:center; gap:10px;
   background: var(--ink); color: var(--bg); font-family: var(--font-mono); font-size: 0.82rem;
@@ -510,6 +513,8 @@ a.mockup-link:hover .mockup, a.mockup-link:focus-visible .mockup{ transform: tra
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 900px){
   .about-grid, .two-col, .contact-grid, .github-layout{ grid-template-columns: 1fr; }
+  .profile-card{ height: auto; }
+  .repo-list{ height: auto; max-height: 420px; }
   .feat-body, .proj-layout{ grid-template-columns: 1fr; }
   .feat-body .mockup, .proj-layout .mockup{ order: -1; }
   .hero-portrait-slot{ position: relative; top: auto; right: auto; transform: none; margin: 20px auto 0; width: min(80vw, 420px); height: min(95vw, 480px); z-index: 1; }

@@ -11,7 +11,7 @@
     <div class="hero-type">
       <div class="hero-portrait-slot">
         <div class="hero-portrait-glow"></div>
-        <img class="hero-portrait" src="{{ hero.portrait.url }}" alt="Portrait photo">
+        <img class="hero-portrait" src="{{ hero.portrait.url }}" alt="Portrait of {{ hero.name_first }} {{ hero.name_last }}">
       </div>
       <a class="btn-neon hero-resume-btn" href="{% url 'resume' %}">SEE MY RESUME <span class="arrow">&rarr;</span></a>
       <h1 class="hero-line">{{ hero.line_one }}</h1>

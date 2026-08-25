@@ -144,12 +144,24 @@ Owner-defined scope, settled 2026-08-25 (see `DECISIONS.md`): a real `Project` m
 Finish and polish the site across both frontend and backend, following the feature-building phases (0–8).
 
 ### Scope
-To be defined in further detail by the project owner.
+Owner-confirmed scope (2026-08-25), selected from a candidate list surveyed against the actual codebase (see `DECISIONS.md`); SEO/meta items — favicon, Open Graph tags, robots.txt — were surveyed but explicitly excluded from this phase.
+
+**Frontend:**
+1. Accessibility fixes — descriptive hero portrait alt text (`templates/pages/home.html`), inline `style=` attributes on Contact/Hire Me row links replaced with a shared CSS class.
+2. Responsive/mobile gaps — the GitHub page's `.profile-card`/`.repo-list` fixed-height panels relaxed under the existing 900px breakpoint instead of double-stacking on mobile.
+3. Visible form validation errors — Contact and Hire Me forms currently re-render silently on an invalid submission with no error shown; add visible, accessible (`role="alert"`, `aria-invalid`, `aria-describedby`) error output.
+4. Smooth scrolling behaviour — `scroll-behavior: smooth` site-wide, respecting the existing `prefers-reduced-motion` override.
+
+**Backend:**
+5. Custom error pages — `404.html`/`500.html`/`403.html`, replacing Django's default debug-style pages once `DEBUG=False`.
+6. Production-safety settings — `SECRET_KEY`/`DEBUG`/`ALLOWED_HOSTS` moved from hardcoded values to environment variables (via `python-dotenv`), with dev-safe defaults.
+7. GitHub API caching — the `/github/` view's two live API calls cached (Django's default `LocMemCache`, 15-minute TTL) to reduce redundant requests and rate-limit risk.
+8. View code de-duplication — Contact and Hire Me views' near-identical POST/redirect/GET logic factored into one shared helper.
 
 ### Completion Criteria
-To be defined.
+`manage.py check` runs clean; Contact/Hire Me forms show visible errors on invalid submission and unchanged `?sent=1` success behavior on valid submission; `/github/` page's mobile layout no longer double-stacks fixed-height panels under 900px; `404.html`/`500.html`/`403.html` render without error and are used automatically once `DEBUG=False`; `SECRET_KEY`/`DEBUG`/`ALLOWED_HOSTS` are read from environment variables with working dev-safe defaults; `/github/` serves cached data on repeat loads within the cache TTL; `contact`/`hire_me` views share one helper function.
 
-**Status: Not started.**
+**Status: Complete.** Verified 2026-08-25 — `manage.py check` clean; Contact/Hire Me forms confirmed showing visible, accessible errors (`role="alert"`, `aria-invalid`) on invalid submission via direct POST, and unchanged `?sent=1` redirect/success behavior on valid submission; the GitHub-page caching change was verified directly against the view function (cache miss on first call populates the cache, a monkeypatched `requests.get` spy confirmed zero live API calls on a second call within the TTL); the custom 404 page was confirmed live in-browser-equivalent (`curl`) under a temporarily real `DEBUG=False`/`ALLOWED_HOSTS` `.env`, returning HTTP 404 with the styled template and working static assets, then `.env` was removed to restore dev defaults; `404.html`/`500.html`/`403.html` all dry-run rendered without error via `get_template(...).render()`. The responsive/mobile CSS fix and the `.contact-row-link`/error-styling CSS were verified by code review and a successful `npm run build:css`, not by a live browser viewport check (no browser automation tool was used this session). See `ARCHITECTURE.md`, `DECISIONS.md`.
 
 ## Phase 10 — Database: MySQL/PostgreSQL/sqlite
 

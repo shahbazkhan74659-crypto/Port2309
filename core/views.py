@@ -1,4 +1,5 @@
 import requests
+from django.core.cache import cache
 from django.shortcuts import redirect, render
 
 from projects.models import Project
@@ -7,6 +8,7 @@ from .forms import ContactRequestForm, HireRequestForm
 from .models import About, AboutSnapshot, HeroContent, Quote, Resume
 
 GITHUB_USERNAME = "shahbazkhan74659-crypto"
+GITHUB_CACHE_TTL = 60 * 15
 
 
 def home(request):
@@ -26,26 +28,28 @@ def about(request):
     return render(request, "pages/about.html", {"about": about})
 
 
-def contact(request):
+def _handle_lead_form(request, form_class, template_name):
     if request.method == "POST":
-        form = ContactRequestForm(request.POST)
+        form = form_class(request.POST)
         if form.is_valid():
             form.save()
             return redirect(f"{request.path}?sent=1")
+        for name in form.errors:
+            if name in form.fields:
+                widget = form.fields[name].widget
+                widget.attrs["aria-invalid"] = "true"
+                widget.attrs["aria-describedby"] = f"{form[name].id_for_label}-error"
     else:
-        form = ContactRequestForm()
-    return render(request, "pages/contact.html", {"form": form, "sent": request.GET.get("sent") == "1"})
+        form = form_class()
+    return render(request, template_name, {"form": form, "sent": request.GET.get("sent") == "1"})
+
+
+def contact(request):
+    return _handle_lead_form(request, ContactRequestForm, "pages/contact.html")
 
 
 def hire_me(request):
-    if request.method == "POST":
-        form = HireRequestForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect(f"{request.path}?sent=1")
-    else:
-        form = HireRequestForm()
-    return render(request, "pages/hire.html", {"form": form, "sent": request.GET.get("sent") == "1"})
+    return _handle_lead_form(request, HireRequestForm, "pages/hire.html")
 
 
 def blog(request):
@@ -70,14 +74,22 @@ def github(request):
         "html_url": f"https://github.com/{GITHUB_USERNAME}",
         "repos": [],
     }
-    try:
-        response = requests.get(
-            f"https://api.github.com/users/{GITHUB_USERNAME}",
-            timeout=5,
-            headers={"Accept": "application/vnd.github+json"},
-        )
-        response.raise_for_status()
-        data = response.json()
+
+    profile_cache_key = f"github_profile_{GITHUB_USERNAME}"
+    data = cache.get(profile_cache_key)
+    if data is None:
+        try:
+            response = requests.get(
+                f"https://api.github.com/users/{GITHUB_USERNAME}",
+                timeout=5,
+                headers={"Accept": "application/vnd.github+json"},
+            )
+            response.raise_for_status()
+            data = response.json()
+            cache.set(profile_cache_key, data, GITHUB_CACHE_TTL)
+        except requests.RequestException:
+            data = None
+    if data:
         context.update({
             "avatar_url": data.get("avatar_url"),
             "name": data.get("name") or context["name"],
@@ -88,17 +100,23 @@ def github(request):
             "following": data.get("following", context["following"]),
             "html_url": data.get("html_url", context["html_url"]),
         })
-    except requests.RequestException:
-        pass
 
-    try:
-        repos_response = requests.get(
-            f"https://api.github.com/users/{GITHUB_USERNAME}/repos",
-            params={"sort": "updated", "per_page": 100},
-            timeout=5,
-            headers={"Accept": "application/vnd.github+json"},
-        )
-        repos_response.raise_for_status()
+    repos_cache_key = f"github_repos_{GITHUB_USERNAME}"
+    repos_data = cache.get(repos_cache_key)
+    if repos_data is None:
+        try:
+            repos_response = requests.get(
+                f"https://api.github.com/users/{GITHUB_USERNAME}/repos",
+                params={"sort": "updated", "per_page": 100},
+                timeout=5,
+                headers={"Accept": "application/vnd.github+json"},
+            )
+            repos_response.raise_for_status()
+            repos_data = repos_response.json()
+            cache.set(repos_cache_key, repos_data, GITHUB_CACHE_TTL)
+        except requests.RequestException:
+            repos_data = None
+    if repos_data:
         context["repos"] = [
             {
                 "name": repo.get("name"),
@@ -107,9 +125,7 @@ def github(request):
                 "language": repo.get("language"),
                 "stars": repo.get("stargazers_count", 0),
             }
-            for repo in repos_response.json()
+            for repo in repos_data
         ]
-    except requests.RequestException:
-        pass
 
     return render(request, "pages/github.html", context)
