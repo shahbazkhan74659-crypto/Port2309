@@ -20,6 +20,14 @@ def projects(request):
     return render(request, "pages/projects.html")
 
 
+def blog(request):
+    return render(request, "pages/blog.html")
+
+
+def resume(request):
+    return render(request, "pages/resume.html")
+
+
 def github(request):
     context = {
         "avatar_url": None,

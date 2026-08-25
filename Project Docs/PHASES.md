@@ -1,6 +1,6 @@
 # Development Phases
 
-The project owner has defined the full build roadmap, Phase 0 through Phase 12 (confirmed 2026-08-24 as the complete set — no further phases expected). The earlier planning and prototyping work is recorded below as **Phase 0 — Pre-Development**, an unnumbered stage that precedes the numbered build roadmap (owner's explicit choice, 2026-08-24, to restart numbering from Phase 1 rather than continue the old Phase 1/2 sequence). Do not invent additional phases beyond what is listed here — see `CLAUDE.md` rule 3.
+The project owner has defined the full build roadmap, Phase 0 through Phase 13 (originally confirmed 2026-08-24 as the complete set through Phase 12 — no further phases expected at the time; the owner then added a new Phase 11, "Seeding real Projects," on 2026-08-25, pushing the former Phase 11 "Full End-to-End Testing" to Phase 12 and the former Phase 12 "Deployment and Hosting" to Phase 13 — see `DECISIONS.md`). The earlier planning and prototyping work is recorded below as **Phase 0 — Pre-Development**, an unnumbered stage that precedes the numbered build roadmap (owner's explicit choice, 2026-08-24, to restart numbering from Phase 1 rather than continue the old Phase 1/2 sequence). Do not invent additional phases beyond what is listed here — see `CLAUDE.md` rule 3.
 
 ## Phase 0 — Pre-Development (Planning & Prototyping)
 
@@ -118,12 +118,12 @@ To be defined.
 Build the Blog and Resume features.
 
 ### Scope
-To be defined in further detail by the project owner. Blog and Resume both live in the `core` app (see `DECISIONS.md`).
+Owner-defined scope (2026-08-25): a static placeholder `/blog/` page (`templates/pages/blog.html`), mirroring Phase 3's placeholder Projects page pattern — three hardcoded placeholder post entries, no `Post` model yet. A styled `/resume/` page (`templates/pages/resume.html`) with a real Skills section (reusing the About page's real skill data) plus placeholder Experience/Education entries, and a "Download PDF" action wired to a static file path (`static/files/resume.pdf`) that the owner will populate later. Both routed via `core/views.py`/`core/urls.py`, same pattern as `about`/`contact`/`projects`. Also in scope: a footer "Blog" link (`templates/base.html`), and a "See My Resume" button on the Home page's hero section, positioned beside the left edge of the hero portrait image, linking to `/resume/`. See `DECISIONS.md`.
 
 ### Completion Criteria
-To be defined.
+`manage.py runserver` serves `/blog/` and `/resume/` at HTTP 200 inside the shared `base.html` shell, styled via the Tailwind-built stylesheet; footer shows a working "Blog" link; Home's hero section shows a "See My Resume" button linking to `/resume/`, positioned beside the hero portrait.
 
-**Status: Not started.**
+**Status: Complete**, for this settled scope. Verified 2026-08-25 — `manage.py check` clean; `/`, `/blog/`, `/resume/` all return HTTP 200; footer "Blog" link and Home's "See My Resume" button confirmed in-browser. Real blog posts (model-backed), real resume experience/education content, and the actual resume PDF file are deliberately deferred — not an oversight, same pattern as Phase 3's placeholder Projects page. See `DECISIONS.md`.
 
 ## Phase 8 — Projects App: Modal & Mechanism, and Hire Me
 
@@ -164,7 +164,20 @@ To be defined.
 
 **Status: Not started.**
 
-## Phase 11 — Full End-to-End Testing (Component/Unit + E2E)
+## Phase 11 — Seeding Real Projects
+
+### Objective
+Populate the Projects listing with the owner's real project data, replacing the Phase 3/5 placeholder content once the real `Project` model (Phase 8) and production database (Phase 10) both exist.
+
+### Scope
+To be defined in further detail by the project owner. Implied by the phase name and its placement after Phase 8 (`projects` app gains a real `Project` model, list/detail views, and a modal mechanism) and Phase 10 (production database engine chosen and set up): creating real `Project` model instances for the owner's actual projects/works — the data itself, not the model or views (those are Phase 8's scope) — replacing the Projects page and Home's featured-project card, which have stayed on Phase 3/5 mockup/placeholder content up to this point (see `DECISIONS.md`).
+
+### Completion Criteria
+To be defined.
+
+**Status: Not started.**
+
+## Phase 12 — Full End-to-End Testing (Component/Unit + E2E)
 
 ### Objective
 Full test coverage across frontend, backend, and database: component/unit tests plus end-to-end tests.
@@ -177,7 +190,7 @@ To be defined.
 
 **Status: Not started.**
 
-## Phase 12 — Deployment and Hosting
+## Phase 13 — Deployment and Hosting
 
 ### Objective
 Deploy and host the finished site.
@@ -190,4 +203,4 @@ To be defined.
 
 **Status: Not started.**
 
-Phase 12 is the last phase in the roadmap — the project owner does not expect further phases (confirmed 2026-08-24). If new phases are identified later, add them here rather than assuming the roadmap is fixed forever.
+Phase 13 is the last phase in the roadmap — the project owner does not expect further phases beyond this (originally confirmed 2026-08-24 for what was then Phase 12; Phase 11 was itself added later, 2026-08-25 — see the note at the top of this file). If new phases are identified later, add them here rather than assuming the roadmap is fixed forever.

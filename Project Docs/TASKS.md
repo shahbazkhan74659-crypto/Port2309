@@ -2,11 +2,11 @@
 
 ## Active
 
-To be defined. No task is currently confirmed as actively in progress. [Phase 1]–[Phase 5] are complete; [Phase 6] is superseded/merged into a redefined [Phase 8] (see below); a [Phase 7] task breakdown has not yet been given by the project owner.
+To be defined. No task is currently confirmed as actively in progress. [Phase 1]–[Phase 5] and [Phase 7] are complete; [Phase 6] is superseded/merged into a redefined [Phase 8] (see below).
 
 ## Next
 
-[Phase 7] "Blog and Resume" is next, per the owner's explicit direction (2026-08-24) — detailed task breakdown not yet given. Build from scratch on the confirmed stack — use `prototype/index.html` only as a styling/layout reference, not as code to port (see `DECISIONS.md`).
+[Phase 8] "Projects App: Modal & Mechanism, and Hire Me" is next — a real `Project` model, project-detail modal mechanism, and "Hire Me" feature. Detailed task breakdown not yet given. Build from scratch on the confirmed stack — use `prototype/index.html` only as a styling/layout reference, not as code to port (see `DECISIONS.md`).
 
 **[Phase 6] is superseded — merged into a redefined [Phase 8]** (owner's call, 2026-08-24). [Phase 8] is now "Projects App: Modal & Mechanism, and Hire Me" — a real `Project` model (replacing the still-hardcoded Phase 3 Projects page / Home featured-project content) plus a modal mechanism for project details, plus "Hire Me". Timeline is cut from the roadmap entirely (not deferred); Contact gets no further scheduled work (considered already covered). See `PHASES.md`, `DECISIONS.md`.
 
@@ -47,3 +47,4 @@ None.
 - [x] Fixed the GitHub page's profile-card/repo-list layout to be equal width and height (switched `.github-layout` from flex to a stretch grid) — 2026-08-24, verified in-browser (see `DECISIONS.md`)
 - [x] Made the GitHub logo in the page header a clickable button linking to the real GitHub profile, with a hover/scale affordance — 2026-08-24, verified in-browser
 - [x] Cleaned the owner's real "SK" badge image (background removed via edge-based flood fill, watermark/noise dropped) and swapped it in as the site's nav/footer brand mark, replacing the auto-derived "S." text — 2026-08-24, verified in-browser (see `DECISIONS.md`, `ARCHITECTURE.md`) — this closes out the deferred badge-swap item
+- [x] [Phase 7] Built placeholder `/blog/` page (three hardcoded posts, no model) and a styled `/resume/` page (real Skills section reusing About's data, placeholder Experience/Education, "Download PDF" wired to a pending static file); added a footer "Blog" link and a Home hero "See My Resume" button beside the portrait — 2026-08-25, verified in-browser (see `PHASES.md`, `DECISIONS.md`)

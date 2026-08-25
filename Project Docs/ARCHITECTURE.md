@@ -48,6 +48,8 @@ This describes the **actual current implementation** — the static prototype pl
 
 **Implemented (Phase 4, 2026-08-24):** `core` and `projects` apps scaffolded via `manage.py startapp` and registered in `INSTALLED_APPS`. All five view functions (`home`, `about`, `contact`, `projects`, `github`) and the full `urlpatterns` list (including `admin/`) moved verbatim from `config/` into `core/views.py`/`core/urls.py`; `config/views.py` and `config/urls.py` were deleted. `ROOT_URLCONF` now points at `'core.urls'` directly — there is no `config/urls.py` and no `include()` layer, so `core.urls` *is* the site's root router (see `DECISIONS.md` for why this is `core`'s correct role, not a workaround). `projects` exists only as a registered, empty `startapp` scaffold — no models, views, or urls.py yet. The rest of the originally-planned feature set — Designs, Blog, Resume, Timeline, Hire Me — is resolved (2026-08-24) to live in `core`; `projects` is scoped strictly to the owner's projects/works/code. See `DECISIONS.md`.
 
+**Implemented (Phase 7, 2026-08-25):** `core/views.py` gained `blog` and `resume` view functions (plain `render`, no context — same pattern as `about`/`contact`/`projects`), registered in `core/urls.py` as `path('blog/', ..., name='blog')` / `path('resume/', ..., name='resume')`. Both render new templates: `templates/pages/blog.html` (three hardcoded placeholder post entries) and `templates/pages/resume.html` (real Skills section + placeholder Experience/Education entries, "Download PDF" link pointing at `static/files/resume.pdf`, which does not exist on disk yet). No models. See `DECISIONS.md`.
+
 **Planned:** `projects` gaining real models/views/urls (a `Project` model, list/detail views) in a future phase, at which point its `urls.py` would be `include()`d from `core/urls.py`.
 
 ## Component Structure
@@ -64,6 +66,8 @@ This describes the **actual current implementation** — the static prototype pl
 
 **Implemented (post-Phase 5 addition, 2026-08-24):** The nav/footer brand mark in `base.html` (`.nav-mark`/`.foot-mark`) now renders the owner's real "SK" badge image (`static/images/sk-badge.png`) instead of an auto-derived "S." text mark. See `DECISIONS.md` for the background-removal technique used to clean the source asset.
 
+**Implemented (Phase 7, 2026-08-25):** `templates/pages/blog.html` and `templates/pages/resume.html` extend `base.html`, following the same `.page-head` pattern as About/Contact/Projects. `base.html`'s footer (`.foot-links`) gained a "Blog" link. `templates/pages/home.html`'s hero section gained a `.hero-resume-btn` linking to `/resume/`, positioned via CSS beside the hero portrait's left edge. Originally `.btn-ghost` styled (matching the rest of the site); restyled 2026-08-25 to a bespoke `.btn-neon` treatment (double-ring glowing green pill, matching an owner-supplied reference image) — see Data Flow/Routing below and `DECISIONS.md`.
+
 **Planned:** Beyond the base shell, not yet defined — will depend on further Django template structure and which pieces become React islands.
 
 ## Data Flow
@@ -78,7 +82,9 @@ This describes the **actual current implementation** — the static prototype pl
 
 **Implemented (post-Phase 5 addition, 2026-08-24):** The same `github` view also fetches the owner's repo list (`GET /users/<username>/repos?sort=updated`) and passes a `repos` list into the context; `templates/pages/github.html` renders it as a scrollable panel (`.repo-list`) beside the profile card, each entry linking out to its real GitHub URL. Falls back to an empty list (rendered as a small "not available right now" note) on request failure. See `DECISIONS.md`.
 
-**Planned:** Real content/model-backed data for Home's featured project and the Projects page — will depend on the `projects` app gaining models/views once that phase happens.
+**Implemented (Phase 7, 2026-08-25):** `blog.html`'s three post entries and `resume.html`'s Experience/Education entries are hardcoded placeholder markup in their templates — not passed via view context, no model. `resume.html`'s Skills section is real content, copied verbatim from `about.html`'s existing skill data.
+
+**Planned:** Real content/model-backed data for Home's featured project and the Projects page — will depend on the `projects` app gaining models/views once that phase happens. Real blog posts (likely a `Post` model) and real resume experience/education content, plus the actual resume PDF file, remain deferred — no phase scheduled yet.
 
 ## State Management
 
@@ -103,6 +109,8 @@ Routing is driven by the browser's `hashchange` event; there is no server-side r
 **Implemented (Django, Phase 3):** `path('about/', ..., name='about')`, `path('contact/', ..., name='contact')`, `path('projects/', ..., name='projects')` added alongside `home`. Nav, footer, and Home's internal links (featured-project explore/mockup link → Projects, "more about me" → About, "get in touch" → Contact) all resolve via `{% url %}` now instead of `href="#"`. Remaining `href="#"` placeholders are limited to things with no real destination yet: GitHub/LinkedIn footer and CTA links (no real social URLs), and the Projects page's per-entry "Explore project"/"View on GitHub" actions (no detail routes or repo URLs yet — those depend on a real `Project` model).
 
 **Implemented (Django, Phase 4):** All routing now lives in `core/urls.py`, which is `ROOT_URLCONF` itself (unnamespaced) — so every `{% url %}` name from earlier phases (`home`, `about`, `contact`, `projects`, `github`) kept resolving to the exact same paths with no template changes. `config/` no longer has a `urls.py` at all.
+
+**Implemented (Phase 7, 2026-08-25):** `path('blog/', ..., name='blog')` and `path('resume/', ..., name='resume')` added to `core/urls.py` alongside the existing routes. Footer's `{% url 'blog' %}` link and Home's `{% url 'resume' %}` hero button both resolve through these.
 
 **Planned:** A `projects/urls.py`, once that app has real views to route to, `include()`d from `core/urls.py` (which will remain the actual `ROOT_URLCONF` — see `DECISIONS.md`).
 

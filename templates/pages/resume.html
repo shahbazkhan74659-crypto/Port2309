@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Resume — Shahbaz Khan{% endblock %}
+{% block description %}Resume — Shahbaz Khan, developer, freelancer, and writer.{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">RESUME</p>
+    <h1 class="page-title">RESUME.</h1>
+    <p class="page-sub">Placeholder experience and education below — real content goes here once it's ready.</p>
+    <a class="btn-ghost" style="margin-top:22px" href="{% static 'files/resume.pdf' %}" target="_blank" rel="noopener">DOWNLOAD PDF <span class="arrow">&rarr;</span></a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <p class="eyebrow" style="margin-bottom:24px">SKILLS &amp; TOOLS</p>
+    <div class="skill-groups">
+      <div>
+        <p class="skill-group-label">Languages</p>
+        <div class="skill-tags">
+          <span class="skill-tag">Python</span><span class="skill-tag">Java</span><span class="skill-tag">JavaScript</span><span class="skill-tag">HTML/CSS</span>
+        </div>
+      </div>
+      <div>
+        <p class="skill-group-label">Frameworks &amp; Tools</p>
+        <div class="skill-tags">
+          <span class="skill-tag">Django</span><span class="skill-tag">Spring Boot</span><span class="skill-tag">React</span><span class="skill-tag">Tailwind CSS</span><span class="skill-tag">AJAX</span><span class="skill-tag">Relational DB</span>
+        </div>
+      </div>
+      <div>
+        <p class="skill-group-label">Currently learning</p>
+        <div class="skill-tags">
+          <span class="skill-tag">AI Agents</span><span class="skill-tag">Autonomous Systems</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <p class="eyebrow" style="margin-bottom:24px">EXPERIENCE</p>
+    <div class="resume-entry">
+      <div class="resume-entry-head">
+        <div>
+          <h3 class="resume-role">Role Placeholder</h3>
+          <p class="resume-org">Company / Client Placeholder</p>
+        </div>
+        <span class="resume-period">20XX &mdash; PRESENT</span>
+      </div>
+      <p class="resume-desc">One-line placeholder description of this role goes here.</p>
+    </div>
+    <div class="resume-entry">
+      <div class="resume-entry-head">
+        <div>
+          <h3 class="resume-role">Role Placeholder</h3>
+          <p class="resume-org">Company / Client Placeholder</p>
+        </div>
+        <span class="resume-period">20XX &mdash; 20XX</span>
+      </div>
+      <p class="resume-desc">One-line placeholder description of this role goes here.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <p class="eyebrow" style="margin-bottom:24px">EDUCATION</p>
+    <div class="resume-entry">
+      <div class="resume-entry-head">
+        <div>
+          <h3 class="resume-role">Degree / Program Placeholder</h3>
+          <p class="resume-org">Institution Placeholder</p>
+        </div>
+        <span class="resume-period">20XX &mdash; 20XX</span>
+      </div>
+      <p class="resume-desc">One-line placeholder description goes here.</p>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
