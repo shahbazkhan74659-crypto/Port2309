@@ -52,7 +52,7 @@ This describes the **actual current implementation** — the static prototype pl
 
 **Implemented (Phase 8, 2026-08-25):** `projects` gained a real `Project` model, `projects/views.py` (`project_list`, `project_detail`), and `projects/urls.py` (`path('', project_list, name='projects')`, `path('<slug:slug>/', project_detail, name='project_detail')`) — `core/urls.py`'s `path('projects/', ...)` now `include()`s it, exactly as `DECISIONS.md`'s "`core.urls` as `ROOT_URLCONF`" entry anticipated. The old `core.views.projects` function was removed. `core/models.py` (new file — `core` had no models before this) holds `HireRequest`; `core/forms.py` (new file) holds `HireRequestForm`; `core/views.py` gained a `hire_me` view, routed at `path('hire/', ..., name='hire_me')` in `core/urls.py`. Both apps' models are registered in their respective `admin.py` (new files).
 
-**Planned:** None remaining for `projects`' core CRUD surface — future work is data-only (Phase 11).
+**Planned:** None remaining for `projects`' core CRUD surface — future work is data-only (Phase 12).
 
 ## Component Structure
 
@@ -90,7 +90,7 @@ This describes the **actual current implementation** — the static prototype pl
 
 **Implemented (Phase 8, 2026-08-25):** `home.html`'s featured-project card and the entire Projects page are now model-backed — `projects/views.py`'s `project_list` passes `Project.objects.all()` (ordered by `Meta.ordering = ['order', '-year']`); `core/views.py`'s `home` passes `Project.objects.filter(featured=True).first()` as `featured`. Three placeholder `Project` rows (mirroring Phase 3's old hardcoded "Project One/Two/Three" text) were seeded via a `RunPython` data migration (`projects/migrations/0002_seed_placeholder_projects.py`), one flagged `featured=True` — real content swap is Phase 11's job, not this phase's; the seeded text is still explicitly placeholder-quality. `HireRequest` rows are the one piece of genuinely real, user-generated data in the project so far — created via `/hire/`'s POST handler, not seeded.
 
-**Planned:** Real blog posts (likely a `Post` model) and real resume experience/education content, plus the actual resume PDF file, remain deferred — no phase scheduled yet. Real (non-placeholder) `Project` content is Phase 11, once the Phase 10 production database is in place.
+**Planned:** Real blog posts (likely a `Post` model), the view/URL logic to serve them, and real content are scheduled to Phase - X, "Blog Upgrade: Content, Logic, and Tables." Real resume experience/education content and the actual resume PDF file remain deferred — no phase scheduled yet. Real (non-placeholder) `Project` content is Phase 12, once the Phase 10 production database is in place.
 
 ## State Management
 

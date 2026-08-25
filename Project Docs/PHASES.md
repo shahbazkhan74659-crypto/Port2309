@@ -1,6 +1,6 @@
 # Development Phases
 
-The project owner has defined the full build roadmap, Phase 0 through Phase 13 (originally confirmed 2026-08-24 as the complete set through Phase 12 — no further phases expected at the time; the owner then added a new Phase 11, "Seeding real Projects," on 2026-08-25, pushing the former Phase 11 "Full End-to-End Testing" to Phase 12 and the former Phase 12 "Deployment and Hosting" to Phase 13 — see `DECISIONS.md`). The earlier planning and prototyping work is recorded below as **Phase 0 — Pre-Development**, an unnumbered stage that precedes the numbered build roadmap (owner's explicit choice, 2026-08-24, to restart numbering from Phase 1 rather than continue the old Phase 1/2 sequence). Do not invent additional phases beyond what is listed here — see `CLAUDE.md` rule 3.
+The project owner has defined the full build roadmap, Phase 0 through Phase 14 (originally confirmed 2026-08-24 as the complete set through Phase 12 — no further phases expected at the time; the owner then added a new Phase 11, "Seeding real Projects," on 2026-08-25, pushing the former Phase 11 "Full End-to-End Testing" to Phase 12 and the former Phase 12 "Deployment and Hosting" to Phase 13; the owner then added a second new Phase 11, "Custom Admin Hub," also on 2026-08-25, pushing "Seeding Real Projects" to Phase 12, "Full End-to-End Testing" to Phase 13, and "Deployment and Hosting" to Phase 14 — see `DECISIONS.md`; the owner then inserted a further phase, **Phase - X — Blog Upgrade: Content, Logic, and Tables**, after Phase 10 and before Phase 11 on 2026-08-25 — deliberately given a non-numeric "X" label instead of a renumbering, per the owner's explicit instruction not to renumber Phases 11–14, so it sits in roadmap order without a sequence number; the owner then inserted **Phase Y — Project Page Upgrade: Logic and Content-Ready Interface** right after Phase - X, also 2026-08-25, using the same non-numeric-label convention so Phases 11–14 stayed unchanged again — see `DECISIONS.md`). The earlier planning and prototyping work is recorded below as **Phase 0 — Pre-Development**, an unnumbered stage that precedes the numbered build roadmap (owner's explicit choice, 2026-08-24, to restart numbering from Phase 1 rather than continue the old Phase 1/2 sequence). Do not invent additional phases beyond what is listed here — see `CLAUDE.md` rule 3.
 
 ## Phase 0 — Pre-Development (Planning & Prototyping)
 
@@ -164,7 +164,46 @@ To be defined.
 
 **Status: Not started.**
 
-## Phase 11 — Seeding Real Projects
+## Phase - X — Blog Upgrade: Content, Logic, and Tables
+
+### Objective
+Upgrade the Blog page from Phase 7's static placeholder into a fully ready feature — real content, real logic, and real database tables backing it, rather than the three hardcoded placeholder post entries it has shipped with since Phase 7.
+
+### Scope
+To be defined in further detail by the project owner. Implied by the phase name: a real `Post`-style model/table (replacing "no model yet"), the view/URL logic to list and display posts from it, and the owner's real blog content replacing the Phase 7 placeholder entries.
+
+### Completion Criteria
+To be defined.
+
+**Status: Not started.**
+
+## Phase Y — Project Page Upgrade: Logic and Content-Ready Interface
+
+### Objective
+Upgrade the Projects page's logic and interface into a fully content-ready state, building further on Phase 8's `Project` model/list/detail/modal mechanism.
+
+### Scope
+To be defined in further detail by the project owner. Implied by the phase name and its placement after Phase - X and before Phase 11: further logic and interface work on the existing `projects` app (model/views/modal shipped in Phase 8) so the page is fully ready to present real content — distinct from Phase 12 "Seeding Real Projects," which populates the data itself rather than the page's logic/interface.
+
+### Completion Criteria
+To be defined.
+
+**Status: Not started.**
+
+## Phase 11 — Custom Admin Hub
+
+### Objective
+Build a custom, central, user-friendly CRUD hub for the whole site — a single admin-facing surface for managing all of the site's content, rather than relying solely on Django's default `/admin/`.
+
+### Scope
+To be defined in further detail by the project owner. Implied by the phase name and its placement in the roadmap: by this point the site's content is spread across nine models (`core.HeroContent`, `Quote`, `AboutSnapshot`, `About`, `ContactEmail`, `Resume`, `ContactRequest`, `HireRequest`, plus `projects.Project`), currently manageable only through Django's default admin interface — this phase would build a more central, friendlier CRUD experience for managing all of it. Exact design (customized Django admin, a bespoke dashboard, or something else) not yet decided.
+
+### Completion Criteria
+To be defined.
+
+**Status: Not started.**
+
+## Phase 12 — Seeding Real Projects
 
 ### Objective
 Populate the Projects listing with the owner's real project data, replacing the Phase 3/5 placeholder content once the real `Project` model (Phase 8) and production database (Phase 10) both exist.
@@ -177,7 +216,7 @@ To be defined.
 
 **Status: Not started.**
 
-## Phase 12 — Full End-to-End Testing (Component/Unit + E2E)
+## Phase 13 — Full End-to-End Testing (Component/Unit + E2E)
 
 ### Objective
 Full test coverage across frontend, backend, and database: component/unit tests plus end-to-end tests.
@@ -190,17 +229,17 @@ To be defined.
 
 **Status: Not started.**
 
-## Phase 13 — Deployment and Hosting
+## Phase 14 — Deployment and Hosting
 
 ### Objective
 Deploy and host the finished site.
 
 ### Scope
-To be defined in further detail by the project owner. Implied by the phase name and its placement after Phase 10 (database engine, chosen "closer to a hosting decision" per `DECISIONS.md`) and Phase 11 (testing): choosing a hosting provider and deploying the completed, tested site. No hosting provider has been chosen yet.
+To be defined in further detail by the project owner. Implied by the phase name and its placement after Phase 10 (database engine, chosen "closer to a hosting decision" per `DECISIONS.md`) and Phase 13 (testing): choosing a hosting provider and deploying the completed, tested site. No hosting provider has been chosen yet.
 
 ### Completion Criteria
 To be defined.
 
 **Status: Not started.**
 
-Phase 13 is the last phase in the roadmap — the project owner does not expect further phases beyond this (originally confirmed 2026-08-24 for what was then Phase 12; Phase 11 was itself added later, 2026-08-25 — see the note at the top of this file). If new phases are identified later, add them here rather than assuming the roadmap is fixed forever.
+Phase 14 is the last *numbered* phase in the roadmap — the project owner does not expect further phases beyond this (originally confirmed 2026-08-24 for what was then Phase 12; four additional phases were inserted later, all 2026-08-25: Phase 11 "Seeding Real Projects" (later renumbered to Phase 12), Phase 11 "Custom Admin Hub", and the non-numeric **Phase - X** "Blog Upgrade: Content, Logic, and Tables" and **Phase Y** "Project Page Upgrade: Logic and Content-Ready Interface" — see the note at the top of this file). Phase - X and Phase Y sit after Phase 10 and before Phase 11 in build order (in that sequence — X then Y) despite their labels not being part of the numeric sequence. If new phases are identified later, add them here rather than assuming the roadmap is fixed forever.

@@ -12,7 +12,7 @@ To be defined. No task is currently confirmed as actively in progress. [Phase 1]
 
 Resolved 2026-08-24: the site brand mark badge swap is done — see Completed below.
 
-Resolved 2026-08-25: Home's featured-project card and the Projects page are now driven by a real `Project` model ([Phase 8]) — no longer Phase 3's hardcoded mockup markup. Seeded rows are still placeholder-quality content by design; real project content is [Phase 11]'s job.
+Resolved 2026-08-25: Home's featured-project card and the Projects page are now driven by a real `Project` model ([Phase 8]) — no longer Phase 3's hardcoded mockup markup. Seeded rows are still placeholder-quality content by design; real project content is [Phase 12]'s job.
 
 Resolved 2026-08-24: Designs, Blog, Resume, Timeline, and Hire Me all live in the `core` app; `projects` is scoped strictly to the owner's projects/works/code. **Designs still has no phase assigned yet** — when it's scheduled, it belongs in `core` per this decision. See `DECISIONS.md`.
 
