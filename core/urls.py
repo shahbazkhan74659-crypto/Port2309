@@ -12,7 +12,7 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('hire/', views.hire_me, name='hire_me'),
     path('projects/', include('projects.urls')),
-    path('blog/', views.blog, name='blog'),
+    path('blog/', include('projects.blog_urls')),
     path('resume/', views.resume, name='resume'),
     path('github/', views.github, name='github'),
 ]

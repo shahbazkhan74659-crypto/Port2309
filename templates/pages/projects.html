@@ -25,7 +25,7 @@
       <div>
         <p class="proj-desc">{{ project.short_description }}</p>
         <div class="proj-tags">
-          {% for tag in project.tag_list %}<span class="proj-tag">{{ tag }}</span>{% endfor %}
+          {% for tag in project.tags.all %}<span class="proj-tag">{{ tag }}</span>{% endfor %}
         </div>
         <div class="proj-meta-row">
           <div><strong>Category</strong>{{ project.category }}</div>
@@ -44,7 +44,7 @@
             <div class="mockup-url">{% if project.live_url %}{{ project.live_url }}{% else %}{{ project.slug }}.app{% endif %}</div>
           </div>
           <div class="mockup-body">
-            <div class="mk-row">{% for tag in project.tag_list %}<div class="mk-chip">{{ tag }}</div>{% endfor %}</div>
+            <div class="mk-row">{% for tag in project.tags.all %}<div class="mk-chip">{{ tag }}</div>{% endfor %}</div>
             <div class="mk-line" style="width:70%"></div>
             <div class="mk-line" style="width:92%"></div>
             <div class="mk-line" style="width:55%"></div>
@@ -68,7 +68,7 @@
   <h2 class="proj-name">{{ project.title }}</h2>
   <p class="proj-desc">{{ project.short_description }}</p>
   <div class="proj-tags">
-    {% for tag in project.tag_list %}<span class="proj-tag">{{ tag }}</span>{% endfor %}
+    {% for tag in project.tags.all %}<span class="proj-tag">{{ tag }}</span>{% endfor %}
   </div>
   <div class="proj-meta-row">
     <div><strong>Category</strong>{{ project.category }}</div>

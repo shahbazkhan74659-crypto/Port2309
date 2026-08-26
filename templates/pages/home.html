@@ -53,7 +53,7 @@
             <div class="mockup-url">{% if featured.live_url %}{{ featured.live_url }}{% else %}{{ featured.slug }}.app{% endif %}</div>
           </div>
           <div class="mockup-body">
-            <div class="mk-row">{% for tag in featured.tag_list %}<div class="mk-chip">{{ tag }}</div>{% endfor %}</div>
+            <div class="mk-row">{% for tag in featured.tags.all %}<div class="mk-chip">{{ tag }}</div>{% endfor %}</div>
             <div class="mk-line" style="width:70%"></div>
             <div class="mk-line" style="width:92%"></div>
             <div class="mk-line" style="width:55%"></div>

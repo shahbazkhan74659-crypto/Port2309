@@ -182,12 +182,12 @@ Owner-decided 2026-08-26 (see `DECISIONS.md`): the production database engine is
 Upgrade the Blog page from Phase 7's static placeholder into a fully ready feature — real content, real logic, and real database tables backing it, rather than the three hardcoded placeholder post entries it has shipped with since Phase 7.
 
 ### Scope
-To be defined in further detail by the project owner. Implied by the phase name: a real `Post`-style model/table (replacing "no model yet"), the view/URL logic to list and display posts from it, and the owner's real blog content replacing the Phase 7 placeholder entries.
+Owner-directed 2026-08-26 (see `DECISIONS.md`'s "Blog `Post`/`Tag` relocated to `projects`..." entry): a real `Post` model (`title`, `slug`, `short_description`, `content`, `tags`, `published_at`) — placed in the `projects` app rather than `core` (an explicit override of the standing Designs/Blog/Resume/Timeline/Hire-Me → `core` placement decision, Blog only). Tags are a real, shared `Tag` model (`ManyToManyField`, not a comma-separated string), reused across `Post`, `Project`, and `core.About`'s skill fields — the new `Post` table enforces a 1–6 tag count via a custom admin form. `blog_list`/`blog_detail` views and `projects/blog_urls.py` (`include()`d from `core.urls` at `/blog/`, `blog` url name preserved for the footer link, `blog_detail` new); `templates/pages/blog.html` converted from three hardcoded entries to a `{% for post in posts %}` loop; a new `templates/pages/blog_detail.html` standalone page (no modal). One placeholder `Post` was seeded via a data migration (mirroring `Project`'s Phase 8 seeding pattern) — real blog content is **not** part of this scope, same "structure now, real writing later" deferral Phase 7 already established.
 
 ### Completion Criteria
-To be defined.
+`manage.py check`/`migrate` run clean; `/blog/` lists the seeded `Post`(s) with working tag chips and a "READ POST" link; `/blog/post-title-one/` renders the full post body; an unknown slug 404s; the footer's `blog` link still resolves with no template changes; `/admin/projects/post/add/` rejects 0 tags (Django's default required-field validation) and more than 6 tags (custom `clean_tags()`), accepting 1–6.
 
-**Status: Not started.**
+**Status: In progress.** Verified 2026-08-26 — model/logic/tables layer is complete and confirmed working (`manage.py check` clean, `makemigrations --check` clean against the final model state, all routes/status codes verified via `runserver`, admin tag-count validation exercised via a test client for the 0/3/7-tag cases). **Not complete** in the sense of this phase's own stated objective ("real content, real logic, and real tables") — only logic and tables are real; exactly one mockup `Post` exists, and real blog writing has not been authored yet.
 
 ## Phase Y — Project Page Upgrade: Logic and Content-Ready Interface
 

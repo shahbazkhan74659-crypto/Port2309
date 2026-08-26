@@ -19,7 +19,7 @@
       <span class="proj-status">{{ project.status }}</span>
     </div>
     <div class="proj-tags">
-      {% for tag in project.tag_list %}<span class="proj-tag">{{ tag }}</span>{% endfor %}
+      {% for tag in project.tags.all %}<span class="proj-tag">{{ tag }}</span>{% endfor %}
     </div>
     <div class="proj-meta-row">
       <div><strong>Category</strong>{{ project.category }}</div>

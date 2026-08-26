@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} — Shahbaz Khan{% endblock %}
+{% block description %}{{ post.short_description }}{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">WRITING</p>
+    <h1 class="page-title">{{ post.title|upper }}.</h1>
+    <p class="page-sub">{{ post.short_description }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="post-detail-meta">
+      <span class="post-date">{{ post.published_at|date:"M Y"|upper }}</span>
+    </div>
+    <div class="post-tags">
+      {% for tag in post.tags.all %}<span class="post-tag">{{ tag }}</span>{% endfor %}
+    </div>
+    <div class="post-body">
+      {{ post.content|linebreaks }}
+    </div>
+    <div class="post-actions">
+      <a class="btn-line" href="{% url 'blog' %}">&larr; ALL POSTS</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -40,19 +40,19 @@
       <div>
         <p class="skill-group-label">{{ about.languages_label }}</p>
         <div class="skill-tags">
-          {% for tag in about.languages_list %}<span class="skill-tag">{{ tag }}</span>{% endfor %}
+          {% for tag in about.languages.all %}<span class="skill-tag">{{ tag }}</span>{% endfor %}
         </div>
       </div>
       <div>
         <p class="skill-group-label">{{ about.frameworks_label }}</p>
         <div class="skill-tags">
-          {% for tag in about.frameworks_list %}<span class="skill-tag">{{ tag }}</span>{% endfor %}
+          {% for tag in about.frameworks.all %}<span class="skill-tag">{{ tag }}</span>{% endfor %}
         </div>
       </div>
       <div>
         <p class="skill-group-label">{{ about.learning_label }}</p>
         <div class="skill-tags">
-          {% for tag in about.learning_list %}<span class="skill-tag">{{ tag }}</span>{% endfor %}
+          {% for tag in about.learning.all %}<span class="skill-tag">{{ tag }}</span>{% endfor %}
         </div>
       </div>
     </div>

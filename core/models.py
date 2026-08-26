@@ -1,5 +1,7 @@
 from django.db import models
 
+from projects.models import Tag
+
 
 class Resume(models.Model):
     file = models.FileField(upload_to="resume/")
@@ -80,11 +82,11 @@ class About(models.Model):
     philosophy_quote = models.TextField()
     skills_eyebrow = models.CharField(max_length=100)
     languages_label = models.CharField(max_length=100)
-    languages = models.CharField(max_length=300, help_text="Comma-separated, e.g. 'Python, Java'")
+    languages = models.ManyToManyField(Tag, related_name="about_languages")
     frameworks_label = models.CharField(max_length=100)
-    frameworks = models.CharField(max_length=300, help_text="Comma-separated, e.g. 'Django, React'")
+    frameworks = models.ManyToManyField(Tag, related_name="about_frameworks")
     learning_label = models.CharField(max_length=100)
-    learning = models.CharField(max_length=300, help_text="Comma-separated, e.g. 'AI Agents'")
+    learning = models.ManyToManyField(Tag, related_name="about_learning")
     going_eyebrow = models.CharField(max_length=100)
     going_paragraph = models.TextField()
     updated_at = models.DateTimeField(auto_now=True)
@@ -94,15 +96,6 @@ class About(models.Model):
 
     def __str__(self):
         return f"About page (updated {self.updated_at:%Y-%m-%d})"
-
-    def languages_list(self):
-        return [t.strip() for t in self.languages.split(",") if t.strip()]
-
-    def frameworks_list(self):
-        return [t.strip() for t in self.frameworks.split(",") if t.strip()]
-
-    def learning_list(self):
-        return [t.strip() for t in self.learning.split(",") if t.strip()]
 
 
 class ContactEmail(models.Model):

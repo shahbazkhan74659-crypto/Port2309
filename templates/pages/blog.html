@@ -9,53 +9,25 @@
   <div class="wrap">
     <p class="eyebrow">WRITING</p>
     <h1 class="page-title">BLOG.</h1>
-    <p class="page-sub">A few placeholder posts — real writing goes here once it's ready.</p>
+    <p class="page-sub">Thoughts on building, learning, and everything in between.</p>
   </div>
 </section>
 
+{% for post in posts %}
 <article class="post-entry">
   <div class="wrap">
     <div class="post-top">
-      <span class="post-num">01 / 03</span>
-      <span class="post-date">JAN 2026</span>
+      <span class="post-num">{{ forloop.counter|stringformat:"02d" }} / {{ posts|length|stringformat:"02d" }}</span>
+      <span class="post-date">{{ post.published_at|date:"M Y"|upper }}</span>
     </div>
-    <h2 class="post-title">Post Title One</h2>
-    <p class="post-excerpt">One-line placeholder excerpt of this post goes here.</p>
+    <h2 class="post-title">{{ post.title }}</h2>
+    <p class="post-excerpt">{{ post.short_description }}</p>
     <div class="post-tags">
-      <span class="post-tag">Tag</span><span class="post-tag">Tag</span>
+      {% for tag in post.tags.all %}<span class="post-tag">{{ tag }}</span>{% endfor %}
     </div>
-    <a class="btn-line" href="#">READ POST &rarr;</a>
+    <a class="btn-line" href="{% url 'blog_detail' post.slug %}">READ POST &rarr;</a>
   </div>
 </article>
-
-<article class="post-entry">
-  <div class="wrap">
-    <div class="post-top">
-      <span class="post-num">02 / 03</span>
-      <span class="post-date">FEB 2026</span>
-    </div>
-    <h2 class="post-title">Post Title Two</h2>
-    <p class="post-excerpt">One-line placeholder excerpt of this post goes here.</p>
-    <div class="post-tags">
-      <span class="post-tag">Tag</span><span class="post-tag">Tag</span>
-    </div>
-    <a class="btn-line" href="#">READ POST &rarr;</a>
-  </div>
-</article>
-
-<article class="post-entry">
-  <div class="wrap">
-    <div class="post-top">
-      <span class="post-num">03 / 03</span>
-      <span class="post-date">MAR 2026</span>
-    </div>
-    <h2 class="post-title">Post Title Three</h2>
-    <p class="post-excerpt">One-line placeholder excerpt of this post goes here.</p>
-    <div class="post-tags">
-      <span class="post-tag">Tag</span><span class="post-tag">Tag</span>
-    </div>
-    <a class="btn-line" href="#">READ POST &rarr;</a>
-  </div>
-</article>
+{% endfor %}
 
 {% endblock %}

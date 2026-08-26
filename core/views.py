@@ -52,10 +52,6 @@ def hire_me(request):
     return _handle_lead_form(request, HireRequestForm, "pages/hire.html")
 
 
-def blog(request):
-    return render(request, "pages/blog.html")
-
-
 def resume(request):
     latest = Resume.objects.first()
     resume_url = latest.file.url if latest else None

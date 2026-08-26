@@ -37,6 +37,7 @@ class ContactEmailAdmin(admin.ModelAdmin):
 class AboutAdmin(admin.ModelAdmin):
     list_display = ("__str__", "eyebrow", "updated_at")
     readonly_fields = ("updated_at",)
+    filter_horizontal = ("languages", "frameworks", "learning")
 
 
 @admin.register(ContactRequest)

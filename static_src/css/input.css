@@ -456,6 +456,10 @@ a.mockup-link:hover .mockup, a.mockup-link:focus-visible .mockup{ transform: tra
 .post-excerpt{ color: var(--ink-dim); font-size: 1.02rem; line-height: 1.7; max-width: 48ch; }
 .post-tags{ display:flex; flex-wrap:wrap; gap: 8px; margin: 18px 0 26px; }
 .post-tag{ font-family: var(--font-mono); font-size: 0.7rem; color: var(--ink-dim); border: 1px solid var(--border); padding: 5px 11px; border-radius: 20px; }
+.post-detail-meta{ display:flex; gap: 12px; align-items:center; margin-bottom: 6px; }
+.post-body{ color: var(--ink-dim); font-size: 1.02rem; line-height: 1.8; max-width: 68ch; }
+.post-body p{ margin-bottom: 1.2em; }
+.post-actions{ display:flex; gap: 14px; margin-top: 32px; flex-wrap: wrap; }
 
 /* ---------- RESUME PAGE ---------- */
 .resume-entry{ padding: 22px 0; }
