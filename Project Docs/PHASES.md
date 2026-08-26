@@ -169,12 +169,12 @@ Owner-confirmed scope (2026-08-25), selected from a candidate list surveyed agai
 Choose and set up the production relational database engine — PostgreSQL or MySQL — resolving the deferral recorded in `DECISIONS.md` (deliberately left open until closer to a hosting decision).
 
 ### Scope
-To be defined in further detail by the project owner. Implied by the phase name and its placement after the feature-building/polish phases: moving from whatever local database was used during development onto the chosen production engine.
+Owner-decided 2026-08-26 (see `DECISIONS.md`): the production database engine is **PostgreSQL**. Narrowed the same day — this phase now covers choosing and connecting that engine only; the actual hosting deployment (Render + UptimeRobot, originally scoped here) was moved to **Phase 14**, which already exists in the roadmap for deployment/hosting. `config/settings.py` reads a `DATABASE_URL` environment variable to configure Postgres (via the `psycopg` driver), falling back to SQLite when unset. Two Postgres targets exist: a **Neon** free-tier project (the eventual Phase 14 production target) and a **local PostgreSQL 18 install** (this machine's day-to-day development database, replacing SQLite for local dev) — both have been migrated and verified working.
 
 ### Completion Criteria
-To be defined.
+`config/settings.py` reads `DATABASE_URL` and connects to PostgreSQL when set (SQLite remains the fallback for a fresh checkout with no `.env`); `manage.py migrate` runs clean against both the local Postgres install and Neon; a superuser exists on both.
 
-**Status: Not started.**
+**Status: Complete**, for this narrowed scope. Verified 2026-08-26 — `psycopg`/`psycopg-binary` added to `requirements.txt`; `manage.py migrate` ran clean against a new Neon project and separately against a locally-created `portfolio` database/role on the local PostgreSQL 18 service; superusers created on both; the dev server verified serving real/seeded content (`/`, `/projects/`) from each in turn. Render deployment and the UptimeRobot keep-alive ping are **not** part of this phase anymore — see Phase 14 below and `DECISIONS.md`.
 
 ## Phase - X — Blog Upgrade: Content, Logic, and Tables
 
@@ -247,10 +247,10 @@ To be defined.
 Deploy and host the finished site.
 
 ### Scope
-To be defined in further detail by the project owner. Implied by the phase name and its placement after Phase 10 (database engine, chosen "closer to a hosting decision" per `DECISIONS.md`) and Phase 13 (testing): choosing a hosting provider and deploying the completed, tested site. No hosting provider has been chosen yet.
+Hosting provider now chosen (moved here from Phase 10, 2026-08-26 — see `DECISIONS.md`): deploy the Django app on **Render**'s free tier, pointed at the existing **Neon** PostgreSQL project (already migrated and verified as of Phase 10), with a free **UptimeRobot** monitor pinging the live URL to prevent Render's free-tier idle spin-down/cold-start. Interim arrangement — once the owner has an international debit/credit card, the plan is to migrate to **Oracle Cloud**'s Always Free tier instead (a real always-on VM, no PaaS cold-start concern). Detailed deployment steps (Render service config, environment variables, static/media file serving in production) still to be worked out when this phase actually starts.
 
 ### Completion Criteria
-To be defined.
+The app is deployed and reachable on Render, connected to the Neon PostgreSQL database; an UptimeRobot monitor is actively pinging the live URL frequently enough to prevent idle spin-down.
 
 **Status: Not started.**
 

@@ -21,6 +21,7 @@ This describes the **actual current implementation** — the static prototype pl
 - Pillow 12.3.0 (added 2026-08-24) — image asset processing (e.g. background removal for the hero portrait), not used by the running Django app itself
 - `requests` 2.34.2 (added Phase 5, 2026-08-24), with its transitive deps `certifi`/`charset-normalizer`/`idna`/`urllib3` — used by `core/views.py`'s `github` view to call GitHub's public REST API server-side
 - `python-dotenv` 1.1.0 (added Phase 9, 2026-08-25) — loads a gitignored `.env` file (tracked `.env.example` documents the expected keys) so `config/settings.py` can read `DJANGO_SECRET_KEY`/`DJANGO_DEBUG`/`DJANGO_ALLOWED_HOSTS` from the environment, with dev-safe defaults when `.env` is absent
+- `psycopg` 3.3.4 + `psycopg-binary` 3.3.4 (added Phase 10, 2026-08-26) — PostgreSQL driver, used when `DATABASE_URL` is set (see Data/Persistence below)
 
 **Implemented (Tailwind, Phase 2, 2026-08-24):**
 - Node v24.18.0 / npm 11.16.0, `tailwindcss` + `@tailwindcss/cli` v4.3.3 as devDependencies (`package.json`)
@@ -32,7 +33,8 @@ This describes the **actual current implementation** — the static prototype pl
 - Django templates
 - Tailwind CSS
 - React + JavaScript, mounted as islands into specific DOM nodes (not a full SPA)
-- A relational database — PostgreSQL or MySQL, engine choice deferred until closer to a hosting decision (see `DECISIONS.md`)
+- A relational database — **PostgreSQL, via Neon's free managed tier** (decided Phase 10, 2026-08-26, see `DECISIONS.md`); SQLite remains the local dev database
+- App hosting: **Render**'s free tier, kept from idling via a free **UptimeRobot** keep-alive ping — an interim arrangement until the owner has an international card to move to Oracle Cloud's Always Free tier (see `DECISIONS.md`)
 - Stack is explicitly open to adding further tools as needed; not considered closed
 
 ## Application Structure
@@ -157,7 +159,9 @@ Not applicable. No API exists in the prototype, and none has been implemented fo
 
 **Implemented (post-Phase 8 addition, 2026-08-25):** `core.Resume` (`file` — `FileField(upload_to="resume/")` — plus `uploaded_at`) added, admin-uploadable. `config/settings.py` gained `MEDIA_URL`/`MEDIA_ROOT`; `core/urls.py` serves `MEDIA_ROOT` via Django's `static()` helper when `DEBUG=True`. `core/views.py`'s `resume` view passes the latest `Resume`'s file URL as `resume_url`; `templates/pages/resume.html`'s "Download PDF" button uses it when present, falling back to the original `static/files/resume.pdf` link (Phase 7's placeholder path) when no `Resume` row exists yet. This is the project's first `FileField`/media-upload usage. See `DECISIONS.md`.
 
-**Planned:** A relational database via Django's ORM for production. Engine: To be defined — PostgreSQL or MySQL, deliberately deferred until closer to a hosting decision (see `DECISIONS.md`, `PHASES.md`'s Phase 10). SQLite is a development-only stand-in, not a production choice.
+**Implemented (Phase 10, 2026-08-26):** `config/settings.py`'s `DATABASES` now branches on a `DATABASE_URL` environment variable — if set, it parses the URL (`urllib.parse`, stdlib only, no `dj-database-url`/`django-environ` dependency added) into a `django.db.backends.postgresql` config via the `psycopg` driver, carrying forward any query-string options (e.g. `sslmode`, `channel_binding`) into `OPTIONS`, defaulting `sslmode` to `require` if unset; if `DATABASE_URL` is absent, it falls back to the original SQLite config unchanged. A second, separate Neon project (the owner's account already had one other project) was created for this portfolio, and `manage.py migrate` was run against it (all existing migrations applied cleanly) with a superuser (`Shahbaz`) created directly on it — this is the intended Phase 14 production target, not the machine's active day-to-day database. SQLite remains the code-level fallback whenever `DATABASE_URL` isn't set at all (e.g. a fresh checkout with no `.env`).
+
+**Implemented (post-Phase 10 addition, 2026-08-26):** Local development itself now runs on **PostgreSQL**, not SQLite or Neon — a PostgreSQL 18 server was already installed and running locally as a Windows service (port 5432); a dedicated role (`portfolio_user`) and database (`portfolio`, owned by that role) were created on it, `manage.py migrate` was run against it, and a local superuser (`Shahbaz`) created. The local `.env`'s active `DATABASE_URL` points at this local database (`sslmode=disable`, since the local install has SSL off by default); the Neon connection string from the paragraph above is kept commented out in the same file for reference, not active. See `DECISIONS.md`'s "Local development moved from SQLite to a local PostgreSQL install" decision for why (Render deployment was also rescheduled to Phase 14 in the same decision, superseding Phase 10's original "Render + UptimeRobot" scope — see `PHASES.md`).
 
 ## Authentication & Authorization
 
@@ -181,7 +185,7 @@ Not applicable. No auth exists in the prototype or in any implemented production
 
 **Implemented (Tailwind, Phase 2):** `npm install` (Node/npm toolchain, `package.json` + `node_modules/`, gitignored) then `npm run build:css` (one-shot, minified) or `npm run watch:css` (rebuild on change) to generate `static/css/main.css` from `static_src/css/input.css`. This build step must run (or `main.css` must already exist) before `runserver` will show a styled page — Django does not invoke it automatically.
 
-**Planned:** React/JS build tooling — not yet set up.
+**Implemented (Phase 10, 2026-08-26):** The app connects to PostgreSQL (local install for day-to-day dev, Neon as the Phase 14 production target) whenever `DATABASE_URL` is set (see Data / Persistence above) — this piece of Phase 10 is done. **Still planned:** React/JS build tooling — not yet set up. Deployment (moved to **Phase 14**, 2026-08-26 — see `DECISIONS.md`): Render (app hosting, connected to the Neon project) + UptimeRobot (free keep-alive ping against Render's 15-minute idle spin-down) — not yet provisioned; interim until an international card enables a move to Oracle Cloud's Always Free tier.
 
 ## Architectural Boundaries
 
