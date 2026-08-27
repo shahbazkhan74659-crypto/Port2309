@@ -195,12 +195,12 @@ Owner-directed 2026-08-26 (see `DECISIONS.md`'s "Blog `Post`/`Tag` relocated to 
 Upgrade the Projects page's logic and interface into a fully content-ready state, building further on Phase 8's `Project` model/list/detail/modal mechanism.
 
 ### Scope
-To be defined in further detail by the project owner. Implied by the phase name and its placement after Phase - X and before Phase 11: further logic and interface work on the existing `projects` app (model/views/modal shipped in Phase 8) so the page is fully ready to present real content — distinct from Phase 12 "Seeding Real Projects," which populates the data itself rather than the page's logic/interface.
+Owner-confirmed scope (2026-08-27, via direct questions — see `DECISIONS.md`): real project screenshots (`projects.ProjectImage`, a gallery model FK'd to `Project`, used as both the list-card's primary image and the detail page's full gallery — falls back to the existing decorative `.mockup` chip when a project has no images), a new `Project.description` long-form field for the detail page's fuller explanation (distinct from the existing 200-char `short_description` used on cards/Home), and category/tag filtering + free-text search + pagination on `/projects/` (all GET-param driven, AND-combinable, bookmarkable). Cleanup: `Project.tags` now enforces the same 1–6 count validation `Post.tags` already had (`ProjectAdminForm.clean_tags()`); Home's hardcoded featured-project placeholder fallback (`{% else %}` branch — "Project Name", generic "Tag" chips) was removed entirely, following the no-template-fallback convention already established by `HeroContent`/`Quote`/`AboutSnapshot`. The detail page's GitHub/Live-URL display logic was already correct (independent `{% if %}` guards) and needed no change.
 
 ### Completion Criteria
-To be defined.
+`manage.py check`/`makemigrations --check` run clean; `/projects/` supports `?category=`, `?tag=`, `?q=`, and `?page=`, individually and combined, with an out-of-range page clamping instead of erroring and a "No projects match your filters." message on zero results; a project with uploaded `ProjectImage` rows shows its real screenshot on its list card, in the modal, and in a gallery on `/projects/<slug>/`; a project with none falls back to the `.mockup` chip everywhere; `/admin/projects/project/<id>/change/` has a working image-gallery inline and rejects 0 or >6 tags; `/` shows the featured project's real data with no fallback branch when `featured` is unset.
 
-**Status: Not started.**
+**Status: Complete.** Verified 2026-08-27 — `manage.py check` and `makemigrations --check` both clean after generating and applying `projects/migrations/0010_project_description_projectimage.py`; all routes (`/`, `/projects/`, filter/search/pagination combinations including `?page=999`, `/projects/<slug>/`, an unknown slug) returned expected status codes via `runserver`; a real test image was uploaded to a seeded `Project` via the ORM, confirmed rendering on the list card, in the modal, on the detail-page gallery, and on Home's featured card (then removed as test data, confirming the `.mockup` fallback returns cleanly); `ProjectAdminForm.clean_tags()` confirmed rejecting 0 and 7 tags via a direct form test; the admin inline's formset fields (`images-0-image` etc.) confirmed present on the `Project` change page via an authenticated test-client request. See `ARCHITECTURE.md`, `DECISIONS.md`.
 
 ## Phase 11 — Custom Admin Hub
 
@@ -223,10 +223,12 @@ Populate the Projects listing with the owner's real project data, replacing the 
 ### Scope
 To be defined in further detail by the project owner. Implied by the phase name and its placement after Phase 8 (`projects` app gains a real `Project` model, list/detail views, and a modal mechanism) and Phase 10 (production database engine chosen and set up): creating real `Project` model instances for the owner's actual projects/works — the data itself, not the model or views (those are Phase 8's scope) — replacing the Projects page and Home's featured-project card, which have stayed on Phase 3/5 mockup/placeholder content up to this point (see `DECISIONS.md`).
 
+**Partially started ad hoc, 2026-08-27** (same pattern as Phase - X's real first blog post, written ahead of that phase's full completion): the first real project, "TS Library," was seeded via `projects/migrations/0011_seed_real_first_project.py`, which deleted all 3 Phase 3/5 placeholder `Project` rows outright (owner's explicit choice) rather than adding alongside them. TS Library has no screenshots yet — it renders via the `.mockup` fallback Phase Y built until real images are uploaded. Remaining Phase 12 work: more real projects, and screenshots for this one.
+
 ### Completion Criteria
 To be defined.
 
-**Status: Not started.**
+**Status: Not started** as a formally scoped phase, but its core task (real project data replacing placeholders) has begun — see above.
 
 ## Phase 13 — Full End-to-End Testing (Component/Unit + E2E)
 

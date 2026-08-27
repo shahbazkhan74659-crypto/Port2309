@@ -15,6 +15,7 @@ class Project(models.Model):
     title = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
     short_description = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
     tags = models.ManyToManyField(Tag, related_name="projects")
     category = models.CharField(max_length=60)
     role = models.CharField(max_length=60)
@@ -30,6 +31,23 @@ class Project(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def primary_image(self):
+        return self.images.first()
+
+
+class ProjectImage(models.Model):
+    project = models.ForeignKey(Project, related_name="images", on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="projects/")
+    caption = models.CharField(max_length=150, blank=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return f"{self.project.title} — image {self.order}"
 
 
 class Post(models.Model):
