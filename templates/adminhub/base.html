@@ -1,0 +1,56 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Shahbaz Khan — Portfolio{% endblock %}</title>
+  <meta name="description" content="{% block description %}Shahbaz Khan — developer, freelancer, and writer. Projects, writing, and contact.{% endblock %}">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="nav-name" href="{% url 'adminhub:home' %}">SHAHBAZ KHAN</a>
+      <nav class="nav-links" aria-label="Primary">
+        <a class="nav-link" href="{% url 'adminhub:project_list' %}"{% if request.resolver_match.url_name == 'project_list' %} aria-current="page"{% endif %}>Projects</a>
+        <a class="nav-link" href="{% url 'adminhub:about' %}"{% if request.resolver_match.url_name == 'about' %} aria-current="page"{% endif %}>About</a>
+        <a class="nav-link" href="{% url 'adminhub:contact' %}"{% if request.resolver_match.url_name == 'contact' %} aria-current="page"{% endif %}>Contact</a>
+        <a class="nav-link" href="{% url 'adminhub:hire' %}"{% if request.resolver_match.url_name == 'hire' %} aria-current="page"{% endif %}>Hire Me</a>
+        <a class="nav-mark" href="{% url 'adminhub:home' %}" aria-label="Home">
+          <img class="nav-mark-badge" src="{% static 'images/sk-badge.png' %}" alt="SK">
+        </a>
+        <form method="post" action="{% url 'adminhub:logout' %}" class="hub-logout-form">
+          {% csrf_token %}
+          <button type="submit" class="hub-logout-btn">Log out</button>
+        </form>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="foot">
+    <div class="foot-inner">
+      <span class="foot-mark">
+        <img class="foot-mark-badge" src="{% static 'images/sk-badge.png' %}" alt="SK">
+      </span>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="{% url 'adminhub:project_list' %}">Projects</a><a href="{% url 'adminhub:about' %}">About</a><a href="{% url 'adminhub:contact' %}">Contact</a>
+        <a href="{% url 'adminhub:hire' %}">Hire Me</a>
+        <a href="{% url 'adminhub:post_list' %}">Blog</a>
+      </nav>
+      <span class="foot-copy">&copy; {% now "Y" %} Shahbaz Khan</span>
+    </div>
+  </footer>
+
+  {% block extra_body %}{% endblock %}
+</body>
+</html>

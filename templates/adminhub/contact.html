@@ -1,0 +1,60 @@
+{% extends "adminhub/base.html" %}
+
+{% block title %}Contact — Admin Hub{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">CONTACT</p>
+    <h1 class="page-title">LET'S TALK.</h1>
+  </div>
+</section>
+
+<section class="section" style="position:relative">
+  <a class="hub-edit-btn" href="{% url 'adminhub:contact_email_edit' %}?next={% url 'adminhub:contact' %}">Edit</a>
+  <a class="hub-delete-btn" href="{% url 'adminhub:contact_email_delete' %}?next={% url 'adminhub:contact' %}">Delete</a>
+  <div class="wrap contact-grid">
+    <div>
+      {% if contact_email %}
+      <ul class="contact-list">
+        <li class="contact-row">
+          <span class="contact-row-label">Email</span><span class="contact-row-value">{{ contact_email.email }}</span>
+        </li>
+        <li class="contact-row">
+          <span class="contact-row-label">GitHub</span><span class="contact-row-value">{{ contact_email.github_display }}</span>
+        </li>
+        <li class="contact-row">
+          <span class="contact-row-label">LinkedIn</span><span class="contact-row-value">{{ contact_email.linkedin_display }}</span>
+        </li>
+      </ul>
+      {% else %}
+      <p class="hub-empty-state">No contact details yet. Click Edit to add them.</p>
+      {% endif %}
+    </div>
+    <div>
+      <p class="hub-notice">This is where the public Contact form appears for visitors. Submissions show below.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap hub-submissions">
+    <h2 class="stack-title">Recent Submissions</h2>
+    {% for row in submissions %}
+    <div class="hub-submission-row">
+      <div><strong>{{ row.name }}</strong> — <a href="mailto:{{ row.email }}">{{ row.email }}</a></div>
+      <div>{{ row.message|truncatewords:40 }}</div>
+      <div>{{ row.submitted_at|date:"M j, Y, H:i" }}</div>
+      <form method="post" action="{% url 'adminhub:contact_request_delete' row.pk %}" onsubmit="return confirm('Delete this submission?');">
+        {% csrf_token %}
+        <button type="submit" class="hub-delete-btn">Delete</button>
+      </form>
+    </div>
+    {% empty %}
+    <p class="hub-empty-state">No submissions yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock %}

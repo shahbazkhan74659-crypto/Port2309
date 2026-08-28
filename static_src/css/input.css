@@ -582,3 +582,69 @@ a.proj-image-link:hover .proj-image, a.proj-image-link:focus-visible .proj-image
   .cta-row{ flex-direction: column; align-items: flex-start; }
   .hero-portrait-slot{ width: min(78vw, 280px); height: min(96vw, 350px); }
 }
+
+/* ---------- ADMIN HUB (Phase 11) ---------- */
+:root{
+  --color-danger: #e5484d;
+}
+
+.hub-logout-form{ display:flex; align-items:center; }
+.hub-logout-btn{ font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-dim); background: transparent; border: 1px solid var(--border-strong); border-radius: 999px; padding: 5px 12px; cursor:pointer; }
+.hub-logout-btn:hover{ color: var(--ink); border-color: var(--accent); }
+
+.hub-edit-btn, .hub-delete-btn{ position:absolute; top:16px; z-index:2; font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; text-decoration:none; white-space: nowrap; padding: 6px 12px; border-radius: 999px; background: var(--bg-raised-2); border: 1px solid var(--border-strong); cursor:pointer; }
+.hub-edit-btn{ right: calc(var(--edge) + 110px); color: var(--accent); }
+.resume-entry.hub-card{ padding-right: 250px; }
+.hub-edit-btn:hover{ border-color: var(--accent); }
+.hub-delete-btn{ right: var(--edge); color: var(--color-danger); }
+.hub-delete-btn:hover{ border-color: var(--color-danger); }
+
+.hub-add-btn{ display:inline-block; margin-top:18px; padding: 14px 20px; border: 1px dashed var(--border-strong); border-radius: 10px; color: var(--ink-dim); text-decoration:none; font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.06em; text-align:center; }
+.hub-add-btn:hover{ background: var(--accent-soft); color: var(--ink); border-color: var(--accent); }
+
+.hub-submissions{ display:flex; flex-direction:column; gap: 18px; }
+.hub-submission-row{ border-bottom: 1px solid var(--border); padding-bottom: 16px; display:flex; flex-direction:column; gap:6px; }
+.hub-submission-row div:last-of-type{ font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-faint); }
+
+.hub-form-page{ padding-bottom: clamp(64px, 10vw, 120px); }
+.hub-form-page fieldset{ border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin: 0 0 24px; }
+.hub-form-page legend{ font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); padding: 0 8px; }
+.hub-form-actions{ display:flex; align-items:center; gap:16px; margin-top: 20px; }
+
+.hub-tag-picker{ border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+.hub-tag-picker ul{ list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:8px; }
+.hub-tag-picker li{ display:inline-flex; }
+.hub-tag-picker label{ display:inline-flex; align-items:center; gap:6px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--border-strong); font-size: 0.82rem; cursor:pointer; }
+.hub-tag-picker input:checked + span, .hub-tag-picker label:has(input:checked){ background: var(--accent-soft); border-color: var(--accent); }
+.hub-tag-quickadd{ display:flex; gap:8px; margin-top: 14px; }
+.hub-tag-quickadd input[type="text"]{ flex:1; }
+
+.hub-image-row{ display:flex; flex-wrap:wrap; align-items:flex-end; gap:14px; border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 16px; }
+.hub-image-thumb{ width: 96px; height: 96px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-strong); }
+
+.hub-login-card{ max-width: 420px; margin: 80px auto; background: var(--bg-raised); border: 1px solid var(--border); border-radius: 14px; padding: 40px; }
+
+/* Restyle Django's default file-clear / row-delete checkboxes as buttons.
+   Keeps the native checkbox visible+interactive (same proven approach as
+   .hub-tag-picker above) rather than hiding it behind a sibling label, which
+   is fragile across browsers when the checkbox and label are separate
+   elements (as Django's ClearableFileInput renders them). */
+.hub-remove-file{
+  display: inline-flex; align-items:center; gap:8px; margin: 8px 0; cursor: pointer;
+  font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--color-danger); background: var(--bg-raised-2); border: 1px solid var(--border-strong);
+  border-radius: 999px; padding: 6px 14px; transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+.hub-remove-file:hover{ border-color: var(--color-danger); }
+.hub-remove-file:has(input:checked){ background: var(--color-danger); color: var(--bg); border-color: var(--color-danger); }
+.hub-remove-file input[type="checkbox"]{ accent-color: var(--color-danger); width:14px; height:14px; cursor:pointer; margin:0; }
+
+input[type="checkbox"][name$="-clear"]{ accent-color: var(--color-danger); width:15px; height:15px; cursor:pointer; vertical-align: middle; margin: 8px 6px 8px 0; }
+input[type="checkbox"][name$="-clear"] + label{
+  cursor: pointer; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--color-danger); font-weight: 600;
+}
+input[type="checkbox"][name$="-clear"]:checked + label{ text-decoration: line-through; }
+
+.hub-empty-state{ color: var(--ink-faint); font-style: italic; }
+.hub-notice{ border: 1px dashed var(--border-strong); border-radius: 10px; padding: 18px; color: var(--ink-dim); font-size: 0.9rem; }

@@ -1,0 +1,56 @@
+{% extends "adminhub/base.html" %}
+
+{% block title %}{% if project %}Edit Project{% else %}Add Project{% endif %} — Admin Hub{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <div class="wrap hub-form-page">
+    <p class="eyebrow">{% if project %}EDIT{% else %}ADD{% endif %}</p>
+    <h1 class="page-title">PROJECT.</h1>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% if form.non_field_errors %}<div class="form-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+
+      <div class="field"><label for="{{ form.title.id_for_label }}">Title</label>{{ form.title }}{% if form.title.errors %}<p class="field-error" role="alert">{{ form.title.errors.0 }}</p>{% endif %}</div>
+      <div class="field"><label for="{{ form.slug.id_for_label }}">Slug</label>{{ form.slug }}{% if form.slug.errors %}<p class="field-error" role="alert">{{ form.slug.errors.0 }}</p>{% endif %}</div>
+      <div class="field"><label for="{{ form.short_description.id_for_label }}">Short description</label>{{ form.short_description }}{% if form.short_description.errors %}<p class="field-error" role="alert">{{ form.short_description.errors.0 }}</p>{% endif %}</div>
+      <div class="field"><label for="{{ form.description.id_for_label }}">Long description</label>{{ form.description }}{% if form.description.errors %}<p class="field-error" role="alert">{{ form.description.errors.0 }}</p>{% endif %}</div>
+      <div class="field"><label for="{{ form.category.id_for_label }}">Category</label>{{ form.category }}{% if form.category.errors %}<p class="field-error" role="alert">{{ form.category.errors.0 }}</p>{% endif %}</div>
+      <div class="field"><label for="{{ form.role.id_for_label }}">Role</label>{{ form.role }}{% if form.role.errors %}<p class="field-error" role="alert">{{ form.role.errors.0 }}</p>{% endif %}</div>
+      <div class="field"><label for="{{ form.year.id_for_label }}">Year</label>{{ form.year }}{% if form.year.errors %}<p class="field-error" role="alert">{{ form.year.errors.0 }}</p>{% endif %}</div>
+      <div class="field"><label for="{{ form.status.id_for_label }}">Status</label>{{ form.status }}{% if form.status.errors %}<p class="field-error" role="alert">{{ form.status.errors.0 }}</p>{% endif %}</div>
+      <div class="field"><label for="{{ form.github_url.id_for_label }}">GitHub URL</label>{{ form.github_url }}{% if form.github_url.errors %}<p class="field-error" role="alert">{{ form.github_url.errors.0 }}</p>{% endif %}</div>
+      <div class="field"><label for="{{ form.live_url.id_for_label }}">Live URL</label>{{ form.live_url }}{% if form.live_url.errors %}<p class="field-error" role="alert">{{ form.live_url.errors.0 }}</p>{% endif %}</div>
+      <div class="field"><label for="{{ form.order.id_for_label }}">Order</label>{{ form.order }}{% if form.order.errors %}<p class="field-error" role="alert">{{ form.order.errors.0 }}</p>{% endif %}</div>
+      <div class="field"><label for="{{ form.featured.id_for_label }}">{{ form.featured }} Featured</label>{% if form.featured.errors %}<p class="field-error" role="alert">{{ form.featured.errors.0 }}</p>{% endif %}</div>
+      <div class="field"><label>Tags</label>{% include "adminhub/partials/tag_picker.html" with field=form.tags field_name="tags" %}</div>
+
+      <fieldset>
+        <legend>Images</legend>
+        {% if formset %}
+        {{ formset.management_form }}
+        {% for image_form in formset %}
+        <div class="hub-image-row">
+          {% if image_form.instance.pk and image_form.instance.image %}
+            <img src="{{ image_form.instance.image.url }}" alt="{{ image_form.instance.caption }}" class="hub-image-thumb">
+          {% endif %}
+          {{ image_form.id }}
+          <div class="field"><label for="{{ image_form.image.id_for_label }}">Image</label>{{ image_form.image }}</div>
+          <div class="field"><label for="{{ image_form.caption.id_for_label }}">Caption</label>{{ image_form.caption }}</div>
+          <div class="field"><label for="{{ image_form.order.id_for_label }}">Order</label>{{ image_form.order }}</div>
+          {% if image_form.instance.pk %}
+          <label class="hub-remove-file" for="{{ image_form.DELETE.id_for_label }}">{{ image_form.DELETE }} Remove Image</label>
+          {% endif %}
+        </div>
+        {% endfor %}
+        {% endif %}
+      </fieldset>
+
+      <div class="hub-form-actions">
+        <button class="submit-btn" type="submit">Save</button>
+        <a class="btn-line" href="{% url 'adminhub:project_list' %}">Cancel</a>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

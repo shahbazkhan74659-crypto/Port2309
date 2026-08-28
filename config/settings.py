@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'projects',
+    'adminhub',
 ]
 
 MIDDLEWARE = [

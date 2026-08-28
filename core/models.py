@@ -14,6 +14,51 @@ class Resume(models.Model):
         return f"Resume ({self.uploaded_at:%Y-%m-%d})"
 
 
+class ResumePage(models.Model):
+    intro_sub = models.CharField(max_length=300)
+    languages_label = models.CharField(max_length=100)
+    languages = models.ManyToManyField(Tag, related_name="resume_languages")
+    frameworks_label = models.CharField(max_length=100)
+    frameworks = models.ManyToManyField(Tag, related_name="resume_frameworks")
+    learning_label = models.CharField(max_length=100)
+    learning = models.ManyToManyField(Tag, related_name="resume_learning")
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-updated_at"]
+
+    def __str__(self):
+        return f"Resume page (updated {self.updated_at:%Y-%m-%d})"
+
+
+class ResumeExperience(models.Model):
+    role = models.CharField(max_length=120)
+    organization = models.CharField(max_length=150)
+    period = models.CharField(max_length=60)
+    description = models.CharField(max_length=300)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return f"{self.role} — {self.organization}"
+
+
+class ResumeEducation(models.Model):
+    degree = models.CharField(max_length=150)
+    institution = models.CharField(max_length=150)
+    period = models.CharField(max_length=60)
+    description = models.CharField(max_length=300)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return f"{self.degree} — {self.institution}"
+
+
 class HeroContent(models.Model):
     portrait = models.ImageField(upload_to="hero/", blank=True, null=True)
     greeting = models.CharField(max_length=100)

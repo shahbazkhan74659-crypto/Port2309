@@ -1,0 +1,60 @@
+{% extends "adminhub/base.html" %}
+
+{% block title %}Edit About Page — Admin Hub{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <div class="wrap hub-form-page">
+    <p class="eyebrow">EDIT</p>
+    <h1 class="page-title">ABOUT PAGE.</h1>
+    <form method="post">
+      {% csrf_token %}
+      {% if form.non_field_errors %}<div class="form-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+
+      <fieldset>
+        <legend>Header</legend>
+        <div class="field"><label for="{{ form.eyebrow.id_for_label }}">Eyebrow</label>{{ form.eyebrow }}{% if form.eyebrow.errors %}<p class="field-error" role="alert">{{ form.eyebrow.errors.0 }}</p>{% endif %}</div>
+        <div class="field"><label for="{{ form.title_line_one.id_for_label }}">Title line one</label>{{ form.title_line_one }}{% if form.title_line_one.errors %}<p class="field-error" role="alert">{{ form.title_line_one.errors.0 }}</p>{% endif %}</div>
+        <div class="field"><label for="{{ form.title_line_two.id_for_label }}">Title line two</label>{{ form.title_line_two }}{% if form.title_line_two.errors %}<p class="field-error" role="alert">{{ form.title_line_two.errors.0 }}</p>{% endif %}</div>
+        <div class="field"><label for="{{ form.lede.id_for_label }}">Lede</label>{{ form.lede }}{% if form.lede.errors %}<p class="field-error" role="alert">{{ form.lede.errors.0 }}</p>{% endif %}</div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Background &amp; What I care about</legend>
+        <div class="field"><label for="{{ form.background_heading.id_for_label }}">Background heading</label>{{ form.background_heading }}{% if form.background_heading.errors %}<p class="field-error" role="alert">{{ form.background_heading.errors.0 }}</p>{% endif %}</div>
+        <div class="field"><label for="{{ form.background_paragraph.id_for_label }}">Background paragraph</label>{{ form.background_paragraph }}{% if form.background_paragraph.errors %}<p class="field-error" role="alert">{{ form.background_paragraph.errors.0 }}</p>{% endif %}</div>
+        <div class="field"><label for="{{ form.care_heading.id_for_label }}">Care heading</label>{{ form.care_heading }}{% if form.care_heading.errors %}<p class="field-error" role="alert">{{ form.care_heading.errors.0 }}</p>{% endif %}</div>
+        <div class="field"><label for="{{ form.care_paragraph.id_for_label }}">Care paragraph</label>{{ form.care_paragraph }}{% if form.care_paragraph.errors %}<p class="field-error" role="alert">{{ form.care_paragraph.errors.0 }}</p>{% endif %}</div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Philosophy</legend>
+        <div class="field"><label for="{{ form.philosophy_eyebrow.id_for_label }}">Philosophy eyebrow</label>{{ form.philosophy_eyebrow }}{% if form.philosophy_eyebrow.errors %}<p class="field-error" role="alert">{{ form.philosophy_eyebrow.errors.0 }}</p>{% endif %}</div>
+        <div class="field"><label for="{{ form.philosophy_quote.id_for_label }}">Philosophy quote</label>{{ form.philosophy_quote }}{% if form.philosophy_quote.errors %}<p class="field-error" role="alert">{{ form.philosophy_quote.errors.0 }}</p>{% endif %}</div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Skills &amp; Tools</legend>
+        <div class="field"><label for="{{ form.skills_eyebrow.id_for_label }}">Skills eyebrow</label>{{ form.skills_eyebrow }}{% if form.skills_eyebrow.errors %}<p class="field-error" role="alert">{{ form.skills_eyebrow.errors.0 }}</p>{% endif %}</div>
+        <div class="field"><label for="{{ form.languages_label.id_for_label }}">Languages label</label>{{ form.languages_label }}{% if form.languages_label.errors %}<p class="field-error" role="alert">{{ form.languages_label.errors.0 }}</p>{% endif %}</div>
+        <div class="field"><label>Languages</label>{% include "adminhub/partials/tag_picker.html" with field=form.languages field_name="languages" %}</div>
+        <div class="field"><label for="{{ form.frameworks_label.id_for_label }}">Frameworks label</label>{{ form.frameworks_label }}{% if form.frameworks_label.errors %}<p class="field-error" role="alert">{{ form.frameworks_label.errors.0 }}</p>{% endif %}</div>
+        <div class="field"><label>Frameworks</label>{% include "adminhub/partials/tag_picker.html" with field=form.frameworks field_name="frameworks" %}</div>
+        <div class="field"><label for="{{ form.learning_label.id_for_label }}">Currently-learning label</label>{{ form.learning_label }}{% if form.learning_label.errors %}<p class="field-error" role="alert">{{ form.learning_label.errors.0 }}</p>{% endif %}</div>
+        <div class="field"><label>Currently learning</label>{% include "adminhub/partials/tag_picker.html" with field=form.learning field_name="learning" %}</div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Where this is going</legend>
+        <div class="field"><label for="{{ form.going_eyebrow.id_for_label }}">Going eyebrow</label>{{ form.going_eyebrow }}{% if form.going_eyebrow.errors %}<p class="field-error" role="alert">{{ form.going_eyebrow.errors.0 }}</p>{% endif %}</div>
+        <div class="field"><label for="{{ form.going_paragraph.id_for_label }}">Going paragraph</label>{{ form.going_paragraph }}{% if form.going_paragraph.errors %}<p class="field-error" role="alert">{{ form.going_paragraph.errors.0 }}</p>{% endif %}</div>
+      </fieldset>
+
+      <div class="hub-form-actions">
+        <button class="submit-btn" type="submit">Save</button>
+        <a class="btn-line" href="{% url 'adminhub:about' %}">Cancel</a>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

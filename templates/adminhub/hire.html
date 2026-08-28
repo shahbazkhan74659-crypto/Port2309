@@ -1,0 +1,67 @@
+{% extends "adminhub/base.html" %}
+
+{% block title %}Hire Me — Admin Hub{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">HIRE ME</p>
+    <h1 class="page-title">LET'S BUILD<br>SOMETHING.</h1>
+  </div>
+</section>
+
+<section class="section" style="position:relative">
+  <a class="hub-edit-btn" href="{% url 'adminhub:contact_email_edit' %}?next={% url 'adminhub:hire' %}">Edit</a>
+  <a class="hub-delete-btn" href="{% url 'adminhub:contact_email_delete' %}?next={% url 'adminhub:hire' %}">Delete</a>
+  <div class="wrap contact-grid">
+    <div>
+      {% if contact_email %}
+      <ul class="contact-list">
+        <li class="contact-row">
+          <span class="contact-row-label">{{ contact_email.available_for_label }}</span><span class="contact-row-value">{{ contact_email.available_for }}</span>
+        </li>
+        <li class="contact-row">
+          <span class="contact-row-label">{{ contact_email.stack_label }}</span><span class="contact-row-value">{{ contact_email.stack }}</span>
+        </li>
+        <li class="contact-row">
+          <span class="contact-row-label">Or email directly</span><span class="contact-row-value">{{ contact_email.email }}</span>
+        </li>
+        <li class="contact-row">
+          <span class="contact-row-label">GitHub</span><span class="contact-row-value">{{ contact_email.github_display }}</span>
+        </li>
+        <li class="contact-row">
+          <span class="contact-row-label">LinkedIn</span><span class="contact-row-value">{{ contact_email.linkedin_display }}</span>
+        </li>
+      </ul>
+      {% else %}
+      <p class="hub-empty-state">No contact details yet. Click Edit to add them.</p>
+      {% endif %}
+    </div>
+    <div>
+      <p class="hub-notice">This is where the public Hire Me form appears for recruiters and clients. Submissions show below.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap hub-submissions">
+    <h2 class="stack-title">Recent Submissions</h2>
+    {% for row in submissions %}
+    <div class="hub-submission-row">
+      <div><strong>{{ row.name }}</strong> — <a href="mailto:{{ row.email }}">{{ row.email }}</a></div>
+      <div>{{ row.project_type }}{% if row.budget %} · {{ row.budget }}{% endif %}{% if row.timeline %} · {{ row.timeline }}{% endif %}</div>
+      <div>{{ row.details|truncatewords:40 }}</div>
+      <div>{{ row.submitted_at|date:"M j, Y, H:i" }}</div>
+      <form method="post" action="{% url 'adminhub:hire_request_delete' row.pk %}" onsubmit="return confirm('Delete this submission?');">
+        {% csrf_token %}
+        <button type="submit" class="hub-delete-btn">Delete</button>
+      </form>
+    </div>
+    {% empty %}
+    <p class="hub-empty-state">No submissions yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock %}

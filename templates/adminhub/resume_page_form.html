@@ -1,0 +1,31 @@
+{% extends "adminhub/base.html" %}
+
+{% block title %}Edit Resume Skills — Admin Hub{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <div class="wrap hub-form-page">
+    <p class="eyebrow">EDIT</p>
+    <h1 class="page-title">RESUME SKILLS.</h1>
+    <form method="post">
+      {% csrf_token %}
+      {% if form.non_field_errors %}<div class="form-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+      <div class="field"><label for="{{ form.intro_sub.id_for_label }}">Intro line</label>{{ form.intro_sub }}{% if form.intro_sub.errors %}<p class="field-error" role="alert">{{ form.intro_sub.errors.0 }}</p>{% endif %}</div>
+
+      <div class="field"><label for="{{ form.languages_label.id_for_label }}">Languages label</label>{{ form.languages_label }}{% if form.languages_label.errors %}<p class="field-error" role="alert">{{ form.languages_label.errors.0 }}</p>{% endif %}</div>
+      <div class="field"><label>Languages</label>{% include "adminhub/partials/tag_picker.html" with field=form.languages field_name="languages" %}</div>
+
+      <div class="field"><label for="{{ form.frameworks_label.id_for_label }}">Frameworks label</label>{{ form.frameworks_label }}{% if form.frameworks_label.errors %}<p class="field-error" role="alert">{{ form.frameworks_label.errors.0 }}</p>{% endif %}</div>
+      <div class="field"><label>Frameworks &amp; Tools</label>{% include "adminhub/partials/tag_picker.html" with field=form.frameworks field_name="frameworks" %}</div>
+
+      <div class="field"><label for="{{ form.learning_label.id_for_label }}">Currently-learning label</label>{{ form.learning_label }}{% if form.learning_label.errors %}<p class="field-error" role="alert">{{ form.learning_label.errors.0 }}</p>{% endif %}</div>
+      <div class="field"><label>Currently learning</label>{% include "adminhub/partials/tag_picker.html" with field=form.learning field_name="learning" %}</div>
+
+      <div class="hub-form-actions">
+        <button class="submit-btn" type="submit">Save</button>
+        <a class="btn-line" href="{% url 'adminhub:resume' %}">Cancel</a>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

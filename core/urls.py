@@ -15,6 +15,7 @@ urlpatterns = [
     path('blog/', include('projects.blog_urls')),
     path('resume/', views.resume, name='resume'),
     path('github/', views.github, name='github'),
+    path('adminhub/', include('adminhub.urls')),
 ]
 
 if settings.DEBUG:

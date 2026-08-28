@@ -1,0 +1,76 @@
+{% extends "adminhub/base.html" %}
+
+{% block title %}About — Admin Hub{% endblock %}
+
+{% block content %}
+
+<section class="page-head" style="position:relative">
+  <a class="hub-edit-btn" href="{% url 'adminhub:about_edit' %}">Edit</a>
+  <a class="hub-delete-btn" href="{% url 'adminhub:about_delete' %}">Delete</a>
+  <div class="wrap">
+    {% if about %}
+    <p class="eyebrow">{{ about.eyebrow }}</p>
+    <h1 class="page-title">{{ about.title_line_one }}<br>{{ about.title_line_two }}</h1>
+    <p class="about-lede" style="margin-top:28px">{{ about.lede }}</p>
+    {% else %}
+    <p class="hub-empty-state">No About page content yet. Click Edit to add it.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% if about %}
+<section class="section">
+  <div class="wrap two-col">
+    <div>
+      <h2 class="stack-title">{{ about.background_heading }}</h2>
+      <p class="prose">{{ about.background_paragraph }}</p>
+    </div>
+    <div>
+      <h2 class="stack-title">{{ about.care_heading }}</h2>
+      <p class="prose">{{ about.care_paragraph }}</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <p class="eyebrow" style="margin-bottom:20px">{{ about.philosophy_eyebrow }}</p>
+    <blockquote class="quote-block">{{ about.philosophy_quote }}</blockquote>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <p class="eyebrow" style="margin-bottom:24px">{{ about.skills_eyebrow }}</p>
+    <div class="skill-groups">
+      <div>
+        <p class="skill-group-label">{{ about.languages_label }}</p>
+        <div class="skill-tags">
+          {% for tag in about.languages.all %}<span class="skill-tag">{{ tag }}</span>{% endfor %}
+        </div>
+      </div>
+      <div>
+        <p class="skill-group-label">{{ about.frameworks_label }}</p>
+        <div class="skill-tags">
+          {% for tag in about.frameworks.all %}<span class="skill-tag">{{ tag }}</span>{% endfor %}
+        </div>
+      </div>
+      <div>
+        <p class="skill-group-label">{{ about.learning_label }}</p>
+        <div class="skill-tags">
+          {% for tag in about.learning.all %}<span class="skill-tag">{{ tag }}</span>{% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <p class="eyebrow" style="margin-bottom:20px">{{ about.going_eyebrow }}</p>
+    <p class="prose" style="max-width:56ch; font-size:1.1rem;">{{ about.going_paragraph }}</p>
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}

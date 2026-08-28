@@ -1,0 +1,62 @@
+{% extends "adminhub/base.html" %}
+
+{% block title %}Projects — Admin Hub{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">SELECTED WORK</p>
+    <h1 class="page-title">PROJECTS.</h1>
+    <a class="hub-add-btn" href="{% url 'adminhub:project_create' %}">+ ADD NEW PROJECT</a>
+  </div>
+</section>
+
+{% for project in projects %}
+<article class="proj-entry" style="position:relative">
+  <a class="hub-edit-btn" href="{% url 'adminhub:project_edit' project.slug %}">Edit</a>
+  <a class="hub-delete-btn" href="{% url 'adminhub:project_delete' project.slug %}">Delete</a>
+  <div class="wrap">
+    <div class="proj-top">
+      <span class="proj-status">{{ project.status }}</span>
+    </div>
+    <h2 class="proj-name">{{ project.title }}</h2>
+    <div class="proj-layout">
+      <div>
+        <p class="proj-desc">{{ project.short_description }}</p>
+        <div class="proj-tags">
+          {% for tag in project.tags.all %}<span class="proj-tag">{{ tag }}</span>{% endfor %}
+        </div>
+        <div class="proj-meta-row">
+          <div><strong>Category</strong>{{ project.category }}</div>
+          <div><strong>Year</strong>{{ project.year }}</div>
+          <div><strong>Role</strong>{{ project.role }}</div>
+        </div>
+      </div>
+      {% with img=project.primary_image %}
+      {% if img %}
+      <img class="proj-image" src="{{ img.image.url }}" alt="{{ img.caption|default:project.title }}">
+      {% else %}
+      <div class="mockup">
+        <div class="mockup-bar">
+          <div class="mockup-dots"><span></span><span></span><span></span></div>
+          <div class="mockup-url">{% if project.live_url %}{{ project.live_url }}{% else %}{{ project.slug }}.app{% endif %}</div>
+        </div>
+        <div class="mockup-body">
+          <div class="mk-row">{% for tag in project.tags.all %}<div class="mk-chip">{{ tag }}</div>{% endfor %}</div>
+        </div>
+      </div>
+      {% endif %}
+      {% endwith %}
+    </div>
+  </div>
+</article>
+{% empty %}
+<section class="section">
+  <div class="wrap">
+    <p class="proj-empty">No projects yet.</p>
+  </div>
+</section>
+{% endfor %}
+
+{% endblock %}

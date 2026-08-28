@@ -1,27 +1,30 @@
-{% extends "base.html" %}
-{% load static %}
+{% extends "adminhub/base.html" %}
 
-{% block title %}Resume — Shahbaz Khan{% endblock %}
-{% block description %}Resume — Shahbaz Khan, developer, freelancer, and writer.{% endblock %}
+{% block title %}Resume — Admin Hub{% endblock %}
 
 {% block content %}
 
-<section class="page-head">
+<section class="page-head" style="position:relative">
+  <a class="hub-edit-btn" href="{% url 'adminhub:resume_file_edit' %}">Edit PDF</a>
+  <a class="hub-delete-btn" href="{% url 'adminhub:resume_file_delete' %}">Delete PDF</a>
   <div class="wrap">
     <p class="eyebrow">RESUME</p>
     <h1 class="page-title">RESUME.</h1>
     <p class="page-sub">{{ resume_page.intro_sub }}</p>
-    {% if resume_url %}
-    <a class="btn-ghost" style="margin-top:22px" href="{{ resume_url }}" target="_blank" rel="noopener">DOWNLOAD PDF <span class="arrow">&rarr;</span></a>
+    {% if latest_file %}
+    <a class="btn-ghost" style="margin-top:22px" href="{{ latest_file.file.url }}" target="_blank" rel="noopener">DOWNLOAD PDF <span class="arrow">&rarr;</span></a>
     {% else %}
-    <a class="btn-ghost" style="margin-top:22px" href="{% static 'files/resume.pdf' %}" target="_blank" rel="noopener">DOWNLOAD PDF <span class="arrow">&rarr;</span></a>
+    <p class="hub-empty-state">No PDF uploaded yet.</p>
     {% endif %}
   </div>
 </section>
 
-<section class="section">
+<section class="section" style="position:relative">
+  <a class="hub-edit-btn" href="{% url 'adminhub:resume_page_edit' %}">Edit</a>
+  <a class="hub-delete-btn" href="{% url 'adminhub:resume_page_delete' %}">Delete</a>
   <div class="wrap">
     <p class="eyebrow" style="margin-bottom:24px">SKILLS &amp; TOOLS</p>
+    {% if resume_page %}
     <div class="skill-groups">
       <div>
         <p class="skill-group-label">{{ resume_page.languages_label }}</p>
@@ -42,14 +45,20 @@
         </div>
       </div>
     </div>
+    {% else %}
+    <p class="hub-empty-state">No skills content yet. Click Edit to add it.</p>
+    {% endif %}
   </div>
 </section>
 
 <section class="section">
   <div class="wrap">
     <p class="eyebrow" style="margin-bottom:24px">EXPERIENCE</p>
+    <a class="hub-add-btn" href="{% url 'adminhub:experience_create' %}">+ ADD NEW EXPERIENCE</a>
     {% for item in experience %}
-    <div class="resume-entry">
+    <div class="resume-entry hub-card" style="position:relative">
+      <a class="hub-edit-btn" href="{% url 'adminhub:experience_edit' item.pk %}">Edit</a>
+      <a class="hub-delete-btn" href="{% url 'adminhub:experience_delete' item.pk %}">Delete</a>
       <div class="resume-entry-head">
         <div>
           <h3 class="resume-role">{{ item.role }}</h3>
@@ -59,6 +68,8 @@
       </div>
       <p class="resume-desc">{{ item.description }}</p>
     </div>
+    {% empty %}
+    <p class="hub-empty-state">No experience entries yet.</p>
     {% endfor %}
   </div>
 </section>
@@ -66,8 +77,11 @@
 <section class="section">
   <div class="wrap">
     <p class="eyebrow" style="margin-bottom:24px">EDUCATION</p>
+    <a class="hub-add-btn" href="{% url 'adminhub:education_create' %}">+ ADD NEW EDUCATION</a>
     {% for item in education %}
-    <div class="resume-entry">
+    <div class="resume-entry hub-card" style="position:relative">
+      <a class="hub-edit-btn" href="{% url 'adminhub:education_edit' item.pk %}">Edit</a>
+      <a class="hub-delete-btn" href="{% url 'adminhub:education_delete' item.pk %}">Delete</a>
       <div class="resume-entry-head">
         <div>
           <h3 class="resume-role">{{ item.degree }}</h3>
@@ -77,6 +91,8 @@
       </div>
       <p class="resume-desc">{{ item.description }}</p>
     </div>
+    {% empty %}
+    <p class="hub-empty-state">No education entries yet.</p>
     {% endfor %}
   </div>
 </section>

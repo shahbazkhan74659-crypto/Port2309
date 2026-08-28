@@ -1,0 +1,39 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign In — Admin Hub</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+  <main id="main">
+    <section class="page-head">
+      <div class="wrap hub-login-card">
+        <p class="eyebrow">ADMIN HUB</p>
+        <h1 class="page-title">SIGN IN.</h1>
+        <form method="post">
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+            <div class="form-errors" role="alert">{{ form.non_field_errors }}</div>
+          {% endif %}
+          <div class="field">
+            <label for="{{ form.username.id_for_label }}">Username</label>
+            {{ form.username }}
+          </div>
+          <div class="field">
+            <label for="{{ form.password.id_for_label }}">Password</label>
+            {{ form.password }}
+          </div>
+          <button class="submit-btn" type="submit">Sign in &rarr;</button>
+        </form>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

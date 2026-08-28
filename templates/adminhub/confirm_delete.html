@@ -1,0 +1,18 @@
+{% extends "adminhub/base.html" %}
+
+{% block title %}{{ title }} — Admin Hub{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <div class="wrap hub-form-page">
+    <p class="eyebrow">CONFIRM DELETE</p>
+    <h1 class="page-title">{{ title }}</h1>
+    <p class="page-sub">{{ warning_message }}</p>
+    <form method="post" class="hub-form-actions" style="margin-top:22px">
+      {% csrf_token %}
+      <button class="submit-btn hub-delete-confirm-btn" type="submit">Yes, delete</button>
+      <a class="btn-line" href="{{ cancel_url }}">Cancel</a>
+    </form>
+  </div>
+</section>
+{% endblock %}

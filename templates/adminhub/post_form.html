@@ -1,0 +1,28 @@
+{% extends "adminhub/base.html" %}
+
+{% block title %}{% if post %}Edit Post{% else %}Add Post{% endif %} — Admin Hub{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <div class="wrap hub-form-page">
+    <p class="eyebrow">{% if post %}EDIT{% else %}ADD{% endif %}</p>
+    <h1 class="page-title">BLOG POST.</h1>
+    <form method="post">
+      {% csrf_token %}
+      {% if form.non_field_errors %}<div class="form-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+
+      <div class="field"><label for="{{ form.title.id_for_label }}">Title</label>{{ form.title }}{% if form.title.errors %}<p class="field-error" role="alert">{{ form.title.errors.0 }}</p>{% endif %}</div>
+      <div class="field"><label for="{{ form.slug.id_for_label }}">Slug</label>{{ form.slug }}{% if form.slug.errors %}<p class="field-error" role="alert">{{ form.slug.errors.0 }}</p>{% endif %}</div>
+      <div class="field"><label for="{{ form.short_description.id_for_label }}">Short description</label>{{ form.short_description }}{% if form.short_description.errors %}<p class="field-error" role="alert">{{ form.short_description.errors.0 }}</p>{% endif %}</div>
+      <div class="field"><label for="{{ form.content.id_for_label }}">Content</label>{{ form.content }}{% if form.content.errors %}<p class="field-error" role="alert">{{ form.content.errors.0 }}</p>{% endif %}</div>
+      <div class="field"><label>Tags</label>{% include "adminhub/partials/tag_picker.html" with field=form.tags field_name="tags" %}</div>
+      <div class="field"><label for="{{ form.published_at.id_for_label }}">Published date</label>{{ form.published_at }}{% if form.published_at.errors %}<p class="field-error" role="alert">{{ form.published_at.errors.0 }}</p>{% endif %}</div>
+
+      <div class="hub-form-actions">
+        <button class="submit-btn" type="submit">Save</button>
+        <a class="btn-line" href="{% url 'adminhub:post_list' %}">Cancel</a>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

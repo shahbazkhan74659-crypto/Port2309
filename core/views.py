@@ -5,7 +5,16 @@ from django.shortcuts import redirect, render
 from projects.models import Project
 
 from .forms import ContactRequestForm, HireRequestForm
-from .models import About, AboutSnapshot, HeroContent, Quote, Resume
+from .models import (
+    About,
+    AboutSnapshot,
+    HeroContent,
+    Quote,
+    Resume,
+    ResumeEducation,
+    ResumeExperience,
+    ResumePage,
+)
 
 GITHUB_USERNAME = "shahbazkhan74659-crypto"
 GITHUB_CACHE_TTL = 60 * 15
@@ -55,7 +64,19 @@ def hire_me(request):
 def resume(request):
     latest = Resume.objects.first()
     resume_url = latest.file.url if latest else None
-    return render(request, "pages/resume.html", {"resume_url": resume_url})
+    resume_page = ResumePage.objects.first()
+    experience = ResumeExperience.objects.all()
+    education = ResumeEducation.objects.all()
+    return render(
+        request,
+        "pages/resume.html",
+        {
+            "resume_url": resume_url,
+            "resume_page": resume_page,
+            "experience": experience,
+            "education": education,
+        },
+    )
 
 
 def github(request):

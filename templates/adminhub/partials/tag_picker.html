@@ -1,0 +1,8 @@
+<div class="hub-tag-picker">
+  {{ field }}
+  {% if field.errors %}<p class="field-error" role="alert">{{ field.errors.0 }}</p>{% endif %}
+  <div class="hub-tag-quickadd">
+    <input type="text" name="new_tag_for_{{ field_name }}" placeholder="New tag name">
+    <button type="submit" name="quick_add_field" value="{{ field_name }}" class="btn-line">+ Add tag</button>
+  </div>
+</div>
