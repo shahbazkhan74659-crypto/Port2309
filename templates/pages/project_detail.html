@@ -57,8 +57,8 @@
     </div>
     <div class="proj-actions">
       <a class="btn-line" href="{% url 'projects' %}">&larr; ALL PROJECTS</a>
-      {% if project.github_url %}<a class="btn-line" href="{{ project.github_url }}">VIEW ON GITHUB &rarr;</a>{% endif %}
-      {% if project.live_url %}<a class="btn-line" href="{{ project.live_url }}">VIEW LIVE &rarr;</a>{% endif %}
+      {% if project.github_url %}<a class="btn-line" href="{{ project.github_url }}" target="_blank" rel="noopener">VIEW ON GITHUB &rarr;</a>{% endif %}
+      {% if project.live_url %}<a class="btn-line" href="{{ project.live_url }}" target="_blank" rel="noopener">VIEW LIVE &rarr;</a>{% endif %}
     </div>
   </div>
 </section>

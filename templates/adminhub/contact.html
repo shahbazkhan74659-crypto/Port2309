@@ -43,7 +43,7 @@
     <h2 class="stack-title">Recent Submissions</h2>
     {% for row in submissions %}
     <div class="hub-submission-row">
-      <div><strong>{{ row.name }}</strong> — <a href="mailto:{{ row.email }}">{{ row.email }}</a></div>
+      <div><strong>{{ row.name }}</strong> — <a href="mailto:{{ row.email }}" target="_blank" rel="noopener">{{ row.email }}</a></div>
       <div>{{ row.message|truncatewords:40 }}</div>
       <div>{{ row.submitted_at|date:"M j, Y, H:i" }}</div>
       <form method="post" action="{% url 'adminhub:contact_request_delete' row.pk %}" onsubmit="return confirm('Delete this submission?');">

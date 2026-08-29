@@ -6,10 +6,15 @@
 {% block content %}
 
 <section class="page-head">
-  <div class="wrap">
-    <p class="eyebrow">HIRE ME</p>
-    <h1 class="page-title">LET'S BUILD<br>SOMETHING.</h1>
-    <p class="page-sub">I'm currently available for freelance work — full-stack builds, from a first prototype through to a shipped product. Tell me about your project below and I'll get back to you.</p>
+  <div class="wrap page-head-row" style="align-items:flex-start">
+    <div>
+      <p class="eyebrow">HIRE ME</p>
+      <h1 class="page-title">LET'S BUILD<br>SOMETHING.</h1>
+      <p class="page-sub">I'm currently available for freelance work — full-stack builds, from a first prototype through to a shipped product. Tell me about your project below and I'll get back to you.</p>
+    </div>
+    <div style="margin-top:50px">
+      {% include "partials/resume_button.html" %}
+    </div>
   </div>
 </section>
 
@@ -24,7 +29,7 @@
           <span class="contact-row-label">{{ contact_email.stack_label }}</span><span class="contact-row-value">{{ contact_email.stack }}</span>
         </li>
         <li class="contact-row">
-          <a href="mailto:{{ contact_email.email }}" class="contact-row-link">
+          <a href="mailto:{{ contact_email.email }}" class="contact-row-link" target="_blank" rel="noopener">
             <span class="contact-row-label">Or email directly</span><span class="contact-row-value">{{ contact_email.email }}</span>
           </a>
         </li>
@@ -34,7 +39,7 @@
           </a>
         </li>
         <li class="contact-row">
-          <a href="https://www.linkedin.com/in/shahbaz-khan-471aa2418/" class="contact-row-link">
+          <a href="https://www.linkedin.com/in/shahbaz-khan-471aa2418/" class="contact-row-link" target="_blank" rel="noopener">
             <span class="contact-row-label">LinkedIn</span><span class="contact-row-value">{{ contact_email.linkedin_display }}</span>
           </a>
         </li>

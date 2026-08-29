@@ -6,10 +6,15 @@
 {% block content %}
 
 <section class="page-head">
-  <div class="wrap">
-    <p class="eyebrow">{{ about.eyebrow }}</p>
-    <h1 class="page-title">{{ about.title_line_one }}<br>{{ about.title_line_two }}</h1>
-    <p class="about-lede" style="margin-top:28px">{{ about.lede }}</p>
+  <div class="wrap page-head-row" style="align-items:flex-start">
+    <div>
+      <p class="eyebrow">{{ about.eyebrow }}</p>
+      <h1 class="page-title">{{ about.title_line_one }}<br>{{ about.title_line_two }}</h1>
+      <p class="about-lede" style="margin-top:28px">{{ about.lede }}</p>
+    </div>
+    <div style="margin-top:50px">
+      {% include "partials/resume_button.html" %}
+    </div>
   </div>
 </section>
 

@@ -16,15 +16,14 @@
 <body>
   <header class="nav">
     <div class="nav-inner">
-      <a class="nav-name" href="{% url 'home' %}">SHAHBAZ KHAN</a>
+      <a class="nav-mark" href="{% url 'home' %}" aria-label="Home">
+        <img class="nav-mark-badge" src="{% static 'images/sk-badge.png' %}" alt="SK">
+      </a>
       <nav class="nav-links" aria-label="Primary">
         <a class="nav-link" href="{% url 'projects' %}"{% if request.resolver_match.url_name == 'projects' %} aria-current="page"{% endif %}>Projects</a>
         <a class="nav-link" href="{% url 'about' %}"{% if request.resolver_match.url_name == 'about' %} aria-current="page"{% endif %}>About</a>
         <a class="nav-link" href="{% url 'contact' %}"{% if request.resolver_match.url_name == 'contact' %} aria-current="page"{% endif %}>Contact</a>
         <a class="nav-link" href="{% url 'hire_me' %}"{% if request.resolver_match.url_name == 'hire_me' %} aria-current="page"{% endif %}>Hire Me</a>
-        <a class="nav-mark" href="{% url 'home' %}" aria-label="Home">
-          <img class="nav-mark-badge" src="{% static 'images/sk-badge.png' %}" alt="SK">
-        </a>
       </nav>
     </div>
   </header>

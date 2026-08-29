@@ -36,6 +36,11 @@ DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = [h.strip() for h in os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(',') if h.strip()]
 
+# Django's own default is 'DENY', which also blocks same-origin framing — the Resume page's
+# "View Resume" modal embeds the resume PDF in a same-origin <iframe>, so this is relaxed to
+# SAMEORIGIN (still blocks any other site from framing this one).
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
 
 # Application definition
 

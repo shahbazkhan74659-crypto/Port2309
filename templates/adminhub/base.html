@@ -16,15 +16,14 @@
 <body>
   <header class="nav">
     <div class="nav-inner">
-      <a class="nav-name" href="{% url 'adminhub:home' %}">SHAHBAZ KHAN</a>
+      <a class="nav-mark" href="{% url 'adminhub:home' %}" aria-label="Home">
+        <img class="nav-mark-badge" src="{% static 'images/sk-badge.png' %}" alt="SK">
+      </a>
       <nav class="nav-links" aria-label="Primary">
         <a class="nav-link" href="{% url 'adminhub:project_list' %}"{% if request.resolver_match.url_name == 'project_list' %} aria-current="page"{% endif %}>Projects</a>
         <a class="nav-link" href="{% url 'adminhub:about' %}"{% if request.resolver_match.url_name == 'about' %} aria-current="page"{% endif %}>About</a>
         <a class="nav-link" href="{% url 'adminhub:contact' %}"{% if request.resolver_match.url_name == 'contact' %} aria-current="page"{% endif %}>Contact</a>
         <a class="nav-link" href="{% url 'adminhub:hire' %}"{% if request.resolver_match.url_name == 'hire' %} aria-current="page"{% endif %}>Hire Me</a>
-        <a class="nav-mark" href="{% url 'adminhub:home' %}" aria-label="Home">
-          <img class="nav-mark-badge" src="{% static 'images/sk-badge.png' %}" alt="SK">
-        </a>
         <form method="post" action="{% url 'adminhub:logout' %}" class="hub-logout-form">
           {% csrf_token %}
           <button type="submit" class="hub-logout-btn">Log out</button>

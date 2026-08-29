@@ -13,7 +13,7 @@
       <h1 class="page-title">CODE &amp;<br>COMMITS.</h1>
       <p class="page-sub">A read-only, live preview of the GitHub profile.</p>
     </div>
-    <a class="page-head-logo-link" href="{{ html_url }}" aria-label="View {{ name }}'s profile on GitHub">
+    <a class="page-head-logo-link" href="{{ html_url }}" aria-label="View {{ name }}'s profile on GitHub" target="_blank" rel="noopener">
       <img class="page-head-logo" src="{% static 'images/github-logo.png' %}" alt="GitHub logo">
     </a>
   </div>
@@ -36,13 +36,13 @@
         <div class="profile-stat"><strong>{{ following }}</strong><span>Following</span></div>
       </div>
       <div class="profile-actions">
-        <a class="submit-btn" href="{{ html_url }}">View on GitHub &rarr;</a>
+        <a class="submit-btn" href="{{ html_url }}" target="_blank" rel="noopener">View on GitHub &rarr;</a>
       </div>
     </div>
 
     <div class="repo-list">
       {% for repo in repos %}
-        <a class="repo-item" href="{{ repo.html_url }}">
+        <a class="repo-item" href="{{ repo.html_url }}" target="_blank" rel="noopener">
           <div class="repo-item-head">
             <span class="repo-name">{{ repo.name }}</span>
             {% if repo.language %}<span class="repo-lang">{{ repo.language }}</span>{% endif %}

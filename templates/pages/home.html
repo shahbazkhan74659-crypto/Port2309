@@ -13,7 +13,7 @@
         <div class="hero-portrait-glow"></div>
         <img class="hero-portrait" src="{{ hero.portrait.url }}" alt="Portrait of {{ hero.name_first }} {{ hero.name_last }}">
       </div>
-      <a class="btn-neon hero-resume-btn" href="{% url 'resume' %}">SEE MY RESUME <span class="arrow">&rarr;</span></a>
+      {% include "partials/resume_button.html" with extra_class="hero-resume-btn" %}
       <h1 class="hero-line">{{ hero.line_one }}</h1>
       <p class="hero-line">{{ hero.line_two }}</p>
       <div class="hero-name-row">
@@ -110,9 +110,9 @@
     <h2 id="talk-heading" class="cta-title">LET'S<br>TALK.</h2>
     <div class="cta-row">
       <div class="cta-links">
-        <div>Email &mdash; <a href="mailto:{{ contact_email.email }}">{{ contact_email.email }}</a></div>
+        <div>Email &mdash; <a href="mailto:{{ contact_email.email }}" target="_blank" rel="noopener">{{ contact_email.email }}</a></div>
         <div class="cta-social">
-          <a href="{% url 'github' %}">GitHub</a><a href="https://www.linkedin.com/in/shahbaz-khan-471aa2418/">LinkedIn</a>
+          <a href="{% url 'github' %}">GitHub</a><a href="https://www.linkedin.com/in/shahbaz-khan-471aa2418/" target="_blank" rel="noopener">LinkedIn</a>
         </div>
       </div>
       <a class="btn-ghost" href="{% url 'contact' %}">GET IN TOUCH <span class="arrow">&rarr;</span></a>

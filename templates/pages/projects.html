@@ -6,10 +6,13 @@
 {% block content %}
 
 <section class="page-head">
-  <div class="wrap">
-    <p class="eyebrow">SELECTED WORK</p>
-    <h1 class="page-title">PROJECTS.</h1>
-    <p class="page-sub">A few placeholder projects — real ones go here once they're ready.</p>
+  <div class="wrap page-head-row">
+    <div>
+      <p class="eyebrow">SELECTED WORK</p>
+      <h1 class="page-title">PROJECTS.</h1>
+      <p class="page-sub">Full-stack builds — from production sites to systems experiments.</p>
+    </div>
+    {% include "partials/resume_button.html" %}
   </div>
 </section>
 
@@ -61,7 +64,7 @@
         </div>
         <div class="proj-actions">
           <a class="btn-line" href="{% url 'project_detail' project.slug %}" data-modal-trigger data-modal-target="modal-{{ project.slug }}">EXPLORE PROJECT &rarr;</a>
-          {% if project.github_url %}<a class="btn-line" href="{{ project.github_url }}">VIEW ON GITHUB &rarr;</a>{% endif %}
+          {% if project.github_url %}<a class="btn-line" href="{{ project.github_url }}" target="_blank" rel="noopener">VIEW ON GITHUB &rarr;</a>{% endif %}
         </div>
       </div>
       {% with img=project.primary_image %}
@@ -135,8 +138,8 @@
   </div>
   <div class="proj-actions">
     <a class="btn-line" href="{% url 'project_detail' project.slug %}">FULL PAGE &rarr;</a>
-    {% if project.github_url %}<a class="btn-line" href="{{ project.github_url }}">VIEW ON GITHUB &rarr;</a>{% endif %}
-    {% if project.live_url %}<a class="btn-line" href="{{ project.live_url }}">VIEW LIVE &rarr;</a>{% endif %}
+    {% if project.github_url %}<a class="btn-line" href="{{ project.github_url }}" target="_blank" rel="noopener">VIEW ON GITHUB &rarr;</a>{% endif %}
+    {% if project.live_url %}<a class="btn-line" href="{{ project.live_url }}" target="_blank" rel="noopener">VIEW LIVE &rarr;</a>{% endif %}
   </div>
 </template>
 {% empty %}

@@ -6,10 +6,15 @@
 {% block content %}
 
 <section class="page-head">
-  <div class="wrap">
-    <p class="eyebrow">CONTACT</p>
-    <h1 class="page-title">LET'S TALK.</h1>
-    <p class="page-sub">Whether it's a project, a question, or just something worth discussing — I read everything that comes in.</p>
+  <div class="wrap page-head-row" style="align-items:flex-start">
+    <div>
+      <p class="eyebrow">CONTACT</p>
+      <h1 class="page-title">LET'S TALK.</h1>
+      <p class="page-sub">Whether it's a project, a question, or just something worth discussing — I read everything that comes in.</p>
+    </div>
+    <div style="margin-top:50px">
+      {% include "partials/resume_button.html" %}
+    </div>
   </div>
 </section>
 
@@ -18,7 +23,7 @@
     <div>
       <ul class="contact-list">
         <li class="contact-row">
-          <a href="mailto:{{ contact_email.email }}" class="contact-row-link">
+          <a href="mailto:{{ contact_email.email }}" class="contact-row-link" target="_blank" rel="noopener">
             <span class="contact-row-label">Email</span><span class="contact-row-value">{{ contact_email.email }}</span>
           </a>
         </li>
@@ -28,7 +33,7 @@
           </a>
         </li>
         <li class="contact-row">
-          <a href="https://www.linkedin.com/in/shahbaz-khan-471aa2418/" class="contact-row-link">
+          <a href="https://www.linkedin.com/in/shahbaz-khan-471aa2418/" class="contact-row-link" target="_blank" rel="noopener">
             <span class="contact-row-label">LinkedIn</span><span class="contact-row-value">{{ contact_email.linkedin_display }}</span>
           </a>
         </li>
