@@ -1,6 +1,6 @@
 # Development Phases
 
-The project owner has defined the full build roadmap, Phase 0 through Phase 14 (originally confirmed 2026-08-24 as the complete set through Phase 12 — no further phases expected at the time; the owner then added a new Phase 11, "Seeding real Projects," on 2026-08-25, pushing the former Phase 11 "Full End-to-End Testing" to Phase 12 and the former Phase 12 "Deployment and Hosting" to Phase 13; the owner then added a second new Phase 11, "Custom Admin Hub," also on 2026-08-25, pushing "Seeding Real Projects" to Phase 12, "Full End-to-End Testing" to Phase 13, and "Deployment and Hosting" to Phase 14 — see `DECISIONS.md`; the owner then inserted a further phase, **Phase - X — Blog Upgrade: Content, Logic, and Tables**, after Phase 10 and before Phase 11 on 2026-08-25 — deliberately given a non-numeric "X" label instead of a renumbering, per the owner's explicit instruction not to renumber Phases 11–14, so it sits in roadmap order without a sequence number; the owner then inserted **Phase Y — Project Page Upgrade: Logic and Content-Ready Interface** right after Phase - X, also 2026-08-25, using the same non-numeric-label convention so Phases 11–14 stayed unchanged again — see `DECISIONS.md`). The earlier planning and prototyping work is recorded below as **Phase 0 — Pre-Development**, an unnumbered stage that precedes the numbered build roadmap (owner's explicit choice, 2026-08-24, to restart numbering from Phase 1 rather than continue the old Phase 1/2 sequence). Do not invent additional phases beyond what is listed here — see `CLAUDE.md` rule 3.
+The project owner has defined the full build roadmap, Phase 0 through Phase 15 (originally confirmed 2026-08-24 as the complete set through Phase 12 — no further phases expected at the time; the owner then added a new Phase 11, "Seeding real Projects," on 2026-08-25, pushing the former Phase 11 "Full End-to-End Testing" to Phase 12 and the former Phase 12 "Deployment and Hosting" to Phase 13; the owner then added a second new Phase 11, "Custom Admin Hub," also on 2026-08-25, pushing "Seeding Real Projects" to Phase 12, "Full End-to-End Testing" to Phase 13, and "Deployment and Hosting" to Phase 14 — see `DECISIONS.md`; the owner then inserted a further phase, **Phase - X — Blog Upgrade: Content, Logic, and Tables**, after Phase 10 and before Phase 11 on 2026-08-25 — deliberately given a non-numeric "X" label instead of a renumbering, per the owner's explicit instruction not to renumber Phases 11–14, so it sits in roadmap order without a sequence number; the owner then inserted **Phase Y — Project Page Upgrade: Logic and Content-Ready Interface** right after Phase - X, also 2026-08-25, using the same non-numeric-label convention so Phases 11–14 stayed unchanged again — see `DECISIONS.md`; the owner then inserted a new **Phase 13 — Mobile Responsive Behaviour** on 2026-08-29, after Phase 12 (by then complete) and before the former Phase 13 "Full End-to-End Testing" — this time an explicit renumbering rather than a non-numeric label, pushing "Full End-to-End Testing" to Phase 14 and "Deployment and Hosting" to Phase 15). The earlier planning and prototyping work is recorded below as **Phase 0 — Pre-Development**, an unnumbered stage that precedes the numbered build roadmap (owner's explicit choice, 2026-08-24, to restart numbering from Phase 1 rather than continue the old Phase 1/2 sequence). Do not invent additional phases beyond what is listed here — see `CLAUDE.md` rule 3.
 
 ## Phase 0 — Pre-Development (Planning & Prototyping)
 
@@ -234,7 +234,20 @@ Real `Project` rows exist with real content (not Phase 3/5 placeholder/mockup da
 
 **Status: Complete.** Three real projects are seeded (TS Library, LoadGate, Fire Service Website), each with at least one real screenshot; Fire Service Website is the current featured project. Verified 2026-08-29 — `manage.py check`/`makemigrations --check` both clean; `manage.py migrate` applied `0015_seed_third_real_project.py` cleanly; a shell check confirmed all three rows' `order`/`featured`/`tags` and that each project has `images.count() >= 1`; `runserver` requests confirmed `/`, `/projects/`, and `/projects/fire-service-website/` all 200, the new project's tags render in the filter bar, and the uploaded screenshot serves at `/media/projects/fireservice-home.png`. Further real projects can still be added anytime going forward — this phase's completion criteria are met with three, not gated on any specific count.
 
-## Phase 13 — Full End-to-End Testing (Component/Unit + E2E)
+## Phase 13 — Mobile Responsive Behaviour
+
+### Objective
+Audit and fix the site's responsive/mobile behavior across every page and component, so layouts, navigation, modals, and interactive elements all work correctly across desktop, tablet, and mobile viewport sizes.
+
+### Scope
+To be defined in further detail by the project owner. Implied by the phase name: a systematic pass over the public site and Admin Hub at mobile/tablet widths — nav (including the off-canvas/mobile nav behavior already present), page layouts, the Projects/Resume popup modals, forms, and any components not yet explicitly verified at narrow viewports.
+
+### Completion Criteria
+To be defined.
+
+**Status: Not started.**
+
+## Phase 14 — Full End-to-End Testing (Component/Unit + E2E)
 
 ### Objective
 Full test coverage across frontend, backend, and database: component/unit tests plus end-to-end tests.
@@ -247,7 +260,7 @@ To be defined.
 
 **Status: Not started.**
 
-## Phase 14 — Deployment and Hosting
+## Phase 15 — Deployment and Hosting
 
 ### Objective
 Deploy and host the finished site.
@@ -260,4 +273,4 @@ The app is deployed and reachable on Render, connected to the Neon PostgreSQL da
 
 **Status: Not started.**
 
-Phase 14 is the last *numbered* phase in the roadmap — the project owner does not expect further phases beyond this (originally confirmed 2026-08-24 for what was then Phase 12; four additional phases were inserted later, all 2026-08-25: Phase 11 "Seeding Real Projects" (later renumbered to Phase 12), Phase 11 "Custom Admin Hub", and the non-numeric **Phase - X** "Blog Upgrade: Content, Logic, and Tables" and **Phase Y** "Project Page Upgrade: Logic and Content-Ready Interface" — see the note at the top of this file). Phase - X and Phase Y sit after Phase 10 and before Phase 11 in build order (in that sequence — X then Y) despite their labels not being part of the numeric sequence. If new phases are identified later, add them here rather than assuming the roadmap is fixed forever.
+Phase 15 is the last *numbered* phase in the roadmap — the project owner does not expect further phases beyond this (originally confirmed 2026-08-24 for what was then Phase 12; five additional phases were inserted later: Phase 11 "Seeding Real Projects" (later renumbered to Phase 12), Phase 11 "Custom Admin Hub", the non-numeric **Phase - X** "Blog Upgrade: Content, Logic, and Tables" and **Phase Y** "Project Page Upgrade: Logic and Content-Ready Interface" (all three 2026-08-25), and **Phase 13 "Mobile Responsive Behaviour"** (2026-08-29, an explicit renumbering rather than a non-numeric label — see the note at the top of this file). Phase - X and Phase Y sit after Phase 10 and before Phase 11 in build order (in that sequence — X then Y) despite their labels not being part of the numeric sequence. If new phases are identified later, add them here rather than assuming the roadmap is fixed forever.
