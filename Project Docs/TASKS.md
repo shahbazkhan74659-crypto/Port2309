@@ -2,11 +2,13 @@
 
 ## Active
 
-None. [Phase 1]–[Phase 15], [Phase - X], [Phase Y] are all complete; [Phase 6] is superseded/merged into [Phase 8] (see below). The roadmap's last numbered phase is done — the site is live.
+[Phase 16] "AJAX Across the Site" — in progress, one slice at a time, on the owner's explicit direction. The Projects page's filter/search/pagination is done (see below and `DECISIONS.md`); everything else under this phase is still unscoped.
 
 ## Next
 
-[Phase 16] "AJAX Across the Site" — apply AJAX site-wide so navigation/interactions feel smoother than the current full-page-reload-per-link behavior. Identified 2026-09-03, right after Phase 15 closed out. Not yet scoped — see `PHASES.md`.
+[Phase 16], continued — which page/interaction converts next is not yet decided; being picked one at a time on the owner's command rather than scoped all at once. Candidates already flagged in `ARCHITECTURE.md`'s Important Invariants: Blog's list page (`blog_list`) has no filter/search/pagination logic at all yet (unlike Projects), so it isn't a like-for-like AJAX candidate until/unless that's built first.
+
+Resolved 2026-09-03: [Phase 16] first slice — the Projects page (`/projects/`) now filters (search box, tag chips, category dropdown) and paginates/clears filters entirely via `fetch()`, with no full page reload and no browser URL change at all, per the owner's explicit requirement. See `DECISIONS.md`'s "Projects page filter/search/pagination converted to AJAX" entry for the full implementation (header-based content negotiation on the existing `project_list` view/URL, a new `partials/project_results.html`, `AbortController`-based race safety, debounced live search, event delegation for the modal-open triggers and pagination links). The existing no-JS/direct-link fallback and the project-detail modal are both unaffected and were verified still working.
 
 The live site is at `https://shahbazkhan.onrender.com`, monitored by UptimeRobot, connected to Neon + Cloudinary. See `DECISIONS.md`'s "Render service named `shahbazkhan`; first live deploy" entry for the bugs found and fixed getting there.
 

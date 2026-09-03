@@ -458,6 +458,8 @@ a.proj-image-link:hover .proj-image, a.proj-image-link:focus-visible .proj-image
 .proj-page-link:hover{ color: var(--accent); border-color: var(--accent); }
 .proj-page-link.active{ color: var(--bg); background: var(--ink); border-color: var(--ink); }
 
+.proj-results-loading{ opacity: .5; pointer-events: none; }
+
 .proj-entry{ padding: clamp(48px, 8vw, 88px) 0; }
 .proj-entry + .proj-entry{ border-top: 1px solid var(--border); }
 .proj-top{ display:flex; justify-content: space-between; align-items:flex-start; gap: 20px; margin-bottom: 20px; }

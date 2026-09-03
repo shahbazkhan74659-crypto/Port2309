@@ -36,6 +36,7 @@
     <div class="proj-filters">
       {% for t in tags %}
       <a class="proj-filter-chip {% if t.name == selected_tag %}active{% endif %}"
+         data-tag-name="{{ t.name }}"
          href="?tag={{ t.name|urlencode }}{% if query %}&q={{ query|urlencode }}{% endif %}{% if selected_category %}&category={{ selected_category|urlencode }}{% endif %}">{{ t.name }}</a>
       {% endfor %}
     </div>
@@ -43,130 +44,13 @@
   </div>
 </section>
 
-{% for project in projects %}
-<article class="proj-entry">
-  <div class="wrap">
-    <div class="proj-top">
-      <span class="proj-num">{{ page_obj.start_index|add:forloop.counter0|stringformat:"02d" }} / {{ page_obj.paginator.count|stringformat:"02d" }}</span>
-      <span class="proj-status">{{ project.status }}</span>
-    </div>
-    <h2 class="proj-name">{{ project.title }}</h2>
-    <div class="proj-layout">
-      <div>
-        <p class="proj-desc">{{ project.short_description }}</p>
-        <div class="proj-tags">
-          {% for tag in project.tags.all %}<span class="proj-tag">{{ tag }}</span>{% endfor %}
-        </div>
-        <div class="proj-meta-row">
-          <div><strong>Category</strong>{{ project.category }}</div>
-          <div><strong>Year</strong>{{ project.year }}</div>
-          <div><strong>Role</strong>{{ project.role }}</div>
-        </div>
-        <div class="proj-actions">
-          <a class="btn-line" href="{% url 'project_detail' project.slug %}" data-modal-trigger data-modal-target="modal-{{ project.slug }}">EXPLORE PROJECT &rarr;</a>
-          {% if project.github_url %}<a class="btn-line" href="{{ project.github_url }}" target="_blank" rel="noopener">VIEW ON GITHUB &rarr;</a>{% endif %}
-        </div>
-      </div>
-      {% with img=project.primary_image %}
-      {% if img %}
-      <a class="proj-image-link" href="{% url 'project_detail' project.slug %}" data-modal-trigger data-modal-target="modal-{{ project.slug }}" aria-label="Open {{ project.title }} details">
-        <img class="proj-image" src="{{ img.image.url }}" alt="{{ img.caption|default:project.title }}">
-      </a>
-      {% else %}
-      <a class="mockup-link" href="{% url 'project_detail' project.slug %}" data-modal-trigger data-modal-target="modal-{{ project.slug }}" aria-label="Open {{ project.title }} details">
-        <div class="mockup">
-          <div class="mockup-bar">
-            <div class="mockup-dots"><span></span><span></span><span></span></div>
-            <div class="mockup-url">{% if project.live_url %}{{ project.live_url }}{% else %}{{ project.slug }}.app{% endif %}</div>
-          </div>
-          <div class="mockup-body">
-            <div class="mk-row">{% for tag in project.tags.all %}<div class="mk-chip">{{ tag }}</div>{% endfor %}</div>
-            <div class="mk-line" style="width:70%"></div>
-            <div class="mk-line" style="width:92%"></div>
-            <div class="mk-line" style="width:55%"></div>
-            <div class="mk-row" style="margin-top:6px">
-              <div class="mk-block" style="flex:1;height:54px"></div>
-              <div class="mk-block" style="flex:1;height:54px"></div>
-              <div class="mk-block" style="flex:1;height:54px"></div>
-            </div>
-          </div>
-        </div>
-      </a>
-      {% endif %}
-      {% endwith %}
-    </div>
-  </div>
-</article>
-
-<template id="modal-{{ project.slug }}">
-  <div class="proj-top">
-    <span class="proj-num">{{ page_obj.start_index|add:forloop.counter0|stringformat:"02d" }} / {{ page_obj.paginator.count|stringformat:"02d" }}</span>
-    <span class="proj-status">{{ project.status }}</span>
-  </div>
-  <h2 class="proj-name">{{ project.title }}</h2>
-  {% with img=project.primary_image %}
-  {% if img %}
-  <img class="proj-image" src="{{ img.image.url }}" alt="{{ img.caption|default:project.title }}">
-  {% else %}
-  <div class="mockup">
-    <div class="mockup-bar">
-      <div class="mockup-dots"><span></span><span></span><span></span></div>
-      <div class="mockup-url">{% if project.live_url %}{{ project.live_url }}{% else %}{{ project.slug }}.app{% endif %}</div>
-    </div>
-    <div class="mockup-body">
-      <div class="mk-row">{% for tag in project.tags.all %}<div class="mk-chip">{{ tag }}</div>{% endfor %}</div>
-      <div class="mk-line" style="width:70%"></div>
-      <div class="mk-line" style="width:92%"></div>
-      <div class="mk-line" style="width:55%"></div>
-      <div class="mk-row" style="margin-top:6px">
-        <div class="mk-block" style="flex:1;height:54px"></div>
-        <div class="mk-block" style="flex:1;height:54px"></div>
-        <div class="mk-block" style="flex:1;height:54px"></div>
-      </div>
-    </div>
-  </div>
-  {% endif %}
-  {% endwith %}
-  <p class="proj-desc">{{ project.short_description }}</p>
-  <div class="proj-tags">
-    {% for tag in project.tags.all %}<span class="proj-tag">{{ tag }}</span>{% endfor %}
-  </div>
-  <div class="proj-meta-row">
-    <div><strong>Category</strong>{{ project.category }}</div>
-    <div><strong>Year</strong>{{ project.year }}</div>
-    <div><strong>Role</strong>{{ project.role }}</div>
-  </div>
-  <div class="proj-actions">
-    <a class="btn-line" href="{% url 'project_detail' project.slug %}">FULL PAGE &rarr;</a>
-    {% if project.github_url %}<a class="btn-line" href="{{ project.github_url }}" target="_blank" rel="noopener">VIEW ON GITHUB &rarr;</a>{% endif %}
-    {% if project.live_url %}<a class="btn-line" href="{{ project.live_url }}" target="_blank" rel="noopener">VIEW LIVE &rarr;</a>{% endif %}
-  </div>
-</template>
-{% empty %}
-<section class="section">
-  <div class="wrap">
-    <p class="proj-empty">No projects match your filters.</p>
-  </div>
-</section>
-{% endfor %}
-
-{% if page_obj.paginator.num_pages > 1 %}
-<section class="proj-pagination-section">
-  <div class="wrap">
-    <div class="proj-pagination">
-      {% if page_obj.has_previous %}
-      <a class="proj-page-link" href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query|urlencode }}{% endif %}{% if selected_category %}&category={{ selected_category|urlencode }}{% endif %}{% if selected_tag %}&tag={{ selected_tag|urlencode }}{% endif %}">&larr; PREV</a>
-      {% endif %}
-      {% for n in page_obj.paginator.page_range %}
-      <a class="proj-page-link {% if n == page_obj.number %}active{% endif %}" {% if n == page_obj.number %}aria-current="page"{% endif %} href="?page={{ n }}{% if query %}&q={{ query|urlencode }}{% endif %}{% if selected_category %}&category={{ selected_category|urlencode }}{% endif %}{% if selected_tag %}&tag={{ selected_tag|urlencode }}{% endif %}">{{ n }}</a>
-      {% endfor %}
-      {% if page_obj.has_next %}
-      <a class="proj-page-link" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query|urlencode }}{% endif %}{% if selected_category %}&category={{ selected_category|urlencode }}{% endif %}{% if selected_tag %}&tag={{ selected_tag|urlencode }}{% endif %}">NEXT &rarr;</a>
-      {% endif %}
-    </div>
-  </div>
-</section>
-{% endif %}
+<div id="proj-results" aria-live="polite" aria-busy="false"
+     data-initial-category="{{ selected_category }}"
+     data-initial-tag="{{ selected_tag }}"
+     data-initial-q="{{ query }}"
+     data-initial-page="{{ page_obj.number }}">
+  {% include "partials/project_results.html" %}
+</div>
 
 <div class="project-modal-backdrop" id="project-modal-backdrop" hidden>
   <div class="project-modal-panel" id="project-modal-panel" role="dialog" aria-modal="true" tabindex="-1">
@@ -181,6 +65,9 @@
 <script>
 (function () {
   "use strict";
+
+  /* ---- project-detail modal (open trigger is delegated; close is not, since
+     the modal shell itself lives outside #proj-results and never gets swapped) ---- */
   var backdrop = document.getElementById("project-modal-backdrop");
   var panel = document.getElementById("project-modal-panel");
   var body = document.getElementById("project-modal-body");
@@ -200,20 +87,146 @@
     body.innerHTML = "";
   }
 
-  document.querySelectorAll("[data-modal-trigger]").forEach(function (link) {
-    link.addEventListener("click", function (event) {
-      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button === 1) return;
-      event.preventDefault();
-      openModal(link.getAttribute("data-modal-target"));
-    });
-  });
-
   closeBtn.addEventListener("click", closeModal);
   backdrop.addEventListener("click", function (event) {
     if (event.target === backdrop) closeModal();
   });
   document.addEventListener("keydown", function (event) {
     if (event.key === "Escape" && !backdrop.hidden) closeModal();
+  });
+
+  /* ---- AJAX filter/search/pagination — no full page reload, no URL change ---- */
+  var results = document.getElementById("proj-results");
+  var filtersSection = document.querySelector(".proj-filters-section");
+  var form = filtersSection.querySelector("form.proj-filters");
+  var searchInput = form.querySelector('input[name="q"]');
+  var categorySelect = form.querySelector('select[name="category"]');
+  var clearLink = filtersSection.querySelector(".proj-filter-clear");
+
+  var state = {
+    category: results.getAttribute("data-initial-category") || "",
+    tag: results.getAttribute("data-initial-tag") || "",
+    q: results.getAttribute("data-initial-q") || "",
+    page: results.getAttribute("data-initial-page") || "1"
+  };
+
+  var debounceTimer = null;
+  var currentController = null;
+
+  function syncFilterBarUI() {
+    categorySelect.value = state.category;
+    filtersSection.querySelectorAll(".proj-filter-chip").forEach(function (chip) {
+      var isActive = chip.getAttribute("data-tag-name") === state.tag && state.tag !== "";
+      chip.classList.toggle("active", isActive);
+    });
+    if (clearLink) {
+      clearLink.hidden = !(state.q || state.category || state.tag);
+    }
+  }
+
+  function loadResults() {
+    if (currentController) currentController.abort();
+    currentController = new AbortController();
+
+    var params = new URLSearchParams();
+    if (state.q) params.set("q", state.q);
+    if (state.category) params.set("category", state.category);
+    if (state.tag) params.set("tag", state.tag);
+    if (state.page && state.page !== "1") params.set("page", state.page);
+
+    results.classList.add("proj-results-loading");
+    results.setAttribute("aria-busy", "true");
+
+    fetch(window.location.pathname + "?" + params.toString(), {
+      headers: { "X-Requested-With": "XMLHttpRequest" },
+      signal: currentController.signal
+    })
+      .then(function (response) {
+        if (!response.ok) throw new Error("Bad response");
+        return response.text();
+      })
+      .then(function (html) {
+        results.innerHTML = html;
+        syncFilterBarUI();
+      })
+      .catch(function (err) {
+        if (err.name === "AbortError") return;
+        results.innerHTML = '<section class="section"><div class="wrap"><p class="proj-empty">Something went wrong loading results. Try again.</p></div></section>';
+      })
+      .finally(function () {
+        results.classList.remove("proj-results-loading");
+        results.setAttribute("aria-busy", "false");
+      });
+  }
+
+  /* Search box — live, debounced */
+  searchInput.addEventListener("input", function () {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function () {
+      state.q = searchInput.value.trim();
+      state.page = "1";
+      loadResults();
+    }, 350);
+  });
+
+  /* Enter / FILTER button — same AJAX path, immediate */
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    clearTimeout(debounceTimer);
+    state.q = searchInput.value.trim();
+    state.category = categorySelect.value;
+    state.page = "1";
+    loadResults();
+  });
+
+  /* Category select — immediate */
+  categorySelect.addEventListener("change", function () {
+    clearTimeout(debounceTimer);
+    state.category = categorySelect.value;
+    state.page = "1";
+    loadResults();
+  });
+
+  /* Tag chips — immediate, delegated (chips themselves aren't swapped, but delegation is cheap/robust) */
+  filtersSection.addEventListener("click", function (event) {
+    var chip = event.target.closest(".proj-filter-chip");
+    if (!chip) return;
+    event.preventDefault();
+    clearTimeout(debounceTimer);
+    state.tag = chip.getAttribute("data-tag-name") || "";
+    state.page = "1";
+    loadResults();
+  });
+
+  /* Clear filters — immediate */
+  if (clearLink) {
+    clearLink.addEventListener("click", function (event) {
+      event.preventDefault();
+      clearTimeout(debounceTimer);
+      state = { category: "", tag: "", q: "", page: "1" };
+      searchInput.value = "";
+      categorySelect.value = "";
+      loadResults();
+    });
+  }
+
+  /* Modal-open + pagination links — delegated, since #proj-results content is replaced on every swap */
+  results.addEventListener("click", function (event) {
+    var trigger = event.target.closest("[data-modal-trigger]");
+    if (trigger) {
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button === 1) return;
+      event.preventDefault();
+      openModal(trigger.getAttribute("data-modal-target"));
+      return;
+    }
+
+    var pageLink = event.target.closest(".proj-page-link");
+    if (pageLink) {
+      event.preventDefault();
+      var url = new URL(pageLink.href, window.location.origin);
+      state.page = url.searchParams.get("page") || "1";
+      loadResults();
+    }
   });
 })();
 </script>

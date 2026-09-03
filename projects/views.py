@@ -6,7 +6,7 @@ from .models import Post, Project, Tag
 
 
 def project_list(request):
-    projects = Project.objects.all()
+    projects = Project.objects.all().prefetch_related("tags", "images")
 
     category = request.GET.get("category", "").strip()
     if category:
@@ -37,9 +37,12 @@ def project_list(request):
     paginator = Paginator(projects, 9)
     page_obj = paginator.get_page(request.GET.get("page"))
 
+    is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
+    template_name = "partials/project_results.html" if is_ajax else "pages/projects.html"
+
     return render(
         request,
-        "pages/projects.html",
+        template_name,
         {
             "page_obj": page_obj,
             "projects": page_obj.object_list,
