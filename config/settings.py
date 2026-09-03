@@ -71,8 +71,8 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'cloudinary_storage',
     'django.contrib.staticfiles',
+    'cloudinary_storage',
     'cloudinary',
     'core',
     'projects',
@@ -200,6 +200,11 @@ STORAGES = {
         ),
     },
 }
+
+# django-cloudinary-storage's own `collectstatic` override reads the legacy STATICFILES_STORAGE
+# attribute directly instead of the STORAGES dict Django 4.2+ actually uses — without this, collectstatic
+# crashes with AttributeError the moment `cloudinary_storage` is in INSTALLED_APPS (confirmed on Render).
+STATICFILES_STORAGE = STORAGES['staticfiles']['BACKEND']
 
 if CLOUDINARY_CLOUD_NAME:
     CLOUDINARY_STORAGE = {
