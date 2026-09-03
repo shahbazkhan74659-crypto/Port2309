@@ -6,7 +6,9 @@ None. [Phase 1]–[Phase 15], [Phase - X], [Phase Y] are all complete; [Phase 6]
 
 ## Next
 
-Nothing scheduled. The site is live at `https://shahbazkhan.onrender.com`, monitored by UptimeRobot, connected to Neon + Cloudinary. See `DECISIONS.md`'s "Render service named `shahbazkhan`; first live deploy" entry for the bugs found and fixed getting there.
+[Phase 16] "AJAX Across the Site" — apply AJAX site-wide so navigation/interactions feel smoother than the current full-page-reload-per-link behavior. Identified 2026-09-03, right after Phase 15 closed out. Not yet scoped — see `PHASES.md`.
+
+The live site is at `https://shahbazkhan.onrender.com`, monitored by UptimeRobot, connected to Neon + Cloudinary. See `DECISIONS.md`'s "Render service named `shahbazkhan`; first live deploy" entry for the bugs found and fixed getting there.
 
 **Note for future admin/content work:** uploading new media via `/adminhub/` against the *local* dev database does **not** automatically appear on the live site — Neon (production) and local Postgres are independent databases. New real content meant for the live site should go through `/adminhub/` on the production site itself.
 
