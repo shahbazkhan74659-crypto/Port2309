@@ -21,15 +21,11 @@ services:
       # Neon PostgreSQL connection string (Phase 10) — paste the existing Neon project's URL.
       - key: DATABASE_URL
         sync: false
-      # Cloudflare R2 media storage — required for uploaded media (Resume PDF, ProjectImage
+      # Cloudinary media storage — required for uploaded media (Resume PDF, ProjectImage
       # screenshots) to survive redeploys, since Render's free tier has no persistent disk.
-      - key: R2_BUCKET_NAME
+      - key: CLOUDINARY_CLOUD_NAME
         sync: false
-      - key: R2_ACCESS_KEY_ID
+      - key: CLOUDINARY_API_KEY
         sync: false
-      - key: R2_SECRET_ACCESS_KEY
-        sync: false
-      - key: R2_ENDPOINT_URL
-        sync: false
-      - key: R2_PUBLIC_DOMAIN
+      - key: CLOUDINARY_API_SECRET
         sync: false

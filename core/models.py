@@ -1,10 +1,24 @@
+from django.conf import settings
 from django.db import models
 
 from projects.models import Tag
 
 
+def resume_storage():
+    # Cloudinary's default (image-oriented) storage rejects non-image files like this PDF — needs
+    # the "raw" resource type instead. Falls back to Django's normal FileSystemStorage in local dev
+    # (Cloudinary unconfigured), same env-presence branch as config/settings.py's STORAGES setup.
+    if settings.CLOUDINARY_CLOUD_NAME:
+        from cloudinary_storage.storage import RawMediaCloudinaryStorage
+
+        return RawMediaCloudinaryStorage()
+    from django.core.files.storage import default_storage
+
+    return default_storage
+
+
 class Resume(models.Model):
-    file = models.FileField(upload_to="resume/")
+    file = models.FileField(upload_to="resume/", storage=resume_storage)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

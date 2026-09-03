@@ -71,7 +71,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'cloudinary_storage',
     'django.contrib.staticfiles',
+    'cloudinary',
     'core',
     'projects',
     'adminhub',
@@ -182,10 +184,12 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # Media storage: Render's free tier has no persistent disk — anything saved to MEDIA_ROOT is wiped
-# on the next deploy. In production, uploaded media (Resume PDF, ProjectImage screenshots) lives in
-# Cloudflare R2 (S3-compatible) instead, via django-storages. Local dev keeps writing straight to
-# MEDIA_ROOT (unchanged) when these vars are unset — same fallback shape as the DATABASE_URL branch above.
-AWS_STORAGE_BUCKET_NAME = os.environ.get('R2_BUCKET_NAME')
+# on the next deploy. In production, uploaded media (Resume PDF, ProjectImage screenshots) lives on
+# Cloudinary instead, via django-cloudinary-storage. Local dev keeps writing straight to MEDIA_ROOT
+# (unchanged) when these vars are unset — same fallback shape as the DATABASE_URL branch above.
+# (Cloudflare R2 was the original plan, but R2 requires a card on file to activate at all — same
+# blocker as the Oracle Cloud deferral — so this moved to Cloudinary, whose free tier needs no card.)
+CLOUDINARY_CLOUD_NAME = os.environ.get('CLOUDINARY_CLOUD_NAME')
 
 STORAGES = {
     'staticfiles': {
@@ -197,16 +201,13 @@ STORAGES = {
     },
 }
 
-if AWS_STORAGE_BUCKET_NAME:
-    AWS_ACCESS_KEY_ID = os.environ.get('R2_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.environ.get('R2_SECRET_ACCESS_KEY')
-    AWS_S3_ENDPOINT_URL = os.environ.get('R2_ENDPOINT_URL')  # e.g. https://<account_id>.r2.cloudflarestorage.com
-    AWS_S3_CUSTOM_DOMAIN = os.environ.get('R2_PUBLIC_DOMAIN')  # e.g. pub-xxxx.r2.dev, or a custom domain
-    AWS_DEFAULT_ACL = None  # R2 buckets manage public access at the bucket level, not per-object ACLs.
-    AWS_QUERYSTRING_AUTH = False  # Plain, permanent URLs — this bucket is public-read, not signed.
-    AWS_S3_ADDRESSING_STYLE = 'virtual'
-    AWS_S3_FILE_OVERWRITE = False
-    STORAGES['default'] = {'BACKEND': 'storages.backends.s3.S3Storage'}
+if CLOUDINARY_CLOUD_NAME:
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': CLOUDINARY_CLOUD_NAME,
+        'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+        'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+    }
+    STORAGES['default'] = {'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage'}
 else:
     STORAGES['default'] = {'BACKEND': 'django.core.files.storage.FileSystemStorage'}
 
