@@ -25,8 +25,36 @@
         <a class="nav-link" href="{% url 'contact' %}"{% if request.resolver_match.url_name == 'contact' %} aria-current="page"{% endif %}>Contact</a>
         <a class="nav-link" href="{% url 'hire_me' %}"{% if request.resolver_match.url_name == 'hire_me' %} aria-current="page"{% endif %}>Hire Me</a>
       </nav>
+      <button type="button" class="nav-burger" data-nav-toggle aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
     </div>
   </header>
+
+  <div class="nav-drawer-backdrop" id="nav-drawer-backdrop" hidden>
+    <div class="nav-drawer" id="nav-drawer" role="dialog" aria-modal="true" aria-label="Menu" tabindex="-1">
+      <div class="nav-drawer-head">
+        <img class="nav-mark-badge" src="{% static 'images/sk-badge.png' %}" alt="SK">
+        <button type="button" class="nav-drawer-close" data-nav-close aria-label="Close menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"></line><line x1="19" y1="5" x2="5" y2="19"></line></svg>
+        </button>
+      </div>
+      <nav class="nav-drawer-links" aria-label="Primary">
+        <a class="nav-drawer-link" href="{% url 'home' %}"{% if request.resolver_match.url_name == 'home' %} aria-current="page"{% endif %}><span class="dot"></span>Home</a>
+        <a class="nav-drawer-link" href="{% url 'projects' %}"{% if request.resolver_match.url_name == 'projects' %} aria-current="page"{% endif %}><span class="dot"></span>Projects</a>
+        <a class="nav-drawer-link" href="{% url 'about' %}"{% if request.resolver_match.url_name == 'about' %} aria-current="page"{% endif %}><span class="dot"></span>About</a>
+        <a class="nav-drawer-link" href="{% url 'blog' %}"{% if request.resolver_match.url_name == 'blog' %} aria-current="page"{% endif %}><span class="dot"></span>Blog</a>
+        <a class="nav-drawer-link" href="{% url 'resume' %}"{% if request.resolver_match.url_name == 'resume' %} aria-current="page"{% endif %}><span class="dot"></span>Resume</a>
+        <a class="nav-drawer-link" href="{% url 'contact' %}"{% if request.resolver_match.url_name == 'contact' %} aria-current="page"{% endif %}><span class="dot"></span>Contact</a>
+        <a class="nav-drawer-link" href="{% url 'hire_me' %}"{% if request.resolver_match.url_name == 'hire_me' %} aria-current="page"{% endif %}><span class="dot"></span>Hire Me</a>
+        <a class="nav-drawer-link" href="{% url 'github' %}"{% if request.resolver_match.url_name == 'github' %} aria-current="page"{% endif %}><span class="dot"></span>GitHub</a>
+      </nav>
+      <div class="nav-drawer-foot">
+        <p class="nav-drawer-foot-label">Get in touch</p>
+        <p class="nav-drawer-foot-value">{{ contact_email.email }}</p>
+      </div>
+    </div>
+  </div>
 
   <main id="main">
     {% block content %}{% endblock %}
@@ -46,6 +74,40 @@
       <span class="foot-copy">&copy; {% now "Y" %} Shahbaz Khan</span>
     </div>
   </footer>
+
+  <script>
+  (function () {
+    "use strict";
+    var backdrop = document.getElementById("nav-drawer-backdrop");
+    var panel = document.getElementById("nav-drawer");
+    var toggleBtn = document.querySelector("[data-nav-toggle]");
+
+    function openDrawer() {
+      backdrop.hidden = false;
+      toggleBtn.setAttribute("aria-expanded", "true");
+      panel.focus();
+    }
+
+    function closeDrawer() {
+      backdrop.hidden = true;
+      toggleBtn.setAttribute("aria-expanded", "false");
+    }
+
+    toggleBtn.addEventListener("click", openDrawer);
+    document.querySelectorAll("[data-nav-close]").forEach(function (btn) {
+      btn.addEventListener("click", closeDrawer);
+    });
+    document.querySelectorAll(".nav-drawer-link").forEach(function (link) {
+      link.addEventListener("click", closeDrawer);
+    });
+    backdrop.addEventListener("click", function (event) {
+      if (event.target === backdrop) closeDrawer();
+    });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && !backdrop.hidden) closeDrawer();
+    });
+  })();
+  </script>
 
   {% block extra_body %}{% endblock %}
 </body>

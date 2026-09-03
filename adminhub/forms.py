@@ -44,6 +44,7 @@ class TagPickerFormMixin:
 
 class ProjectForm(TagPickerFormMixin, forms.ModelForm):
     tag_field_names = ("tags",)
+    max_featured = 3
 
     class Meta:
         model = Project
@@ -55,6 +56,17 @@ class ProjectForm(TagPickerFormMixin, forms.ModelForm):
 
     def clean_tags(self):
         return validate_tag_count(self.cleaned_data.get("tags"))
+
+    def clean_featured(self):
+        featured = self.cleaned_data.get("featured")
+        if featured:
+            other_featured = Project.objects.filter(featured=True).exclude(pk=self.instance.pk)
+            if other_featured.count() >= self.max_featured:
+                raise forms.ValidationError(
+                    f"At most {self.max_featured} projects can be Featured. "
+                    "Unfeature another project first."
+                )
+        return featured
 
 
 class ProjectImageForm(forms.ModelForm):

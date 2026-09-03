@@ -13,11 +13,16 @@ def hub_home(request):
     hero = HeroContent.objects.first()
     quote = Quote.objects.first()
     about_snapshot = AboutSnapshot.objects.first()
-    featured = Project.objects.filter(featured=True).first()
+    featured_projects = Project.objects.filter(featured=True)
     return render(
         request,
         "adminhub/home.html",
-        {"hero": hero, "quote": quote, "about_snapshot": about_snapshot, "featured": featured},
+        {
+            "hero": hero,
+            "quote": quote,
+            "about_snapshot": about_snapshot,
+            "featured_projects": featured_projects,
+        },
     )
 
 

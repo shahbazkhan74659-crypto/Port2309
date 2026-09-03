@@ -21,14 +21,19 @@ GITHUB_CACHE_TTL = 60 * 15
 
 
 def home(request):
-    featured = Project.objects.filter(featured=True).first()
+    featured_projects = Project.objects.filter(featured=True)
     hero = HeroContent.objects.first()
     quote = Quote.objects.first()
     about_snapshot = AboutSnapshot.objects.first()
     return render(
         request,
         "pages/home.html",
-        {"featured": featured, "hero": hero, "quote": quote, "about_snapshot": about_snapshot},
+        {
+            "featured_projects": featured_projects,
+            "hero": hero,
+            "quote": quote,
+            "about_snapshot": about_snapshot,
+        },
     )
 
 

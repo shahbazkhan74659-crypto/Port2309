@@ -39,30 +39,34 @@
 <section class="section" style="position:relative">
   <div class="wrap">
     <div class="feat-head">
-      <p class="eyebrow"><span class="accent-dot">01</span> &mdash; PROJECT</p>
+      <p class="eyebrow">PROJECT{{ featured_projects|length|pluralize }}</p>
+      <a class="btn-line" href="{% url 'adminhub:project_list' %}">Manage Project &rarr;</a>
     </div>
-    {% if featured %}
-    <a class="hub-edit-btn" href="{% url 'adminhub:project_edit' featured.slug %}">Edit</a>
-    <div class="feat-body">
-      <div>
-        <h2 class="feat-title">{{ featured.title }}</h2>
-        <p class="feat-desc">{{ featured.short_description }}</p>
-      </div>
-      {% with img=featured.primary_image %}
-      {% if img %}
-      <img class="proj-image" src="{{ img.image.url }}" alt="{{ img.caption|default:featured.title }}">
-      {% else %}
-      <div class="mockup">
-        <div class="mockup-bar">
-          <div class="mockup-dots"><span></span><span></span><span></span></div>
-          <div class="mockup-url">{% if featured.live_url %}{{ featured.live_url }}{% else %}{{ featured.slug }}.app{% endif %}</div>
+    {% if featured_projects %}
+    <div class="feat-list">
+      {% for featured in featured_projects %}
+      <div class="feat-body">
+        <div>
+          <h2 class="feat-title">{{ featured.title }}</h2>
+          <p class="feat-desc">{{ featured.short_description }}</p>
         </div>
-        <div class="mockup-body">
-          <div class="mk-row">{% for tag in featured.tags.all %}<div class="mk-chip">{{ tag }}</div>{% endfor %}</div>
+        {% with img=featured.primary_image %}
+        {% if img %}
+        <img class="proj-image" src="{{ img.image.url }}" alt="{{ img.caption|default:featured.title }}">
+        {% else %}
+        <div class="mockup">
+          <div class="mockup-bar">
+            <div class="mockup-dots"><span></span><span></span><span></span></div>
+            <div class="mockup-url">{% if featured.live_url %}{{ featured.live_url }}{% else %}{{ featured.slug }}.app{% endif %}</div>
+          </div>
+          <div class="mockup-body">
+            <div class="mk-row">{% for tag in featured.tags.all %}<div class="mk-chip">{{ tag }}</div>{% endfor %}</div>
+          </div>
         </div>
+        {% endif %}
+        {% endwith %}
       </div>
-      {% endif %}
-      {% endwith %}
+      {% endfor %}
     </div>
     {% else %}
     <p class="hub-empty-state">No featured project set. <a href="{% url 'adminhub:project_list' %}">Mark one Featured on the Projects hub page.</a></p>
