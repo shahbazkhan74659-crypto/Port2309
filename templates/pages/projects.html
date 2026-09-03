@@ -28,9 +28,7 @@
       </select>
       <input type="hidden" name="tag" value="{{ selected_tag }}">
       <button type="submit" class="btn-line">FILTER</button>
-      {% if query or selected_category or selected_tag %}
-      <a class="proj-filter-clear" href="{% url 'projects' %}">Clear filters</a>
-      {% endif %}
+      <a class="proj-filter-clear" href="{% url 'projects' %}" {% if not query and not selected_category and not selected_tag %}hidden{% endif %}>Clear filters</a>
     </form>
     {% if tags %}
     <div class="proj-filters">

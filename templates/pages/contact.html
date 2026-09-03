@@ -39,41 +39,49 @@
         </li>
       </ul>
     </div>
-    <div>
-      {% if sent %}
-        <p class="proj-desc">Thanks — your message has been sent. I'll get back to you soon.</p>
-      {% else %}
-      <form method="post">
-        {% csrf_token %}
-        {% if form.non_field_errors %}
-          <div class="form-errors" role="alert">{{ form.non_field_errors }}</div>
-        {% endif %}
-        <div class="field">
-          <label for="{{ form.name.id_for_label }}">Name</label>
-          {{ form.name }}
-          {% if form.name.errors %}
-            <p id="{{ form.name.id_for_label }}-error" class="field-error" role="alert">{{ form.name.errors.0 }}</p>
-          {% endif %}
-        </div>
-        <div class="field">
-          <label for="{{ form.email.id_for_label }}">Email</label>
-          {{ form.email }}
-          {% if form.email.errors %}
-            <p id="{{ form.email.id_for_label }}-error" class="field-error" role="alert">{{ form.email.errors.0 }}</p>
-          {% endif %}
-        </div>
-        <div class="field">
-          <label for="{{ form.message.id_for_label }}">Message</label>
-          {{ form.message }}
-          {% if form.message.errors %}
-            <p id="{{ form.message.id_for_label }}-error" class="field-error" role="alert">{{ form.message.errors.0 }}</p>
-          {% endif %}
-        </div>
-        <button class="submit-btn" type="submit">Send message &rarr;</button>
-      </form>
-      {% endif %}
+    <div id="contact-form-wrap" aria-live="polite">
+      {% include "partials/contact_form.html" %}
     </div>
   </div>
 </section>
 
+{% endblock %}
+
+{% block extra_body %}
+<script>
+(function () {
+  "use strict";
+  var wrap = document.getElementById("contact-form-wrap");
+
+  wrap.addEventListener("submit", function (event) {
+    var form = event.target;
+    if (form.tagName !== "FORM") return;
+    event.preventDefault();
+
+    var existingError = wrap.querySelector(".ajax-form-error");
+    if (existingError) existingError.remove();
+
+    var submitBtn = form.querySelector(".submit-btn");
+    if (submitBtn) submitBtn.disabled = true;
+
+    fetch(window.location.pathname, {
+      method: "POST",
+      headers: { "X-Requested-With": "XMLHttpRequest" },
+      body: new FormData(form)
+    })
+      .then(function (response) { return response.text(); })
+      .then(function (html) {
+        wrap.innerHTML = html;
+      })
+      .catch(function () {
+        if (submitBtn) submitBtn.disabled = false;
+        var banner = document.createElement("div");
+        banner.className = "form-errors ajax-form-error";
+        banner.setAttribute("role", "alert");
+        banner.textContent = "Something went wrong sending your message. Please try again.";
+        form.insertBefore(banner, form.firstChild);
+      });
+  });
+})();
+</script>
 {% endblock %}

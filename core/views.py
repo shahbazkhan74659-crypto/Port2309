@@ -42,28 +42,37 @@ def about(request):
     return render(request, "pages/about.html", {"about": about})
 
 
-def _handle_lead_form(request, form_class, template_name):
+def _handle_lead_form(request, form_class, template_name, partial_template_name):
+    is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
+
     if request.method == "POST":
         form = form_class(request.POST)
         if form.is_valid():
             form.save()
+            if is_ajax:
+                return render(request, partial_template_name, {"form": form_class(), "sent": True})
             return redirect(f"{request.path}?sent=1")
         for name in form.errors:
             if name in form.fields:
                 widget = form.fields[name].widget
                 widget.attrs["aria-invalid"] = "true"
                 widget.attrs["aria-describedby"] = f"{form[name].id_for_label}-error"
+        context = {"form": form, "sent": False}
     else:
         form = form_class()
-    return render(request, template_name, {"form": form, "sent": request.GET.get("sent") == "1"})
+        context = {"form": form, "sent": request.GET.get("sent") == "1"}
+
+    if is_ajax:
+        return render(request, partial_template_name, context)
+    return render(request, template_name, context)
 
 
 def contact(request):
-    return _handle_lead_form(request, ContactRequestForm, "pages/contact.html")
+    return _handle_lead_form(request, ContactRequestForm, "pages/contact.html", "partials/contact_form.html")
 
 
 def hire_me(request):
-    return _handle_lead_form(request, HireRequestForm, "pages/hire.html")
+    return _handle_lead_form(request, HireRequestForm, "pages/hire.html", "partials/hire_form.html")
 
 
 def resume(request):
