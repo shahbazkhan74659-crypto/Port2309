@@ -28,13 +28,15 @@ This describes the **actual current implementation** — the static prototype pl
 - Source stylesheet `static_src/css/input.css` (CSS-first `@theme` tokens + ported prototype component CSS), built to `static/css/main.css` (gitignored) via `npm run build:css` / `npm run watch:css`
 - No React or database engine wired up yet — those remain planned
 
-**Planned (production, not implemented):**
+**Implemented (Phase 15 codebase deploy-readiness, 2026-09-03):** `gunicorn` 23.0.0 (WSGI server, `render.yaml`'s start command), `whitenoise` 6.9.0 (static-file serving in production — added to `MIDDLEWARE` and, when `DEBUG=False`, `STORAGES['staticfiles']`), `django-storages` 1.14.4 + `boto3` 1.36.5 (media storage — `STORAGES['default']` uses `storages.backends.s3.S3Storage` against a Cloudflare R2 bucket when `R2_BUCKET_NAME` is set, else falls back to plain `FileSystemStorage`/`MEDIA_ROOT`, same env-presence-gated shape as the `DATABASE_URL` branch below). New `render.yaml` Blueprint at the repo root defines the Render web service (build/start commands, `PYTHON_VERSION` matching the new `.python-version` file, every required env var declared as a `sync: false` placeholder). New production-only settings (all gated on `not DEBUG`, so local dev is unaffected): `CSRF_TRUSTED_ORIGINS`, `SECURE_PROXY_SSL_HEADER`, `SESSION_COOKIE_SECURE`/`CSRF_COOKIE_SECURE`, `SECURE_SSL_REDIRECT`, `SECURE_HSTS_*`. See `DECISIONS.md` for the full reasoning, including why Render's free tier forces the R2 media-storage detour (no persistent disk).
+
+**Planned (production, account-level steps not yet done):**
 - Python Django
 - Django templates
 - Tailwind CSS
 - React + JavaScript, mounted as islands into specific DOM nodes (not a full SPA)
 - A relational database — **PostgreSQL, via Neon's free managed tier** (decided Phase 10, 2026-08-26, see `DECISIONS.md`); SQLite remains the local dev database
-- App hosting: **Render**'s free tier, kept from idling via a free **UptimeRobot** keep-alive ping — an interim arrangement until the owner has an international card to move to Oracle Cloud's Always Free tier (see `DECISIONS.md`)
+- App hosting: **Render**'s free tier, kept from idling via a free **UptimeRobot** keep-alive ping — an interim arrangement until the owner has an international card to move to Oracle Cloud's Always Free tier (see `DECISIONS.md`). The codebase side is now deploy-ready (see above); creating the actual Render service from `render.yaml`, an R2 bucket, and the UptimeRobot monitor are account-level steps still pending the owner's action.
 - Stack is explicitly open to adding further tools as needed; not considered closed
 
 ## Application Structure

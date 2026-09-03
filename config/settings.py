@@ -36,6 +36,27 @@ DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = [h.strip() for h in os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(',') if h.strip()]
 
+# Origins allowed to POST to this site (Contact/Hire Me forms, admin/adminhub logins). Required by
+# Django whenever the site is served over HTTPS behind a proxy (Render) — e.g. "https://your-app.onrender.com".
+CSRF_TRUSTED_ORIGINS = [
+    o.strip() for o in os.environ.get('DJANGO_CSRF_TRUSTED_ORIGINS', '').split(',') if o.strip()
+]
+
+# Render (and most PaaS hosts) terminate TLS at a proxy and forward plain HTTP to the app,
+# signaling the original scheme via this header — without it, request.is_secure() is always
+# False in production, which breaks CSRF/cookie-secure behavior below.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Only send cookies over HTTPS once actually deployed (DEBUG=False) — local dev (plain HTTP) is unaffected.
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 3600  # Conservative starting value — raise once HTTPS-only is confirmed stable.
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
 # Django's own default is 'DENY', which also blocks same-origin framing — the Resume page's
 # "View Resume" modal embeds the resume PDF in a same-origin <iframe>, so this is relaxed to
 # SAMEORIGIN (still blocks any other site from framing this one).
@@ -58,6 +79,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -154,9 +176,39 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # collectstatic target in production (Render); gitignored, not committed.
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Media storage: Render's free tier has no persistent disk — anything saved to MEDIA_ROOT is wiped
+# on the next deploy. In production, uploaded media (Resume PDF, ProjectImage screenshots) lives in
+# Cloudflare R2 (S3-compatible) instead, via django-storages. Local dev keeps writing straight to
+# MEDIA_ROOT (unchanged) when these vars are unset — same fallback shape as the DATABASE_URL branch above.
+AWS_STORAGE_BUCKET_NAME = os.environ.get('R2_BUCKET_NAME')
+
+STORAGES = {
+    'staticfiles': {
+        'BACKEND': (
+            'whitenoise.storage.CompressedManifestStaticFilesStorage'
+            if not DEBUG
+            else 'django.contrib.staticfiles.storage.StaticFilesStorage'
+        ),
+    },
+}
+
+if AWS_STORAGE_BUCKET_NAME:
+    AWS_ACCESS_KEY_ID = os.environ.get('R2_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('R2_SECRET_ACCESS_KEY')
+    AWS_S3_ENDPOINT_URL = os.environ.get('R2_ENDPOINT_URL')  # e.g. https://<account_id>.r2.cloudflarestorage.com
+    AWS_S3_CUSTOM_DOMAIN = os.environ.get('R2_PUBLIC_DOMAIN')  # e.g. pub-xxxx.r2.dev, or a custom domain
+    AWS_DEFAULT_ACL = None  # R2 buckets manage public access at the bucket level, not per-object ACLs.
+    AWS_QUERYSTRING_AUTH = False  # Plain, permanent URLs — this bucket is public-read, not signed.
+    AWS_S3_ADDRESSING_STYLE = 'virtual'
+    AWS_S3_FILE_OVERWRITE = False
+    STORAGES['default'] = {'BACKEND': 'storages.backends.s3.S3Storage'}
+else:
+    STORAGES['default'] = {'BACKEND': 'django.core.files.storage.FileSystemStorage'}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
