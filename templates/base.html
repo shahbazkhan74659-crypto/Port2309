@@ -38,6 +38,7 @@
         <a class="nav-link" href="{% url 'about' %}"{% if request.resolver_match.url_name == 'about' %} aria-current="page"{% endif %}>About</a>
         <a class="nav-link" href="{% url 'contact' %}"{% if request.resolver_match.url_name == 'contact' %} aria-current="page"{% endif %}>Contact</a>
         <a class="nav-link" href="{% url 'hire_me' %}"{% if request.resolver_match.url_name == 'hire_me' %} aria-current="page"{% endif %}>Hire Me</a>
+        <a class="nav-link" href="{% url 'feedback' %}"{% if request.resolver_match.url_name == 'feedback' %} aria-current="page"{% endif %}>Feedback</a>
       </nav>
       <button type="button" class="nav-burger" data-nav-toggle aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
@@ -62,6 +63,7 @@
         <a class="nav-drawer-link" href="{% url 'contact' %}"{% if request.resolver_match.url_name == 'contact' %} aria-current="page"{% endif %}><span class="dot"></span>Contact</a>
         <a class="nav-drawer-link" href="{% url 'hire_me' %}"{% if request.resolver_match.url_name == 'hire_me' %} aria-current="page"{% endif %}><span class="dot"></span>Hire Me</a>
         <a class="nav-drawer-link" href="{% url 'github' %}"{% if request.resolver_match.url_name == 'github' %} aria-current="page"{% endif %}><span class="dot"></span>GitHub</a>
+        <a class="nav-drawer-link" href="{% url 'feedback' %}"{% if request.resolver_match.url_name == 'feedback' %} aria-current="page"{% endif %}><span class="dot"></span>Feedback</a>
       </nav>
       <div class="nav-drawer-foot">
         <p class="nav-drawer-foot-label">Get in touch</p>

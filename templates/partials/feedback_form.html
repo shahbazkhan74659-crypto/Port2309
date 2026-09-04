@@ -1,0 +1,58 @@
+{% if sent %}
+  <p class="proj-desc">Thanks — your feedback is awaiting approval. It'll appear on this page once reviewed.</p>
+{% else %}
+<form method="post">
+  {% csrf_token %}
+  {% if form.non_field_errors %}
+    <div class="form-errors" role="alert">{{ form.non_field_errors }}</div>
+  {% endif %}
+  <h2 class="stack-title">Share your feedback</h2>
+  <div class="field">
+    <label for="{{ form.name.id_for_label }}">Name</label>
+    {{ form.name }}
+    {% if form.name.errors %}
+      <p id="{{ form.name.id_for_label }}-error" class="field-error" role="alert">{{ form.name.errors.0 }}</p>
+    {% endif %}
+  </div>
+  <div class="field">
+    <label id="feedback-rating-label">Rating</label>
+    <div class="feedback-rating-row">
+      <fieldset class="feedback-star-picker" role="radiogroup" aria-labelledby="feedback-rating-label">
+        <input type="radio" name="rating" id="fb-star-5" value="5" aria-describedby="fb-rating-error"{% if form.rating.value|stringformat:"s" == "5" %} checked{% endif %}>
+        <label for="fb-star-5" aria-label="5 stars">{% include "partials/star_icon.html" %}</label>
+
+        <input type="radio" name="rating" id="fb-star-4" value="4" aria-describedby="fb-rating-error"{% if form.rating.value|stringformat:"s" == "4" %} checked{% endif %}>
+        <label for="fb-star-4" aria-label="4 stars">{% include "partials/star_icon.html" %}</label>
+
+        <input type="radio" name="rating" id="fb-star-3" value="3" aria-describedby="fb-rating-error"{% if form.rating.value|stringformat:"s" == "3" %} checked{% endif %}>
+        <label for="fb-star-3" aria-label="3 stars">{% include "partials/star_icon.html" %}</label>
+
+        <input type="radio" name="rating" id="fb-star-2" value="2" aria-describedby="fb-rating-error"{% if form.rating.value|stringformat:"s" == "2" %} checked{% endif %}>
+        <label for="fb-star-2" aria-label="2 stars">{% include "partials/star_icon.html" %}</label>
+
+        <input type="radio" name="rating" id="fb-star-1" value="1" aria-describedby="fb-rating-error"{% if form.rating.value|stringformat:"s" == "1" %} checked{% endif %}>
+        <label for="fb-star-1" aria-label="1 star">{% include "partials/star_icon.html" %}</label>
+      </fieldset>
+      <span class="feedback-rating-words" aria-hidden="true">
+        <span class="word word-empty">Select a rating</span>
+        <span class="word word-1">Poor</span>
+        <span class="word word-2">Fair</span>
+        <span class="word word-3">Good</span>
+        <span class="word word-4">Great</span>
+        <span class="word word-5">Excellent</span>
+      </span>
+    </div>
+    {% if form.rating.errors %}
+      <p id="fb-rating-error" class="field-error" role="alert">{{ form.rating.errors.0 }}</p>
+    {% endif %}
+  </div>
+  <div class="field">
+    <label for="{{ form.feedback.id_for_label }}">Feedback</label>
+    {{ form.feedback }}
+    {% if form.feedback.errors %}
+      <p id="{{ form.feedback.id_for_label }}-error" class="field-error" role="alert">{{ form.feedback.errors.0 }}</p>
+    {% endif %}
+  </div>
+  <button class="submit-btn" type="submit">Submit feedback &rarr;</button>
+</form>
+{% endif %}

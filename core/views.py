@@ -1,15 +1,17 @@
 import requests
 from django.core.cache import cache
+from django.db.models import Avg
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
 from projects.models import Project
 
-from .forms import ContactRequestForm, HireRequestForm
+from .forms import ContactRequestForm, FeedbackForm, HireRequestForm
 from .models import (
     About,
     AboutSnapshot,
+    Feedback,
     HeroContent,
     Quote,
     Resume,
@@ -57,7 +59,7 @@ def about(request):
     return render(request, "pages/about.html", {"about": about})
 
 
-def _handle_lead_form(request, form_class, template_name, partial_template_name):
+def _handle_lead_form(request, form_class, template_name, partial_template_name, extra_context=None):
     is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
 
     if request.method == "POST":
@@ -79,6 +81,8 @@ def _handle_lead_form(request, form_class, template_name, partial_template_name)
 
     if is_ajax:
         return render(request, partial_template_name, context)
+    if extra_context:
+        context = {**context, **extra_context}
     return render(request, template_name, context)
 
 
@@ -88,6 +92,23 @@ def contact(request):
 
 def hire_me(request):
     return _handle_lead_form(request, HireRequestForm, "pages/hire.html", "partials/hire_form.html")
+
+
+def feedback(request):
+    live_qs = Feedback.objects.filter(status="live")
+    review_count = live_qs.count()
+    average_rating = live_qs.aggregate(avg=Avg("rating"))["avg"] or 0
+    rounded = round(average_rating)
+    extra_context = {
+        "live_testimonials": live_qs,
+        "average_rating": average_rating,
+        "average_filled_stars": range(rounded),
+        "average_empty_stars": range(5 - rounded),
+        "review_count": review_count,
+    }
+    return _handle_lead_form(
+        request, FeedbackForm, "pages/feedback.html", "partials/feedback_form.html", extra_context=extra_context
+    )
 
 
 def resume(request):

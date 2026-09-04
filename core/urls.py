@@ -13,6 +13,7 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
     path('hire/', views.hire_me, name='hire_me'),
+    path('feedback/', views.feedback, name='feedback'),
     path('projects/', include('projects.urls')),
     path('blog/', include('projects.blog_urls')),
     path('resume/', views.resume, name='resume'),

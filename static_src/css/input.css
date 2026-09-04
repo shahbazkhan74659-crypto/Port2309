@@ -425,6 +425,61 @@ a.proj-image-link:hover .proj-image, a.proj-image-link:focus-visible .proj-image
 .submit-btn:active{ transform: scale(0.98); }
 .form-note{ font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-faint); margin-top: 14px; line-height: 1.6; }
 
+/* ---------- FEEDBACK PAGE ---------- */
+.feedback-grid{ display:grid; grid-template-columns: 0.9fr 1.3fr; gap: clamp(30px,5vw,70px); align-items:start; }
+.feedback-card{ border: 1px solid var(--border-strong); border-radius: 16px; padding: clamp(24px,4vw,36px); }
+
+.feedback-rating-row{ display:flex; align-items:center; gap:14px; margin: 0 0 22px; }
+.feedback-star-picker{ display:flex; flex-direction: row-reverse; justify-content:flex-end; gap:6px; border:none; padding:0; margin:0; }
+.feedback-star-picker input{ position:absolute; opacity:0; width:1px; height:1px; pointer-events:none; }
+.feedback-star-picker label{ cursor:pointer; color: var(--ink-faint); line-height:0; transition: color 0.15s ease; }
+.feedback-star-picker input:focus-visible + label{ outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+.feedback-star-picker input:checked ~ label,
+.feedback-star-picker label:hover,
+.feedback-star-picker label:hover ~ label{ color: var(--accent); }
+.feedback-star-picker input:checked ~ label .feedback-star-icon,
+.feedback-star-picker label:hover .feedback-star-icon,
+.feedback-star-picker label:hover ~ label .feedback-star-icon{ fill: currentColor; }
+
+.feedback-star-icon{ width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+
+/* Responsive rating word (Poor/Fair/Good/Great/Excellent) — reveals via :has(),
+   independent of the star picker's row-reverse DOM order. Hover preview wins
+   over the persisted checked value while the picker is actively hovered. */
+.feedback-rating-words{ font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-faint); }
+.feedback-rating-words .word{ display:none; }
+.feedback-rating-words .word-empty{ display:inline; }
+
+.feedback-rating-row:has(.feedback-star-picker input:checked) .word-empty,
+.feedback-rating-row:has(.feedback-star-picker:hover) .word-empty{ display:none; }
+
+.feedback-rating-row:not(:has(.feedback-star-picker:hover)):has(#fb-star-1:checked) .word-1,
+.feedback-rating-row:not(:has(.feedback-star-picker:hover)):has(#fb-star-2:checked) .word-2,
+.feedback-rating-row:not(:has(.feedback-star-picker:hover)):has(#fb-star-3:checked) .word-3,
+.feedback-rating-row:not(:has(.feedback-star-picker:hover)):has(#fb-star-4:checked) .word-4,
+.feedback-rating-row:not(:has(.feedback-star-picker:hover)):has(#fb-star-5:checked) .word-5,
+.feedback-rating-row:has(label[for="fb-star-1"]:hover) .word-1,
+.feedback-rating-row:has(label[for="fb-star-2"]:hover) .word-2,
+.feedback-rating-row:has(label[for="fb-star-3"]:hover) .word-3,
+.feedback-rating-row:has(label[for="fb-star-4"]:hover) .word-4,
+.feedback-rating-row:has(label[for="fb-star-5"]:hover) .word-5{ display:inline; color: var(--accent); }
+
+.feedback-summary{ display:flex; align-items:center; gap:18px; margin-bottom: 28px; }
+.feedback-summary-number{ font-family: var(--font-display); font-weight: 900; font-size: clamp(2.4rem, 5vw, 3.4rem); line-height:1; }
+.feedback-summary-stars{ display:flex; gap:4px; }
+.feedback-summary-stars .feedback-star-icon{ width:18px; height:18px; color: var(--ink-faint); }
+.feedback-summary-stars .is-filled{ color: var(--accent); fill: currentColor; }
+.feedback-summary-count{ font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink-faint); margin-top: 4px; }
+
+.feedback-list{ display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+.feedback-testimonial{ border: 1px solid var(--border); border-radius: 14px; padding: 20px; display:flex; flex-direction:column; gap:12px; }
+.feedback-testimonial-stars{ display:flex; gap:3px; }
+.feedback-testimonial-stars .feedback-star-icon{ width:16px; height:16px; color: var(--ink-faint); }
+.feedback-testimonial-stars .is-filled{ color: var(--accent); fill: currentColor; }
+.feedback-testimonial-quote{ color: var(--ink-dim); font-size: 0.92rem; line-height: 1.6; }
+.feedback-testimonial-name{ font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink-faint); }
+.feedback-empty{ color: var(--ink-faint); font-family: var(--font-mono); font-size: 0.85rem; padding: 40px 0; }
+
 /* ---------- PROJECTS LIST PAGE ---------- */
 .proj-filters-section{ padding: 20px 0 0; }
 .proj-filters{ display:flex; flex-wrap:wrap; align-items:center; gap: 12px; margin-top: 14px; }
@@ -600,7 +655,7 @@ a.proj-image-link:hover .proj-image, a.proj-image-link:focus-visible .proj-image
 
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 900px){
-  .about-grid, .two-col, .contact-grid, .github-layout{ grid-template-columns: 1fr; }
+  .about-grid, .two-col, .contact-grid, .github-layout, .feedback-grid{ grid-template-columns: 1fr; }
   .about-grid > *, .two-col > *, .contact-grid > *, .github-layout > *{ min-width: 0; }
   .profile-card{ height: auto; }
   .repo-list{ height: auto; max-height: 420px; }
@@ -706,6 +761,30 @@ input[type="checkbox"][name$="-clear"]:checked + label{ text-decoration: line-th
 
 .hub-empty-state{ color: var(--ink-faint); font-style: italic; }
 .hub-notice{ border: 1px dashed var(--border-strong); border-radius: 10px; padding: 18px; color: var(--ink-dim); font-size: 0.9rem; }
+
+/* ---------- ADMIN HUB — FEEDBACK ---------- */
+.feedback-hub-list{ display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+.feedback-hub-card{ border: 1px solid var(--border); border-radius: 14px; padding: 18px; display:flex; flex-direction:column; gap:10px; }
+.feedback-hub-card-head{ display:flex; justify-content:space-between; align-items:center; gap:10px; }
+.feedback-hub-status{ font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+.feedback-hub-status--pending{ color: var(--ink-faint); background: var(--bg-raised-2); }
+.feedback-hub-status--live{ color: var(--accent); background: var(--accent-soft); }
+.feedback-hub-stars{ display:flex; gap:3px; }
+.feedback-hub-stars .feedback-star-icon{ width:14px; height:14px; color: var(--accent); fill: currentColor; }
+.feedback-hub-meta{ font-family: var(--font-mono); font-size: 0.7rem; color: var(--ink-faint); }
+.feedback-hub-actions{ display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; }
+.feedback-hub-btn{ font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 6px 11px; border-radius: 999px; border: 1px solid var(--border-strong); background: var(--bg-raised-2); cursor:pointer; transition: border-color 0.2s ease; }
+.feedback-hub-btn--live{ color: var(--accent); }
+.feedback-hub-btn--live.is-active{ background: var(--accent-soft); border-color: var(--accent); }
+.feedback-hub-btn--viewed:hover{ border-color: var(--ink); }
+.feedback-hub-btn--delete{ color: var(--color-danger); }
+.feedback-hub-btn--delete:hover{ border-color: var(--color-danger); }
+
+.feedback-viewed-table{ width:100%; border-collapse: collapse; margin-top: 24px; font-size: 0.88rem; }
+.feedback-viewed-table th{ text-align:left; font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); padding: 10px 12px; border-bottom: 1px solid var(--border-strong); }
+.feedback-viewed-table td{ padding: 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.feedback-viewed-delete-btn{ font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-danger); background:none; border: 1px solid var(--border-strong); border-radius: 999px; padding: 5px 11px; cursor:pointer; transition: border-color 0.2s ease; }
+.feedback-viewed-delete-btn:hover{ border-color: var(--color-danger); }
 
 /* ---------- MOBILE NAV DRAWER (Phase 13) ---------- */
 .nav-drawer-backdrop{

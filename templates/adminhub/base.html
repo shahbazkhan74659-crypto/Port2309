@@ -24,6 +24,7 @@
         <a class="nav-link" href="{% url 'adminhub:about' %}"{% if request.resolver_match.url_name == 'about' %} aria-current="page"{% endif %}>About</a>
         <a class="nav-link" href="{% url 'adminhub:contact' %}"{% if request.resolver_match.url_name == 'contact' %} aria-current="page"{% endif %}>Contact</a>
         <a class="nav-link" href="{% url 'adminhub:hire' %}"{% if request.resolver_match.url_name == 'hire' %} aria-current="page"{% endif %}>Hire Me</a>
+        <a class="nav-link" href="{% url 'adminhub:feedback' %}"{% if request.resolver_match.url_name == 'feedback' %} aria-current="page"{% endif %}>Feedback</a>
         <form method="post" action="{% url 'adminhub:logout' %}" class="hub-logout-form">
           {% csrf_token %}
           <button type="submit" class="hub-logout-btn">Log out</button>
@@ -51,6 +52,7 @@
         <a class="nav-drawer-link" href="{% url 'adminhub:resume' %}"{% if request.resolver_match.url_name == 'resume' %} aria-current="page"{% endif %}><span class="dot"></span>Resume</a>
         <a class="nav-drawer-link" href="{% url 'adminhub:contact' %}"{% if request.resolver_match.url_name == 'contact' %} aria-current="page"{% endif %}><span class="dot"></span>Contact</a>
         <a class="nav-drawer-link" href="{% url 'adminhub:hire' %}"{% if request.resolver_match.url_name == 'hire' %} aria-current="page"{% endif %}><span class="dot"></span>Hire Me</a>
+        <a class="nav-drawer-link" href="{% url 'adminhub:feedback' %}"{% if request.resolver_match.url_name == 'feedback' %} aria-current="page"{% endif %}><span class="dot"></span>Feedback</a>
         <form method="post" action="{% url 'adminhub:logout' %}">
           {% csrf_token %}
           <button type="submit" class="nav-drawer-link nav-drawer-logout"><span class="dot"></span>Log out</button>

@@ -1,0 +1,46 @@
+{% extends "adminhub/base.html" %}
+
+{% block title %}Viewed Feedback — Admin Hub{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">FEEDBACK</p>
+    <h1 class="page-title">VIEWED FEEDBACK.</h1>
+    <p class="page-sub">Archived entries auto-delete 20 days after being marked Viewed.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <a class="btn-line" href="{% url 'adminhub:feedback' %}">&larr; Back to Feedback</a>
+    <table class="feedback-viewed-table">
+      <thead>
+        <tr><th>Name</th><th>Rating</th><th>Feedback</th><th>Viewed on</th><th>Days remaining</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for row in submissions %}
+        <tr>
+          <td>{{ row.name }}</td>
+          <td>{{ row.rating }}/5</td>
+          <td>{{ row.feedback|truncatewords:20 }}</td>
+          <td>{{ row.viewed_at|date:"M j, Y" }}</td>
+          <td>{{ row.days_remaining }}</td>
+          <td>
+            <form method="post" action="{% url 'adminhub:feedback_delete' row.pk %}" onsubmit="return confirm('Delete this feedback?');">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{% url 'adminhub:feedback_viewed' %}">
+              <button type="submit" class="feedback-viewed-delete-btn">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="hub-empty-state">No viewed feedback yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+{% endblock %}

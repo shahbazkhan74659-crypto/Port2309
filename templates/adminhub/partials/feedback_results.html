@@ -1,0 +1,37 @@
+{% for row in submissions %}
+<div class="feedback-hub-card">
+  <div class="feedback-hub-card-head">
+    <strong>{{ row.name }}</strong>
+    <span class="feedback-hub-status feedback-hub-status--{{ row.status }}">{{ row.get_status_display }}</span>
+  </div>
+  <div class="feedback-hub-stars">
+    {% for _ in row.filled_stars %}{% include "partials/star_icon.html" with filled=True %}{% endfor %}
+    {% for _ in row.empty_stars %}{% include "partials/star_icon.html" with filled=False %}{% endfor %}
+  </div>
+  <p>{{ row.feedback|truncatewords:40 }}</p>
+  <div class="feedback-hub-meta">{{ row.submitted_at|date:"M j, Y, H:i" }}</div>
+  <div class="feedback-hub-actions">
+    {% if row.status == "live" %}
+    <form method="post" action="{% url 'adminhub:feedback_unpublish' row.pk %}">
+      {% csrf_token %}
+      <button type="submit" class="feedback-hub-btn feedback-hub-btn--live is-active">Unpublish</button>
+    </form>
+    {% else %}
+    <form method="post" action="{% url 'adminhub:feedback_publish' row.pk %}">
+      {% csrf_token %}
+      <button type="submit" class="feedback-hub-btn feedback-hub-btn--live">Live</button>
+    </form>
+    {% endif %}
+    <form method="post" action="{% url 'adminhub:feedback_mark_viewed' row.pk %}">
+      {% csrf_token %}
+      <button type="submit" class="feedback-hub-btn feedback-hub-btn--viewed">Viewed</button>
+    </form>
+    <form method="post" action="{% url 'adminhub:feedback_delete' row.pk %}" class="feedback-hub-delete-form">
+      {% csrf_token %}
+      <button type="submit" class="feedback-hub-btn feedback-hub-btn--delete">Delete</button>
+    </form>
+  </div>
+</div>
+{% empty %}
+<p class="hub-empty-state">No feedback yet.</p>
+{% endfor %}

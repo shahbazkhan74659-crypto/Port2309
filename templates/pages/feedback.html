@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Feedback — Shahbaz Khan{% endblock %}
+{% block description %}What clients say about working with Shahbaz Khan.{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">FEEDBACK</p>
+    <h1 class="page-title">WHAT CLIENTS SAY.</h1>
+    <p class="page-sub">Real feedback from people I've worked with — share your own below.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap feedback-grid">
+    <div class="feedback-card" id="feedback-form-wrap" aria-live="polite">
+      {% include "partials/feedback_form.html" %}
+    </div>
+    <div>
+      <div class="feedback-summary">
+        <span class="feedback-summary-number">{{ average_rating|floatformat:1 }}</span>
+        <div>
+          <div class="feedback-summary-stars">
+            {% for _ in average_filled_stars %}{% include "partials/star_icon.html" with filled=True %}{% endfor %}
+            {% for _ in average_empty_stars %}{% include "partials/star_icon.html" with filled=False %}{% endfor %}
+          </div>
+          <p class="feedback-summary-count">Based on {{ review_count }} review{{ review_count|pluralize }}</p>
+        </div>
+      </div>
+      <div class="feedback-list">
+        {% for row in live_testimonials %}
+        <div class="feedback-testimonial">
+          <div class="feedback-testimonial-stars">
+            {% for _ in row.filled_stars %}{% include "partials/star_icon.html" with filled=True %}{% endfor %}
+            {% for _ in row.empty_stars %}{% include "partials/star_icon.html" with filled=False %}{% endfor %}
+          </div>
+          <p class="feedback-testimonial-quote">{{ row.feedback }}</p>
+          <p class="feedback-testimonial-name">&mdash; {{ row.name }}</p>
+        </div>
+        {% empty %}
+        <p class="feedback-empty">No reviews yet — be the first to share yours.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_body %}
+<script>
+(function () {
+  "use strict";
+  var wrap = document.getElementById("feedback-form-wrap");
+
+  wrap.addEventListener("submit", function (event) {
+    var form = event.target;
+    if (form.tagName !== "FORM") return;
+    event.preventDefault();
+
+    var existingError = wrap.querySelector(".ajax-form-error");
+    if (existingError) existingError.remove();
+
+    var submitBtn = form.querySelector(".submit-btn");
+    if (submitBtn) submitBtn.disabled = true;
+
+    fetch(window.location.pathname, {
+      method: "POST",
+      headers: { "X-Requested-With": "XMLHttpRequest" },
+      body: new FormData(form)
+    })
+      .then(function (response) { return response.text(); })
+      .then(function (html) {
+        wrap.innerHTML = html;
+      })
+      .catch(function () {
+        if (submitBtn) submitBtn.disabled = false;
+        var banner = document.createElement("div");
+        banner.className = "form-errors ajax-form-error";
+        banner.setAttribute("role", "alert");
+        banner.textContent = "Something went wrong sending your feedback. Please try again.";
+        form.insertBefore(banner, form.firstChild);
+      });
+  });
+})();
+</script>
+{% endblock %}

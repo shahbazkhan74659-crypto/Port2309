@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import about, auth, blog, contact, hire, home
+from .views import about, auth, blog, contact, feedback, hire, home
 from .views import projects as project_views
 from .views import resume
 
@@ -59,4 +59,12 @@ urlpatterns = [
     path("resume/education/add/", resume.education_create, name="education_create"),
     path("resume/education/<int:pk>/edit/", resume.education_edit, name="education_edit"),
     path("resume/education/<int:pk>/delete/", resume.education_delete, name="education_delete"),
+
+    # Feedback
+    path("feedback/", feedback.feedback_hub, name="feedback"),
+    path("feedback/viewed/", feedback.feedback_viewed_hub, name="feedback_viewed"),
+    path("feedback/<int:pk>/publish/", feedback.feedback_publish, name="feedback_publish"),
+    path("feedback/<int:pk>/unpublish/", feedback.feedback_unpublish, name="feedback_unpublish"),
+    path("feedback/<int:pk>/viewed/", feedback.feedback_mark_viewed, name="feedback_mark_viewed"),
+    path("feedback/<int:pk>/delete/", feedback.feedback_delete, name="feedback_delete"),
 ]

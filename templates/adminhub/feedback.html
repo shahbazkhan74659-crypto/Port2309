@@ -1,0 +1,67 @@
+{% extends "adminhub/base.html" %}
+
+{% block title %}Feedback — Admin Hub{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap page-head-row" style="align-items:flex-start">
+    <div>
+      <p class="eyebrow">FEEDBACK</p>
+      <h1 class="page-title">WHAT CLIENTS SAY.</h1>
+    </div>
+    <a class="btn-line" href="{% url 'adminhub:feedback_viewed' %}">View Viewed Feedback &rarr;</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <p class="hub-notice">This is where the public Feedback form and testimonial grid appear for visitors. Pending and live submissions show below.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap feedback-hub-list" id="feedback-results" aria-live="polite">
+    {% include "adminhub/partials/feedback_results.html" %}
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_body %}
+<script>
+(function () {
+  "use strict";
+  var results = document.getElementById("feedback-results");
+
+  results.addEventListener("submit", function (event) {
+    var form = event.target;
+    if (form.tagName !== "FORM") return;
+
+    if (form.classList.contains("feedback-hub-delete-form") && !confirm("Delete this feedback?")) {
+      event.preventDefault();
+      return;
+    }
+
+    event.preventDefault();
+
+    var buttons = form.querySelectorAll("button");
+    buttons.forEach(function (btn) { btn.disabled = true; });
+
+    fetch(form.action, {
+      method: "POST",
+      headers: { "X-Requested-With": "XMLHttpRequest" },
+      body: new FormData(form)
+    })
+      .then(function (response) { return response.text(); })
+      .then(function (html) {
+        results.innerHTML = html;
+      })
+      .catch(function () {
+        buttons.forEach(function (btn) { btn.disabled = false; });
+        alert("Something went wrong. Please try again.");
+      });
+  });
+})();
+</script>
+{% endblock %}

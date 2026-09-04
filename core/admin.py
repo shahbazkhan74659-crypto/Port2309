@@ -1,6 +1,16 @@
 from django.contrib import admin
 
-from .models import About, AboutSnapshot, ContactEmail, ContactRequest, HeroContent, HireRequest, Quote, Resume
+from .models import (
+    About,
+    AboutSnapshot,
+    ContactEmail,
+    ContactRequest,
+    Feedback,
+    HeroContent,
+    HireRequest,
+    Quote,
+    Resume,
+)
 
 
 @admin.register(Resume)
@@ -49,4 +59,10 @@ class ContactRequestAdmin(admin.ModelAdmin):
 @admin.register(HireRequest)
 class HireRequestAdmin(admin.ModelAdmin):
     list_display = ("name", "email", "project_type", "submitted_at")
+    readonly_fields = ("submitted_at",)
+
+
+@admin.register(Feedback)
+class FeedbackAdmin(admin.ModelAdmin):
+    list_display = ("name", "rating", "status", "submitted_at")
     readonly_fields = ("submitted_at",)

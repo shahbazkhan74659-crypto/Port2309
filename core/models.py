@@ -1,5 +1,8 @@
+from datetime import timedelta
+
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 
 from projects.models import Tag
 
@@ -201,3 +204,46 @@ class HireRequest(models.Model):
 
     def __str__(self):
         return f"{self.name} — {self.project_type}"
+
+
+FEEDBACK_STATUS_CHOICES = [
+    ("pending", "Pending"),
+    ("live", "Live"),
+    ("viewed", "Viewed"),
+]
+
+RATING_CHOICES = [(i, str(i)) for i in range(1, 6)]
+
+
+class Feedback(models.Model):
+    name = models.CharField(max_length=100)
+    rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES)
+    feedback = models.TextField()
+    status = models.CharField(max_length=10, choices=FEEDBACK_STATUS_CHOICES, default="pending")
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    viewed_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-submitted_at"]
+
+    def __str__(self):
+        return f"{self.name} — {self.rating}★"
+
+    @property
+    def filled_stars(self):
+        return range(self.rating)
+
+    @property
+    def empty_stars(self):
+        return range(5 - self.rating)
+
+    @property
+    def days_remaining(self):
+        if not self.viewed_at:
+            return None
+        return max(0, 20 - (timezone.now() - self.viewed_at).days)
+
+
+def expire_viewed_feedback():
+    cutoff = timezone.now() - timedelta(days=20)
+    Feedback.objects.filter(status="viewed", viewed_at__lt=cutoff).delete()
