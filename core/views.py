@@ -1,6 +1,8 @@
 import requests
 from django.core.cache import cache
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
+from django.urls import reverse
 
 from projects.models import Project
 
@@ -35,6 +37,19 @@ def home(request):
             "about_snapshot": about_snapshot,
         },
     )
+
+
+def robots_txt(request):
+    sitemap_url = request.build_absolute_uri(reverse("sitemap"))
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+        "Disallow: /admin/",
+        "Disallow: /adminhub/",
+        "",
+        f"Sitemap: {sitemap_url}",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
 
 
 def about(request):

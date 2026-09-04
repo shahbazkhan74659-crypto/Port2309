@@ -1,0 +1,30 @@
+{% load static %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Shahbaz Khan",
+  "jobTitle": "Freelance Full-Stack Developer",
+  "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'home' %}",
+  "image": "{{ request.scheme }}://{{ request.get_host }}{% static 'images/sk-badge.png' %}",
+  "sameAs": [
+    "https://github.com/shahbazkhan74659-crypto",
+    "https://www.linkedin.com/in/shahbaz-khan-471aa2418/"
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Silvassa",
+    "addressRegion": "Dadra and Nagar Haveli",
+    "addressCountry": "IN"
+  },
+  "workLocation": [
+    { "@type": "Place", "name": "Silvassa" },
+    { "@type": "Place", "name": "Vapi" },
+    { "@type": "Place", "name": "Daman" },
+    { "@type": "Place", "name": "Dadra and Nagar Haveli" },
+    { "@type": "Place", "name": "Bhilad" },
+    { "@type": "Place", "name": "Naroli" }
+  ],
+  "knowsAbout": ["Web Development", "Application Development", "Django", "React"]
+}
+</script>
