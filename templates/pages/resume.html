@@ -25,31 +25,7 @@
   </div>
 </section>
 
-<section class="section">
-  <div class="wrap">
-    <p class="eyebrow" style="margin-bottom:24px">SKILLS &amp; TOOLS</p>
-    <div class="skill-groups">
-      <div>
-        <p class="skill-group-label">{{ resume_page.languages_label }}</p>
-        <div class="skill-tags">
-          {% for tag in resume_page.languages.all %}<span class="skill-tag">{{ tag.name }}</span>{% endfor %}
-        </div>
-      </div>
-      <div>
-        <p class="skill-group-label">{{ resume_page.frameworks_label }}</p>
-        <div class="skill-tags">
-          {% for tag in resume_page.frameworks.all %}<span class="skill-tag">{{ tag.name }}</span>{% endfor %}
-        </div>
-      </div>
-      <div>
-        <p class="skill-group-label">{{ resume_page.learning_label }}</p>
-        <div class="skill-tags">
-          {% for tag in resume_page.learning.all %}<span class="skill-tag">{{ tag.name }}</span>{% endfor %}
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+{% include "partials/skill_groups.html" with eyebrow_text="SKILLS &amp; TOOLS" languages_label=resume_page.languages_label languages=resume_page.languages.all frameworks_label=resume_page.frameworks_label frameworks=resume_page.frameworks.all learning_label=resume_page.learning_label learning=resume_page.learning.all %}
 
 <section class="section">
   <div class="wrap">

@@ -6,7 +6,7 @@ from projects.models import Project
 from ..decorators import hub_staff_required
 from ..forms import ProjectForm, ProjectImageFormSet
 from ..utils import apply_tag_quick_add
-from ._shared import object_delete_view
+from ._shared import object_delete_view, resolve_next
 
 
 @hub_staff_required
@@ -16,13 +16,15 @@ def project_list(request):
 
 
 def _project_form_view(request, project=None):
+    next_url = resolve_next(request, "adminhub:project_list")
     if request.method == "POST":
         quick_add_data = apply_tag_quick_add(request.POST)
         if quick_add_data is not None:
             form = ProjectForm(quick_add_data, request.FILES, instance=project)
             formset = ProjectImageFormSet(instance=project)
             return render(
-                request, "adminhub/project_form.html", {"form": form, "formset": formset, "project": project}
+                request, "adminhub/project_form.html",
+                {"form": form, "formset": formset, "project": project, "next_url": next_url},
             )
 
         form = ProjectForm(request.POST, request.FILES, instance=project)
@@ -35,21 +37,24 @@ def _project_form_view(request, project=None):
                 else:
                     transaction.set_rollback(True)
             if formset.is_valid():
-                return redirect("adminhub:project_list")
+                return redirect(next_url)
             return render(
-                request, "adminhub/project_form.html", {"form": form, "formset": formset, "project": project}
+                request, "adminhub/project_form.html",
+                {"form": form, "formset": formset, "project": project, "next_url": next_url},
             )
 
         # Main form invalid — re-show it; image edits aren't preserved on this path.
         formset = ProjectImageFormSet(instance=project)
         return render(
-            request, "adminhub/project_form.html", {"form": form, "formset": formset, "project": project}
+            request, "adminhub/project_form.html",
+            {"form": form, "formset": formset, "project": project, "next_url": next_url},
         )
 
     form = ProjectForm(instance=project)
     formset = ProjectImageFormSet(instance=project)
     return render(
-        request, "adminhub/project_form.html", {"form": form, "formset": formset, "project": project}
+        request, "adminhub/project_form.html",
+        {"form": form, "formset": formset, "project": project, "next_url": next_url},
     )
 
 

@@ -9,6 +9,7 @@
     <h1 class="page-title">ABOUT PAGE.</h1>
     <form method="post">
       {% csrf_token %}
+      <input type="hidden" name="next" value="{{ next_url }}">
       {% if form.non_field_errors %}<div class="form-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
 
       <fieldset>
@@ -52,7 +53,7 @@
 
       <div class="hub-form-actions">
         <button class="submit-btn" type="submit">Save</button>
-        <a class="btn-line" href="{% url 'adminhub:about' %}">Cancel</a>
+        <a class="btn-line" href="{{ next_url }}">Cancel</a>
       </div>
     </form>
   </div>

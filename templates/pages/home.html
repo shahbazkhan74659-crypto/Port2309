@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Shahbaz Khan — Portfolio{% endblock %}
 {% block description %}Shahbaz Khan — developer, freelancer, and writer. Projects, writing, and contact, all in one place.{% endblock %}
@@ -13,7 +14,17 @@
         <div class="hero-portrait-glow"></div>
         {% if hero.portrait %}<img class="hero-portrait" src="{{ hero.portrait.url }}" alt="Portrait of {{ hero.name_first }} {{ hero.name_last }}">{% endif %}
       </div>
-      {% include "partials/resume_button.html" with extra_class="hero-resume-btn" %}
+      <div class="hero-cta-stack">
+        {% include "partials/resume_button.html" with extra_class="hero-resume-btn" %}
+        <div class="hero-social-row">
+          <a href="#" aria-label="WhatsApp"><img src="{% static 'socials/whatsapp.png' %}" alt="WhatsApp"></a>
+          <a href="#" aria-label="Telegram"><img src="{% static 'socials/telegram.png' %}" alt="Telegram"></a>
+          <a href="mailto:{{ contact_email.email }}" aria-label="Email"><img src="{% static 'socials/mail.png' %}" alt="Email"></a>
+          <a href="{% url 'github' %}" aria-label="GitHub"><img src="{% static 'socials/github.png' %}" alt="GitHub"></a>
+          <a href="https://www.linkedin.com/in/shahbaz-khan-471aa2418/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="{% static 'socials/linkedin.png' %}" alt="LinkedIn"></a>
+          <a href="#" aria-label="Instagram"><img src="{% static 'socials/instagram.png' %}" alt="Instagram"></a>
+        </div>
+      </div>
       <h1 class="hero-line">{{ hero.line_one }}</h1>
       <p class="hero-line">{{ hero.line_two }}</p>
       <div class="hero-name-row">

@@ -38,31 +38,7 @@
   </div>
 </section>
 
-<section class="section">
-  <div class="wrap">
-    <p class="eyebrow" style="margin-bottom:24px">{{ about.skills_eyebrow }}</p>
-    <div class="skill-groups">
-      <div>
-        <p class="skill-group-label">{{ about.languages_label }}</p>
-        <div class="skill-tags">
-          {% for tag in about.languages.all %}<span class="skill-tag">{{ tag }}</span>{% endfor %}
-        </div>
-      </div>
-      <div>
-        <p class="skill-group-label">{{ about.frameworks_label }}</p>
-        <div class="skill-tags">
-          {% for tag in about.frameworks.all %}<span class="skill-tag">{{ tag }}</span>{% endfor %}
-        </div>
-      </div>
-      <div>
-        <p class="skill-group-label">{{ about.learning_label }}</p>
-        <div class="skill-tags">
-          {% for tag in about.learning.all %}<span class="skill-tag">{{ tag }}</span>{% endfor %}
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+{% include "partials/skill_groups.html" with eyebrow_text=about.skills_eyebrow languages_label=about.languages_label languages=about.languages.all frameworks_label=about.frameworks_label frameworks=about.frameworks.all learning_label=about.learning_label learning=about.learning.all %}
 
 <section class="section">
   <div class="wrap">

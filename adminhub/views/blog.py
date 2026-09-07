@@ -5,7 +5,7 @@ from projects.models import Post
 from ..decorators import hub_staff_required
 from ..forms import PostForm
 from ..utils import apply_tag_quick_add
-from ._shared import object_delete_view
+from ._shared import object_delete_view, resolve_next
 
 
 @hub_staff_required
@@ -15,20 +15,21 @@ def post_list(request):
 
 
 def _post_form_view(request, post=None):
+    next_url = resolve_next(request, "adminhub:post_list")
     if request.method == "POST":
         quick_add_data = apply_tag_quick_add(request.POST)
         if quick_add_data is not None:
             form = PostForm(quick_add_data, instance=post)
-            return render(request, "adminhub/post_form.html", {"form": form, "post": post})
+            return render(request, "adminhub/post_form.html", {"form": form, "post": post, "next_url": next_url})
 
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
             form.save()
-            return redirect("adminhub:post_list")
-        return render(request, "adminhub/post_form.html", {"form": form, "post": post})
+            return redirect(next_url)
+        return render(request, "adminhub/post_form.html", {"form": form, "post": post, "next_url": next_url})
 
     form = PostForm(instance=post)
-    return render(request, "adminhub/post_form.html", {"form": form, "post": post})
+    return render(request, "adminhub/post_form.html", {"form": form, "post": post, "next_url": next_url})
 
 
 @hub_staff_required

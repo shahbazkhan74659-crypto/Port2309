@@ -19,9 +19,8 @@ def contact_hub(request):
 
 @hub_staff_required
 def contact_email_edit(request):
-    next_url = request.GET.get("next") or request.POST.get("next") or "adminhub:contact"
     return singleton_edit_view(
-        request, ContactEmail, ContactEmailForm, "adminhub/contact_email_form.html", next_url
+        request, ContactEmail, ContactEmailForm, "adminhub/contact_email_form.html", "adminhub:contact"
     )
 
 

@@ -1,0 +1,25 @@
+<section class="section">
+  <div class="wrap">
+    <p class="eyebrow" style="margin-bottom:24px">{{ eyebrow_text }}</p>
+    <div class="skill-groups">
+      <div>
+        <p class="skill-group-label">{{ languages_label }}</p>
+        <div class="skill-tags">
+          {% for tag in languages %}<span class="skill-tag">{{ tag }}</span>{% endfor %}
+        </div>
+      </div>
+      <div>
+        <p class="skill-group-label">{{ frameworks_label }}</p>
+        <div class="skill-tags">
+          {% for tag in frameworks %}<span class="skill-tag">{{ tag }}</span>{% endfor %}
+        </div>
+      </div>
+      <div>
+        <p class="skill-group-label">{{ learning_label }}</p>
+        <div class="skill-tags">
+          {% for tag in learning %}<span class="skill-tag">{{ tag }}</span>{% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

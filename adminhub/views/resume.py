@@ -5,7 +5,7 @@ from core.models import Resume, ResumeEducation, ResumeExperience, ResumePage
 from ..decorators import hub_staff_required
 from ..forms import ResumeEducationForm, ResumeExperienceForm, ResumeFileForm, ResumePageForm
 from ..utils import apply_tag_quick_add
-from ._shared import object_delete_view, singleton_delete_view, singleton_edit_view
+from ._shared import object_delete_view, resolve_next, singleton_delete_view, singleton_edit_view
 
 
 @hub_staff_required
@@ -59,14 +59,17 @@ def resume_page_delete(request):
 
 
 def _experience_form_view(request, entry=None):
+    next_url = resolve_next(request, "adminhub:resume")
     if request.method == "POST":
         form = ResumeExperienceForm(request.POST, instance=entry)
         if form.is_valid():
             form.save()
-            return redirect("adminhub:resume")
+            return redirect(next_url)
     else:
         form = ResumeExperienceForm(instance=entry)
-    return render(request, "adminhub/resume_entry_form.html", {"form": form, "kind": "Experience"})
+    return render(
+        request, "adminhub/resume_entry_form.html", {"form": form, "kind": "Experience", "next_url": next_url}
+    )
 
 
 @hub_staff_required
@@ -90,14 +93,17 @@ def experience_delete(request, pk):
 
 
 def _education_form_view(request, entry=None):
+    next_url = resolve_next(request, "adminhub:resume")
     if request.method == "POST":
         form = ResumeEducationForm(request.POST, instance=entry)
         if form.is_valid():
             form.save()
-            return redirect("adminhub:resume")
+            return redirect(next_url)
     else:
         form = ResumeEducationForm(instance=entry)
-    return render(request, "adminhub/resume_entry_form.html", {"form": form, "kind": "Education"})
+    return render(
+        request, "adminhub/resume_entry_form.html", {"form": form, "kind": "Education", "next_url": next_url}
+    )
 
 
 @hub_staff_required

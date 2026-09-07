@@ -127,7 +127,11 @@ class AboutForm(TagPickerFormMixin, forms.ModelForm):
         return validate_tag_count(self.cleaned_data.get("languages"))
 
     def clean_frameworks(self):
-        return validate_tag_count(self.cleaned_data.get("frameworks"))
+        # Higher ceiling than the shared 1-6 default: the real "Frameworks &
+        # Tools" content already legitimately runs to 8 tags, which was
+        # exceeding the default cap and blocking every save of this form
+        # (regardless of which field was actually edited).
+        return validate_tag_count(self.cleaned_data.get("frameworks"), max_count=10)
 
     def clean_learning(self):
         return validate_tag_count(self.cleaned_data.get("learning"))
@@ -196,7 +200,9 @@ class ResumePageForm(TagPickerFormMixin, forms.ModelForm):
         return validate_tag_count(self.cleaned_data.get("languages"))
 
     def clean_frameworks(self):
-        return validate_tag_count(self.cleaned_data.get("frameworks"))
+        # See AboutForm.clean_frameworks: same real 8-tag content, same
+        # raised cap needed so this form isn't permanently unsavable.
+        return validate_tag_count(self.cleaned_data.get("frameworks"), max_count=10)
 
     def clean_learning(self):
         return validate_tag_count(self.cleaned_data.get("learning"))
